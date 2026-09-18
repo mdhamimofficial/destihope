@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Hind Siliguri', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* Hide scrollbar for clean mobile horizontal pills */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Continuous Train Marquee Ticker */
+@keyframes trainMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-train-marquee {
+  display: flex;
+  width: max-content;
+  animation: trainMarquee 30s linear infinite;
+  will-change: transform;
+}
+
+.animate-train-marquee:hover {
+  animation-play-state: paused;
+}
+

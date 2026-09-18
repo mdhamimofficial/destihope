@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>DestiHope_Master_Blueprint</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    @page {
+      size: A4;
+      margin: 15mm 15mm 15mm 15mm;
+    }
+    body {
+      font-family: 'Hind Siliguri', 'Plus Jakarta Sans', sans-serif;
+      color: #1a202c;
+      line-height: 1.6;
+      background: #ffffff;
+      margin: 0;
+      padding: 24px;
+      font-size: 13px;
+    }
+    .no-print-bar {
+      position: sticky;
+      top: 0;
+      background: #0f172a;
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: -24px -24px 24px -24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+    }
+    .btn-pdf {
+      background: #e53e3e;
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(229,62,62,0.4);
+    }
+    .btn-pdf:hover {
+      background: #c53030;
+    }
+    .header-box {
+      border-bottom: 3px solid #e53e3e;
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .app-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+      letter-spacing: -0.5px;
+    }
+    .sub-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #e53e3e;
+      margin: 3px 0 0 0;
+    }
+    .badge-ver {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: bold;
+      border-radius: 6px;
+      font-family: monospace;
+    }
+    h2 {
+      font-size: 14px;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: #0f172a;
+      border-left: 4px solid #e53e3e;
+      padding-left: 8px;
+      margin-top: 22px;
+      margin-bottom: 8px;
+    }
+    h3 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 10px 0 4px 0;
+    }
+    p, ul {
+      margin: 6px 0;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 4px;
+    }
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin: 8px 0;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .module-item {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+    .module-title {
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .code-block {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 11px;
+      overflow-x: auto;
+      line-height: 1.4;
+      margin: 8px 0;
+    }
+    .prompt-box {
+      background: #f1f5f9;
+      border: 1px solid #94a3b8;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-style: italic;
+      color: #0f172a;
+    }
+    .footer {
+      margin-top: 30px;
+      padding-top: 10px;
+      border-top: 1px solid #e2e8f0;
+      font-size: 11px;
+      color: #64748b;
+      display: flex;
+      justify-content: space-between;
+    }
+    @media print {
+      .no-print-bar {
+        display: none !important;
+      }
+      body {
+        padding: 0;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Action bar (Hidden when printing/saving to PDF) -->
+  <div class="no-print-bar">
+    <div>
+      <span style="font-weight: bold; font-size: 14px;">DestiHope Master Blueprint</span>
+      <span style="opacity: 0.7; font-size: 11px; margin-left: 8px;">— প্রস্তুত PDF ভার্সন</span>
+    </div>
+    <button class="btn-pdf" onclick="window.print()">
+      🖨️ PDF হিসেবে সেভ করুন / প্রিন্ট করুন
+    </button>
+  </div>
+
+  <!-- Header -->
+  <div class="header-box">
+    <div>
+      <h1 class="app-title">DESTIHOPE ECOSYSTEM</h1>
+      <p class="sub-title">UNIVERSAL ARCHITECTURAL BLUEPRINT & INTERACTION SPECIFICATION</p>
+      <div style="font-size: 11px; color: #64748b; margin-top: 4px;">
+        Universal Specification for AI Systems, Engineering Teams & Mobile Platforms
+      </div>
+    </div>
+    <div class="badge-ver">
+      v2.0 • AGNOSTIC
+    </div>
+  </div>
+
+  <!-- Section 1 -->
+  <h2>১. প্ল্যাটফর্ম ওভারভিউ ও কোর আর্কিটেকচার (System Overview)</h2>
+  <div class="card">
+    <ul>
+      <li><strong>মূল উদ্দেশ্য:</strong> মানবিক সংকট, জরুরি রক্তদান, নিখোঁজ মানুষ উদ্ধার, হাসপাতাল ও অ্যাম্বুলেন্স সেবা, কৃত্রিম বুদ্ধিমত্তা চালিত স্বাস্থ্য ট্রায়াজ এবং সামাজিক সহযোগিতার একীভূত সুপার-প্ল্যাটফর্ম।</li>
+      <li><strong>ফর্ম ফ্যাক্টর:</strong> মোবাইল-ফার্স্ট সিঙ্গেল ভিউ ফ্রেমওয়ার্ক (সেন্টার্ড মোবাইল রেশিও, ম্যাক্সিমাম উইডথ ৪৫০px)। প্রতিটি বাটন মিনিমাম ৪৪px টাচ জোন সম্পন্ন।</li>
+      <li><strong>অফলাইন রেজিলিয়েন্স:</strong> ডিভাইস ইন্টারনেট সংযোগ বিচ্ছিন্ন হলেও লোকাল মেমোরিতে ডেটা ক্যাশ থাকবে এবং হেডারে অফলাইন নির্দেশক ব্যানার সক্রিয় হবে।</li>
+      <li><strong>কালার আর্কিটেকচার:</strong> মডিউলভিত্তিক স্বতন্ত্র থিম কালার (Hope-লাল, Chat-টিল, Media-পার্পল, Brain-অ্যাম্বার, Care-রোজ, Find-এমারেল্ড, Profile-স্লেট)।</li>
+    </ul>
+  </div>
+
+  <!-- Section 2 -->
+  <h2>২. গ্লোবাল নেভিগেশন ও ইন্টারঅ্যাকশন মেকানিক্স (Global Navigation)</h2>
+  <div class="card">
+    <h3>২.১ সেন্ট্রাল অরবিট মডিউল হুইল (Radial Orbit Module Switcher):</h3>
+    <p>বটম ন্যাভিগেশনের ঠিক কেন্দ্রে অবস্থিত একটি গোল্ডেন-লেয়ার্ড এলিভেটেড বাটন চাপলে পুরো স্ক্রিনের উপর ব্লার ব্যাকড্রপ সহ একটি বৃত্তাকার কক্ষপথ (Radius ~124px) আবির্ভূত হয়:</p>
+    <div class="grid-2">
+      <div class="module-item"><span style="color:#e53e3e;">●</span> <strong>১. হোম (Hope):</strong> রক্ত ও ক্রাইসিস ফিড (লাল)</div>
+      <div class="module-item"><span style="color:#0d9488;">●</span> <strong>২. চ্যাট (Chat):</strong> ডিরেক্ট মেসেজ, গ্রুপ ও টিম (টিল)</div>
+      <div class="module-item"><span style="color:#9333ea;">●</span> <strong>৩. মিডিয়া (Media):</strong> রিলস ও ভিডিও স্ট্রিম (বেগুনি)</div>
+      <div class="module-item"><span style="color:#d97706;">●</span> <strong>৪. ব্রেন (Brain):</strong> এআই ডক্টর ও কুইজ (অ্যাম্বার)</div>
+      <div class="module-item"><span style="color:#e11d48;">●</span> <strong>৫. কেয়ার (Care):</strong> রক্তদাতা ও হাসপাতাল (রোজ)</div>
+      <div class="module-item"><span style="color:#059669;">●</span> <strong>৬. নিখোঁজ (Find):</strong> সন্ধান ও রাডার (এমারেল্ড)</div>
+      <div class="module-item" style="grid-column: span 2;"><span style="color:#334155;">●</span> <strong>৭. প্রোফাইল (Profile):</strong> হোপ পয়েন্টস, ডোনার কার্ড ও ব্যাজ (স্লেট)</div>
+    </div>
+    <p style="margin-top: 8px;"><strong>ইন্টারঅ্যাকশন:</strong> নিচে ফ্লোটিং "✕ বন্ধ করুন" ক্যাপসুল বাটন অথবা ব্যাকড্রপে ট্যাপ করলে স্মুথ স্প্রিং ট্রানজিশনে বন্ধ হয়।</p>
+
+    <h3>২.২ অ্যাডাপ্টিভ টপ হেডার (Sticky Header):</h3>
+    <p>বামপাশে সাইডবার ড্রয়ার বাটন ও সক্রিয় মডিউলের নাম (যেমন: DESTI HOPE, DESTI CARE), মাঝখানে কুইক অপিনিয়ন পিল, ডানপাশে মডিউল অ্যাকশন, সার্চ বাটন এবং লাইভ কাউন্টার যুক্ত নোটিফিকেশন বেল।</p>
+  </div>
+
+  <!-- Section 3 -->
+  <h2>৩. মডিউলসমূহের বিস্তারিত স্পেসিফিকেশন (Module Specifications)</h2>
+  
+  <div class="module-item" style="margin-bottom: 6px;">
+    <div class="module-title" style="color:#b91c1c;">মডিউল ১: DESTI HOPE (হোম ফিড ও জরুরি সেবা)</div>
+    <div>লাইভ জরুরি ব্যানার, ৪টি কুইক অ্যাকশন বাটন (৯৯৯ কল, রক্তের আবেদন, নিখোঁজ সন্ধান, এআই ডক্টর), ক্যাটাগরি ফিল্টার এবং ক্রাইসিস রেসপন্স ফিড কার্ড।</div>
+  </div>
+
+  <div class="module-item" style="margin-bottom: 6px;">
+    <div class="module-title" style="color:#0f766e;">মডিউল ২: DESTI CHAT (কমিউনিটি ও মেসেজিং)</div>
+    <div>৪টি সাব-ট্যাব: চ্যাটস (১-অন-১ এনক্রিপ্টেড চ্যাট), গ্রুপস (জেলা/উপজেলা ভলান্টিয়ার কমিউনিটি), রক্ত কেস (জরুরি রক্তের থ্রেড), এবং স্পিড কল হিস্ট্রি।</div>
+  </div>
+
+  <div class="module-item" style="margin-bottom: 6px;">
+    <div class="module-title" style="color:#7e22ce;">মডিউল ৩: DESTI MEDIA (ভিডিও, রিলস ও সচেতনতা)</div>
+    <div>সম্পূর্ণ ডার্ক থিম মোড। টিকটক স্টাইলের ৯:১৬ ফুল-স্ক্রিন রিলস, ল্যান্ডস্কেপ ভিডিও, ফার্স্ট-এইড অডিও পডকাস্ট এবং সেভড লাইব্রেরি।</div>
+  </div>
+
+  <div class="module-item" style="margin-bottom: 6px;">
+    <div class="module-title" style="color:#b45309;">মডিউল ৪: DESTI BRAIN (এআই ট্রায়াজ ও নলেজ)</div>
+    <div>এআই ডক্টর লক্ষণ পরীক্ষক, স্বাস্থ্য প্রশ্নোত্তর ও প্রাথমিক চিকিৎসা গাইড, মাল্টিপ্লেয়ার হেলথ কুইজ ব্যাটল এবং জনস্বাস্থ্য ফোরাম ডিবেট।</div>
+  </div>
+
+  <div class="module-item" style="margin-bottom: 6px;">
+    <div class="module-title" style="color:#be123c;">মডিউল ৫: DESTI CARE (ব্লাড ব্যাংক ও চিকিৎসা নেটওয়ার্ক)</div>
+    <div>৬৪ জেলা ও ৪৯৫ উপজেলা ড্রপডাউন লোকেশন ফিল্টার, লাইভ ডোনার ডিরেক্টরি (ওয়ান-ট্যাপ কল বাটনসহ), হাসপাতাল আইসিইউ/বেড ট্র্যাকার, অ্যাম্বুলেন্স সেবা এবং ডোনার স্ট্যাটাস ম্যানেজার।</div>
+  </div>
+
+  <div class="module-item" style="margin-bottom: 6px;">
+    <div class="module-title" style="color:#047857;">মডিউল ৬: DESTI FIND (নিখোঁজ সন্ধান ও রেসকিউ রাডার)</div>
+    <div>ইউনিক কেস আইডি জেনারেটর, ৩-উপায় সার্চ (নাম, কেস আইডি, পুলিশ জিডি নম্বর), নিখোঁজ ও উদ্ধারকৃত তালিকা, এবং জিও-লোকেশন রাডার ভিউ।</div>
+  </div>
+
+  <div class="module-item" style="margin-bottom: 6px;">
+    <div class="module-title" style="color:#1e293b;">মডিউল ৭: DESTI PROFILE (একীভূত প্রোফাইল ও পরিচিতি)</div>
+    <div>ডিজিটাল রক্তদাতা আইডি কার্ড, রক্তদানের রেকর্ড, হোপ পয়েন্ট ও মেম্বারশিপ ব্যাজ, প্রতিটি মডিউলের অ্যাক্টিভিটি হিস্ট্রি এবং নিরাপত্তা সেটিংস।</div>
+  </div>
+
+  <!-- Section 4 -->
+  <h2>৪. ডেটা স্কিমা ও সিস্টেম এন্টিটি (Entities Specification)</h2>
+  <div class="code-block">
+User: id, name, avatar, bloodGroup, isDonorAvailable, lastDonationDate, district, upazila, hopePoints, role, phone
+FeedPost: id, authorId, category, text, images, urgencyLevel, location, bloodNeeded, missingPersonRef, createdAt
+Donor: id, name, bloodGroup, location (district, upazila), phone, lastDonated, availabilityStatus, donationCount
+MissingCase: id, destiCaseId, policeGdNumber, personName, age, photoUrl, lastSeenLocation, status (missing | found)
+ChatMessage: id, conversationId, senderId, text, mediaUrl, messageType (text | voice | blood_alert), timestamp
+MediaItem: id, title, mediaType (reel | video | podcast), videoUrl, thumbnail, duration, likesCount
+  </div>
+
+  <!-- Section 5 -->
+  <h2>৫. ইউনিভার্সাল এআই প্রম্পট (Universal Prompt for Any AI)</h2>
+  <div class="prompt-box">
+    "Please build a complete mobile-first application implementing the full DestiHope Master Blueprint above. Create all 7 modules (Hope, Chat, Media, Brain, Care, Find, Profile), the central circular radial module switcher in the bottom navigation, contextual headers, emergency modals, and Bangladesh-wide location filtering."
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span>DestiHope Bangladesh Ecosystem • Master Specification Blueprint</span>
+    <span>Generated via Google AI Studio</span>
+  </div>
+
+  <script>
+    // If opened directly with print hash, trigger print
+    if (window.location.search.includes('print=true')) {
+      window.onload = function() {
+        window.print();
+      };
+    }
+  </script>
+</body>
+</html>
