@@ -28,6 +28,7 @@ interface HomeFeedProps {
   onShowHopePointsInfo: () => void;
   activeFilter: string;
   onToggleLike?: (postId: string) => void;
+  compactMode?: boolean;
 }
 
 export const HomeFeed: React.FC<HomeFeedProps> = ({
@@ -39,6 +40,7 @@ export const HomeFeed: React.FC<HomeFeedProps> = ({
   onShowHopePointsInfo,
   activeFilter,
   onToggleLike,
+  compactMode = false,
 }) => {
   const [feedPosts, setFeedPosts] = useState<FeedPost[]>(posts);
   const [copiedPhone, setCopiedPhone] = useState<string | null>(null);
@@ -111,7 +113,7 @@ export const HomeFeed: React.FC<HomeFeedProps> = ({
                         <CheckCircle className="w-3.5 h-3.5 text-blue-500 fill-blue-50" />
                       )}
                     </div>
-                    <div className="text-[11px] text-gray-400 font-normal">
+                    <div className="text-[11px] text-gray-600 font-medium">
                       {post.timeAgo} • {post.location}
                     </div>
                   </div>
@@ -137,7 +139,7 @@ export const HomeFeed: React.FC<HomeFeedProps> = ({
                   </span>
                   <button 
                     onClick={() => onSharePost(post)}
-                    className="text-gray-400 hover:text-gray-600 p-1"
+                    className="text-gray-500 hover:text-gray-800 p-1"
                     aria-label="More options"
                   >
                     <MoreVertical className="w-4 h-4" />
@@ -156,7 +158,7 @@ export const HomeFeed: React.FC<HomeFeedProps> = ({
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute top-1 left-1 bg-black/60 backdrop-blur-xs text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+                    <div className="absolute top-1 left-1 bg-black/60 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
                       {post.bloodDetails?.group}
                     </div>
                   </div>
@@ -172,7 +174,7 @@ export const HomeFeed: React.FC<HomeFeedProps> = ({
                       রক্ত প্রয়োজন
                     </h3>
 
-                    <p className="text-xs text-gray-600 line-clamp-3 mt-1 leading-relaxed">
+                    <p className="text-xs text-gray-800 line-clamp-3 mt-1 leading-relaxed">
                       {post.content}
                     </p>
 
@@ -267,7 +269,7 @@ export const HomeFeed: React.FC<HomeFeedProps> = ({
                         <CheckCircle className="w-3.5 h-3.5 text-blue-500 fill-blue-50" />
                       )}
                     </div>
-                    <div className="text-[11px] text-gray-400 font-normal">
+                    <div className="text-[11px] text-gray-600 font-medium">
                       {post.timeAgo} • {post.location}
                     </div>
                   </div>
@@ -293,7 +295,7 @@ export const HomeFeed: React.FC<HomeFeedProps> = ({
                   </span>
                   <button 
                     onClick={() => onSharePost(post)}
-                    className="text-gray-400 hover:text-gray-600 p-1"
+                    className="text-gray-500 hover:text-gray-800 p-1"
                     aria-label="More options"
                   >
                     <MoreVertical className="w-4 h-4" />
@@ -325,7 +327,7 @@ export const HomeFeed: React.FC<HomeFeedProps> = ({
                       নিখোঁজ: {post.missingDetails?.personName}
                     </h3>
 
-                    <p className="text-xs text-gray-600 mt-1 leading-relaxed line-clamp-4">
+                    <p className="text-xs text-gray-800 mt-1 leading-relaxed line-clamp-4">
                       {post.content}
                     </p>
                   </div>
@@ -404,7 +406,7 @@ export const HomeFeed: React.FC<HomeFeedProps> = ({
                         <CheckCircle className="w-3.5 h-3.5 text-blue-500 fill-blue-50" />
                       )}
                     </div>
-                    <div className="text-[11px] text-gray-400 font-normal">
+                    <div className="text-[11px] text-gray-600 font-medium">
                       {post.timeAgo}
                     </div>
                   </div>
@@ -412,7 +414,7 @@ export const HomeFeed: React.FC<HomeFeedProps> = ({
 
                 <button 
                   onClick={() => onSharePost(post)}
-                  className="text-gray-400 hover:text-gray-600 p-1"
+                  className="text-gray-500 hover:text-gray-800 p-1"
                   aria-label="More options"
                 >
                   <MoreVertical className="w-4 h-4" />
@@ -435,7 +437,7 @@ export const HomeFeed: React.FC<HomeFeedProps> = ({
               <h3 className="text-base font-bold text-gray-950 mb-1 leading-snug">
                 {post.title}
               </h3>
-              <p className="text-xs text-gray-600 leading-relaxed mb-3">
+              <p className="text-xs text-gray-800 leading-relaxed mb-3">
                 {post.content}
               </p>
 
@@ -498,7 +500,7 @@ export const HomeFeed: React.FC<HomeFeedProps> = ({
                       <CheckCircle className="w-3.5 h-3.5 text-blue-500 fill-blue-50" />
                     )}
                   </div>
-                  <div className="text-[11px] text-gray-400 font-normal">
+                  <div className="text-[11px] text-gray-600 font-medium">
                     {post.timeAgo} {post.location && `• ${post.location}`}
                   </div>
                 </div>
@@ -518,7 +520,7 @@ export const HomeFeed: React.FC<HomeFeedProps> = ({
                 ) : null}
                 <button 
                   onClick={() => onSharePost(post)}
-                  className="text-gray-400 hover:text-gray-600 p-1"
+                  className="text-gray-500 hover:text-gray-800 p-1"
                   aria-label="More options"
                 >
                   <MoreVertical className="w-4 h-4" />

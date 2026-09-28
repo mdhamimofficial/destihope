@@ -82,8 +82,8 @@ export const LiveAlertBanner: React.FC<LiveAlertBannerProps> = ({ onAlertClick }
               <span className="text-gray-400 font-bold mx-2">•</span>
               <span className="text-gray-700">{alert.location}</span>
               <span className="text-gray-400 font-bold mx-2">•</span>
-              <span className="text-gray-500 text-[11px] font-medium">{alert.time}</span>
-              <span className="text-rose-400 font-bold ml-6 select-none">✦</span>
+              <span className="text-slate-700 text-[11px] font-semibold">{alert.time}</span>
+              <span className="text-rose-500 font-bold ml-6 select-none">✦</span>
             </div>
           ))}
 
@@ -97,8 +97,8 @@ export const LiveAlertBanner: React.FC<LiveAlertBannerProps> = ({ onAlertClick }
               <span className="text-gray-400 font-bold mx-2">•</span>
               <span className="text-gray-700">{alert.location}</span>
               <span className="text-gray-400 font-bold mx-2">•</span>
-              <span className="text-gray-500 text-[11px] font-medium">{alert.time}</span>
-              <span className="text-rose-400 font-bold ml-6 select-none">✦</span>
+              <span className="text-slate-700 text-[11px] font-semibold">{alert.time}</span>
+              <span className="text-rose-500 font-bold ml-6 select-none">✦</span>
             </div>
           ))}
         </div>

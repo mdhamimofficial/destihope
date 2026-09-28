@@ -29,7 +29,8 @@ import {
   CheckCircle,
   Bell,
   Upload,
-  Menu
+  Menu,
+  RefreshCw
 } from 'lucide-react';
 import { mockDonors, mockHospitals } from '../../data/mockData';
 import { BangladeshLocationFilter } from '../common/BangladeshLocationFilter';
@@ -37,6 +38,7 @@ import { getDivisionOfDistrict } from '../../data/bangladeshLocations';
 import { BloodDonor, UserProfile, DonorWillingnessStatus, ActiveModule } from '../../types';
 import { ContactDonorModal } from '../modals/ContactDonorModal';
 import { ManageDonorStatusModal } from '../modals/ManageDonorStatusModal';
+import { PullToRefresh } from '../common/PullToRefresh';
 
 interface DestiCareViewProps {
   onOpenMenu?: () => void;
@@ -89,6 +91,22 @@ export const DestiCareView: React.FC<DestiCareViewProps> = ({
   // Ambulance simulator state
   const [ambulanceDispatched, setAmbulanceDispatched] = useState(false);
   const [ambulanceEta, setAmbulanceEta] = useState(7);
+
+  // In-app toast message state
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
+  // Pull-to-refresh state for DestiCare
+  const [isCareRefreshing, setIsCareRefreshing] = useState(false);
+  const handleRefreshCare = async () => {
+    setIsCareRefreshing(true);
+    await new Promise((r) => setTimeout(r, 750));
+    setIsCareRefreshing(false);
+    showToast('✨ রক্তের আবেদন ও ডোনার তালিকা রিফ্রেশ হয়েছে!');
+  };
 
   // User's own donor profile stored locally & synced with currentUser
   const [userDonorProfile, setUserDonorProfile] = useState<{
@@ -277,6 +295,14 @@ export const DestiCareView: React.FC<DestiCareViewProps> = ({
 
   return (
     <div className="bg-gray-50 flex-1 flex flex-col min-h-screen pb-20 relative">
+      {/* Toast Notification Banner */}
+      {toastMessage && (
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-gray-900/95 text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-2xl flex items-center space-x-2 border border-white/20 animate-in fade-in duration-200">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
       {/* Top Navigation Bar: Identical to Home Page (DESTI HOPE -> DESTI CARE) */}
       <header className="bg-white border-b border-gray-100 sticky top-0 z-30">
         <div className="flex items-center justify-between px-2 sm:px-3 py-1.5 sm:py-2 gap-1 sm:gap-2 w-full">
@@ -324,6 +350,22 @@ export const DestiCareView: React.FC<DestiCareViewProps> = ({
 
           {/* Right section: Search and Notification Icons */}
           <div className="flex items-center space-x-0 sm:space-x-0.5 shrink-0">
+            {/* Refresh Button */}
+            <button
+              id="btn-care-header-refresh"
+              onClick={handleRefreshCare}
+              disabled={isCareRefreshing}
+              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center text-gray-800 hover:bg-gray-100 active:bg-gray-200 rounded-full transition-all active:scale-90 relative cursor-pointer"
+              aria-label="রিফ্রেশ করুন"
+              title="ডোনার ও রক্তের তালিকা রিফ্রেশ করুন"
+            >
+              <RefreshCw
+                className={`w-5 h-5 sm:w-5 sm:h-5 text-gray-700 transition-transform ${
+                  isCareRefreshing ? 'animate-spin text-rose-600' : 'hover:rotate-180 duration-500'
+                }`}
+              />
+            </button>
+
             {/* Search Button */}
             <button
               id="btn-header-search"
@@ -466,7 +508,11 @@ export const DestiCareView: React.FC<DestiCareViewProps> = ({
 
       {/* ================= 1. BLOOD BANK & DONORS ================= */}
       {activeSubTab === 'bloodbank' && (
-        <div className="flex-1 flex flex-col overflow-y-auto">
+        <PullToRefresh
+          id="care-pull-to-refresh"
+          onRefresh={handleRefreshCare}
+          className="flex-1 flex flex-col"
+        >
           {/* Blood Group Matrix Bar */}
           <div className="p-3 bg-white border-b border-gray-100">
             <div className="flex items-center justify-between mb-2">
@@ -622,7 +668,7 @@ export const DestiCareView: React.FC<DestiCareViewProps> = ({
               })
             )}
           </div>
-        </div>
+        </PullToRefresh>
       )}
 
       {/* ================= 2. HOSPITALS & ICU ================= */}
@@ -901,72 +947,86 @@ export const DestiCareView: React.FC<DestiCareViewProps> = ({
                 </span>
               </div>
 
-              {/* Luxury Card UI */}
-              <div className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-rose-950 to-red-900 text-white rounded-[28px] p-5 shadow-xl border border-rose-500/30">
-                <div className="absolute top-0 right-0 -mr-6 -mt-6 w-36 h-36 rounded-full bg-rose-500/20 blur-xl pointer-events-none" />
-                <div className="absolute bottom-0 left-0 -ml-6 -mb-6 w-32 h-32 rounded-full bg-amber-500/10 blur-xl pointer-events-none" />
+              {/* Luxury Card UI - Clean & GPU-Safe (no heavy blur-xl filters) */}
+              <div 
+                id="smart-donor-pass-card"
+                className="relative overflow-hidden bg-slate-950 text-white rounded-3xl p-5 shadow-2xl border border-rose-500/40 select-none"
+                style={{
+                  background: 'linear-gradient(145deg, #090b10 0%, #1c050f 45%, #2e0513 80%, #150209 100%)'
+                }}
+              >
+                {/* Decorative subtle pattern (NO heavy blur filters to prevent GPU buffer corruption on mobile) */}
+                <div 
+                  className="absolute inset-0 pointer-events-none opacity-40" 
+                  style={{
+                    backgroundImage: 'radial-gradient(circle at 90% 10%, rgba(244, 63, 94, 0.25) 0%, transparent 55%), radial-gradient(circle at 10% 90%, rgba(245, 158, 11, 0.15) 0%, transparent 50%)'
+                  }}
+                />
 
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 rounded-full bg-rose-600 flex items-center justify-center shadow-xs">
-                      <Droplet className="w-4 h-4 fill-white" />
+                <div className="relative z-10 space-y-3.5">
+                  <div className="flex items-center justify-between pb-3 border-b border-white/15">
+                    <div className="flex items-center space-x-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-rose-600 to-red-500 flex items-center justify-center shadow-md shrink-0">
+                        <Droplet className="w-4 h-4 fill-white text-white" />
+                      </div>
+                      <div>
+                        <span className="text-xs font-black tracking-widest text-rose-300 uppercase block leading-none font-mono">
+                          DESTI DONOR PASS
+                        </span>
+                        <span className="text-[9px] text-rose-200/80 font-mono tracking-wider mt-0.5 block">
+                          DONOR ID: DH-88291
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-xs font-black tracking-widest text-rose-300 uppercase block leading-none">
-                        DESTI DONOR PASS
-                      </span>
-                      <span className="text-[8px] text-rose-200/70 font-mono tracking-wider">
-                        DONOR ID: DH-88291
-                      </span>
-                    </div>
-                  </div>
-                  <span className="text-[9px] font-black uppercase tracking-wider bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-full font-sans shadow-xs">
-                    ভেরিফাইড ডোনার
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between py-2">
-                  <div>
-                    <h3 className="text-lg font-black text-white">{currentUser?.name || 'তানভীর আহমেদ'}</h3>
-                    <p className="text-[11px] text-rose-200">
-                      @{currentUser?.username || 'tanvir'} • {userDonorProfile.upazila}, {userDonorProfile.district}
-                    </p>
-                    <p className="text-[11px] font-mono text-rose-300/80 mt-0.5">{userDonorProfile.phone}</p>
-                  </div>
-                  <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 flex flex-col items-center justify-center shadow-inner">
-                    <span className="text-xl font-black text-rose-400 leading-none">{userDonorProfile.bloodGroup}</span>
-                    <span className="text-[8px] font-bold text-white/70 uppercase tracking-wider mt-1">রক্তের গ্রুপ</span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-white/15 text-[11px]">
-                  <div>
-                    <span className="text-gray-400 text-[10px] block">মোট রক্তদান:</span>
-                    <span className="font-bold text-white">{currentUser?.stats?.donations ?? 4} বার সম্পন্ন</span>
-                  </div>
-                  <div>
-                    <span className="text-gray-400 text-[10px] block">বর্তমান স্ট্যাটাস:</span>
-                    <span className={`font-bold ${
-                      userDonorProfile.willingness === 'available'
-                        ? 'text-emerald-400'
-                        : userDonorProfile.willingness === 'after_months'
-                        ? 'text-amber-400'
-                        : 'text-gray-300'
-                    }`}>
-                      {userDonorProfile.willingness === 'available'
-                        ? '🟢 এখনই দেওয়া যাবে'
-                        : userDonorProfile.willingness === 'after_months'
-                        ? `🟡 ${userDonorProfile.availableDateNote}`
-                        : '⚪ আপাতত বন্ধ'}
+                    <span className="text-[9.5px] font-black uppercase tracking-wider bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-full shadow-xs">
+                      ভেরিফাইড ডোনার
                     </span>
                   </div>
-                </div>
 
-                <div className="mt-4 pt-3 flex items-center justify-between border-t border-white/10 text-[10px] text-rose-200">
-                  <span className="flex items-center gap-1.5">
-                    <QrCode className="w-3.5 h-3.5" /> স্ক্যান করে ডোনার সত্যতা যাচাই করুন
-                  </span>
-                  <span className="text-white/60 font-mono">DestiHope ২০২৬</span>
+                  <div className="flex items-center justify-between py-1">
+                    <div className="pr-2 min-w-0">
+                      <h3 className="text-lg font-black text-white truncate">{currentUser?.name || 'তানভীর আহমেদ'}</h3>
+                      <p className="text-xs text-rose-200/90 font-medium truncate mt-0.5">
+                        @{currentUser?.username || 'tanvir'} • {userDonorProfile.upazila}, {userDonorProfile.district}
+                      </p>
+                      <p className="text-xs font-mono text-rose-300/90 mt-0.5 font-bold tracking-wide">{userDonorProfile.phone}</p>
+                    </div>
+                    <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 flex flex-col items-center justify-center shadow-inner shrink-0">
+                      <span className="text-2xl font-black text-rose-400 leading-none">{userDonorProfile.bloodGroup}</span>
+                      <span className="text-[8.5px] font-bold text-white/80 uppercase tracking-wider mt-1">রক্তের গ্রুপ</span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2.5 pt-2.5 border-t border-white/15 text-xs">
+                    <div className="bg-white/5 rounded-xl p-2.5 border border-white/10">
+                      <span className="text-rose-200/70 text-[10px] block font-medium">মোট রক্তদান:</span>
+                      <span className="font-black text-white text-xs mt-0.5 block">{currentUser?.stats?.donations ?? 4} বার সম্পন্ন</span>
+                    </div>
+                    <div className="bg-white/5 rounded-xl p-2.5 border border-white/10">
+                      <span className="text-rose-200/70 text-[10px] block font-medium">বর্তমান স্ট্যাটাস:</span>
+                      <span className={`font-black text-xs mt-0.5 block truncate ${
+                        userDonorProfile.willingness === 'available'
+                          ? 'text-emerald-400'
+                          : userDonorProfile.willingness === 'after_months'
+                          ? 'text-amber-400'
+                          : 'text-gray-300'
+                      }`}>
+                        {userDonorProfile.willingness === 'available'
+                          ? '🟢 এখনই দেওয়া যাবে'
+                          : userDonorProfile.willingness === 'after_months'
+                          ? `🟡 ${userDonorProfile.availableDateNote}`
+                          : '⚪ আপাতত বন্ধ'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="pt-2.5 flex items-center justify-between border-t border-white/10 text-[10.5px] text-rose-200/80 font-medium">
+                    <span className="flex items-center gap-1.5">
+                      <QrCode className="w-4 h-4 text-rose-400 shrink-0" />
+                      <span>স্ক্যান করে ডোনার সত্যতা যাচাই করুন</span>
+                    </span>
+                    <span className="text-white/60 font-mono font-bold">DestiHope ২০২৬</span>
+                  </div>
                 </div>
               </div>
 
@@ -974,7 +1034,7 @@ export const DestiCareView: React.FC<DestiCareViewProps> = ({
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
-                  onClick={() => alert('স্মার্ট ডোনার কার্ডটি আপনার ডিভাইসে সংরক্ষিত হয়েছে!')}
+                  onClick={() => showToast('স্মার্ট ডোনার কার্ডটি আপনার ডিভাইসে সংরক্ষিত হয়েছে!')}
                   className="py-2.5 bg-rose-600 hover:bg-rose-700 active:scale-95 text-white rounded-2xl text-xs font-bold shadow-xs transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
                 >
                   <Share2 className="w-3.5 h-3.5" />

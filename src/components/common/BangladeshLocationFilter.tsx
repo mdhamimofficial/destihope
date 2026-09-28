@@ -93,7 +93,7 @@ const SearchablePickerModal: React.FC<SearchablePickerModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 transition-opacity animate-in fade-in duration-150">
       {/* Backdrop click to close */}
       <div className="absolute inset-0" onClick={onClose} />
 

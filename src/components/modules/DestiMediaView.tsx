@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { MediaItem, ActiveModule } from '../../types';
 import { mockMediaList } from '../../data/mockData';
+import { DestiMediaUploadModal } from '../modals/DestiMediaUploadModal';
 
 interface DestiMediaViewProps {
   onOpenModuleSwitcher?: () => void;
@@ -43,7 +44,8 @@ export const DestiMediaView: React.FC<DestiMediaViewProps> = ({
   activeSubTab = 'reels',
   onSelectSubTab
 }) => {
-  const [items] = useState<MediaItem[]>(mockMediaList);
+  const [items, setItems] = useState<MediaItem[]>(mockMediaList);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [currentReelIndex, setCurrentReelIndex] = useState(0);
   const [likedMap, setLikedMap] = useState<Record<string, boolean>>({
     'm1': true,
@@ -130,7 +132,10 @@ export const DestiMediaView: React.FC<DestiMediaViewProps> = ({
 
         <div className="flex-1 min-w-0 flex items-center justify-center">
           <div
-            onClick={onOpenCreatePost}
+            onClick={() => {
+              setIsUploadModalOpen(true);
+              if (onOpenCreatePost) onOpenCreatePost();
+            }}
             className="flex-1 min-w-0 flex items-center justify-between bg-zinc-900 hover:bg-zinc-800/80 active:bg-zinc-800 border border-zinc-700 hover:border-zinc-600 active:border-zinc-500 rounded-full pl-3.5 pr-1.5 py-1.5 sm:py-2 shadow-inner cursor-pointer transition-all mx-1 sm:mx-2 group"
           >
             <span className="text-[11px] xs:text-xs sm:text-sm text-zinc-400 group-hover:text-zinc-200 font-medium truncate">
@@ -359,7 +364,7 @@ export const DestiMediaView: React.FC<DestiMediaViewProps> = ({
       )}
 
       {/* ================= VIDEOS TAB (FEED GRID) ================= */}
-      {activeSubTab === 'home' && (
+      {(activeSubTab === 'home' || activeSubTab === 'videos') && (
         <div className="flex-1 bg-zinc-950 flex flex-col overflow-y-auto">
           {/* Header */}
           <div className="p-3 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between sticky top-0 z-20">
@@ -554,6 +559,18 @@ export const DestiMediaView: React.FC<DestiMediaViewProps> = ({
           </div>
         </div>
       )}
+
+      {/* Dedicated DestiMedia Creator Studio Upload Modal */}
+      <DestiMediaUploadModal
+        isOpen={isUploadModalOpen}
+        onClose={() => setIsUploadModalOpen(false)}
+        onSubmitMedia={(newMedia) => {
+          setItems((prev) => [newMedia, ...prev]);
+          setCurrentReelIndex(0);
+          setIsPlaying(true);
+          if (onSelectSubTab) onSelectSubTab(newMedia.type === 'reel' ? 'reels' : 'videos');
+        }}
+      />
     </div>
   );
 };

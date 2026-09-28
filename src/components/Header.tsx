@@ -31,6 +31,8 @@ interface HeaderProps {
   syncedCount?: number;
   pendingSyncCount?: number;
   onManualSync?: () => void;
+  onRefresh?: () => void;
+  isRefreshing?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -46,6 +48,8 @@ export const Header: React.FC<HeaderProps> = ({
   syncedCount = 0,
   pendingSyncCount = 0,
   onManualSync,
+  onRefresh,
+  isRefreshing = false,
 }) => {
   const getSecondWord = (mod: ActiveModule) => {
     switch (mod) {
@@ -228,6 +232,24 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </button>
           ) : null}
+
+          {/* Refresh Feed Button (Social Media Style) */}
+          {onRefresh && (
+            <button
+              id="btn-header-refresh-feed"
+              onClick={onRefresh}
+              disabled={isRefreshing}
+              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center text-gray-800 hover:bg-gray-100 active:bg-gray-200 rounded-full transition-all active:scale-90 relative"
+              aria-label="ফিড রিফ্রেশ করুন"
+              title="নতুন পোস্ট ও আপডেট দেখতে রিফ্রেশ করুন"
+            >
+              <RefreshCw
+                className={`w-5 h-5 sm:w-5 sm:h-5 text-gray-700 transition-transform ${
+                  isRefreshing ? 'animate-spin text-rose-600' : 'hover:rotate-180 duration-500'
+                }`}
+              />
+            </button>
+          )}
 
           {/* Search Button */}
           <button

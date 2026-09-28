@@ -5,6 +5,7 @@ import {
   AlertTriangle, 
   Clock, 
   MessageCircle, 
+  MessageSquare,
   Users, 
   PhoneCall, 
   PlaySquare, 
@@ -126,49 +127,49 @@ export const BottomNav: React.FC<BottomNavProps> = ({
     switch (activeModule) {
       case 'chat':
         return [
-          { id: 'all', label: 'চ্যাটস', icon: MessageCircle, badge: unreadChatCount > 0 ? unreadChatCount : undefined },
-          { id: 'groups', label: 'গ্রুপস', icon: Users },
-          { id: 'module_switcher', label: 'মডিউল', icon: ModuleLayersIcon, isSwitcher: true },
-          { id: 'blood', label: 'রক্ত কেস', icon: Droplet },
-          { id: 'calls', label: 'কল লিস্ট', icon: PhoneCall },
+          { id: 'back_home', label: 'Home', icon: Home },
+          { id: 'chat', label: 'Chat', icon: MessageSquare, badge: unreadChatCount > 0 ? unreadChatCount : undefined },
+          { id: 'upload', label: 'আপলোড+', icon: PlusCircle },
+          { id: 'module_switch', label: 'মডিউল', icon: ModuleLayersIcon },
+          { id: 'community', label: 'কমিউনিটি', icon: Users },
         ];
       case 'media':
         return [
+          { id: 'back_home', label: 'হোম', icon: Home },
           { id: 'reels', label: 'রিলস', icon: Clapperboard },
-          { id: 'home', label: 'ভিডিও', icon: Film },
-          { id: 'module_switcher', label: 'মডিউল', icon: ModuleLayersIcon, isSwitcher: true },
+          { id: 'videos', label: 'ভিডিও', icon: Film },
           { id: 'audio', label: 'অডিও', icon: Headphones },
           { id: 'saved', label: 'সংরক্ষিত', icon: Bookmark },
         ];
       case 'brain':
         return [
+          { id: 'back_home', label: 'হোম', icon: Home },
           { id: 'ai', label: 'এআই ডক্টর', icon: Brain },
           { id: 'learn', label: 'প্রশ্নোত্তর', icon: HelpCircle },
-          { id: 'module_switcher', label: 'মডিউল', icon: ModuleLayersIcon, isSwitcher: true },
           { id: 'battle', label: 'কুইজ', icon: Award },
           { id: 'debate', label: 'ডিবেট', icon: Swords },
         ];
       case 'care':
         return [
+          { id: 'back_home', label: 'হোম', icon: Home },
           { id: 'bloodbank', label: 'ডোনার', icon: Droplet },
           { id: 'hospitals', label: 'হাসপাতাল', icon: Building2 },
-          { id: 'module_switcher', label: 'মডিউল', icon: ModuleLayersIcon, isSwitcher: true },
           { id: 'ambulance', label: 'অ্যাম্বুলেন্স', icon: Siren },
           { id: 'profile', label: 'প্রোফাইল', icon: User },
         ];
       case 'find':
         return [
+          { id: 'back_home', label: 'হোম', icon: Home },
           { id: 'cases', label: 'নিখোঁজ', icon: UserSearch },
           { id: 'found', label: 'উদ্ধার', icon: CheckCircle2 },
-          { id: 'module_switcher', label: 'মডিউল', icon: ModuleLayersIcon, isSwitcher: true },
           { id: 'radar', label: 'রাডার', icon: Radio },
           { id: 'profile', label: 'প্রোফাইল', icon: User },
         ];
       case 'profile':
         return [
+          { id: 'back_home', label: 'হোম', icon: Home },
           { id: 'overview', label: 'পরিচিতি', icon: User },
-          { id: 'modules', label: 'মডিউল প্রোফাইল', icon: Layers },
-          { id: 'module_switcher', label: 'মডিউল', icon: ModuleLayersIcon, isSwitcher: true },
+          { id: 'modules', label: 'মডিউল', icon: Layers },
           { id: 'badges', label: 'পয়েন্ট ও ব্যাজ', icon: Award },
           { id: 'security', label: 'নিরাপত্তা', icon: ShieldCheck },
         ];
@@ -205,45 +206,30 @@ export const BottomNav: React.FC<BottomNavProps> = ({
 
   const activeColorClass = getThemeColor();
 
-  return (
-    <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-md border-t border-gray-200/80 z-40 shadow-[0_-4px_24px_rgba(0,0,0,0.08)]">
-      <div className={`flex items-center justify-around ${isHome ? 'px-1.5 h-16' : 'px-1 pt-1 pb-2'}`}>
-        {navItems.map((item) => {
-          const isActive = isHome ? item.id === 'hope' : activeSubTab === item.id;
-          const Icon = item.icon || HomeSwitchIcon;
+  const isMedia = activeModule === 'media';
 
-          // Distinct elevated launcher styling for the module switcher button (Circular launcher with dark-to-crimson gradient glow matching user screenshot)
-          if (item.isSwitcher) {
-            return (
-              <button
-                key={item.id}
-                id="btn-module-switcher-trigger"
-                onClick={() => onOpenModuleSwitcher?.()}
-                className="flex-1 flex flex-col items-center justify-center relative -mt-4 group transition-transform active:scale-95 cursor-pointer"
-                aria-label="মডিউল পরিবর্তন"
-                title="মডিউল সুইচার"
-              >
-                <div className="relative flex items-center justify-center">
-                  <div 
-                    className="w-13 h-13 rounded-full border-2 border-white flex items-center justify-center transition-all group-hover:scale-105 shadow-[0_4px_18px_rgba(0,0,0,0.35)]"
-                    style={{
-                      background: 'radial-gradient(circle at 75% 25%, #7F1D1D 0%, #1E1B4B 45%, #0B0F19 100%)'
-                    }}
-                  >
-                    <ModuleLayersIcon className="w-6 h-6 text-[#FBBF24] stroke-[2.4]" showDot={false} />
-                  </div>
-                </div>
-              </button>
-            );
-          }
+  return (
+    <nav className={`fixed bottom-0 left-0 right-0 max-w-md mx-auto backdrop-blur-md border-t z-40 shadow-[0_-4px_24px_rgba(0,0,0,0.08)] ${
+      isMedia 
+        ? 'bg-zinc-950/95 border-zinc-800/80 text-zinc-300' 
+        : 'bg-white/95 border-gray-200/80 text-gray-800'
+    }`}>
+      <div className="flex items-center justify-around px-2 h-16">
+        {navItems.map((item) => {
+          const isActive = isHome 
+            ? item.id === 'hope' 
+            : activeModule === 'chat'
+            ? (activeSubTab === item.id || (item.id === 'chat' && (!activeSubTab || activeSubTab === 'chat' || activeSubTab === 'all')))
+            : activeSubTab === item.id;
+          const Icon = item.icon || HomeSwitchIcon;
 
           return (
             <button
               key={item.id}
               id={`nav-item-${item.id}`}
               onClick={() => {
-                if (item.isSwitcher) {
-                  onOpenModuleSwitcher?.();
+                if (item.id === 'back_home') {
+                  onSelectModule('hope');
                   return;
                 }
                 if (isHome) {
@@ -254,62 +240,47 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                   }
                   return;
                 }
-                if (item.id === 'back_home') {
-                  onSelectModule('hope');
-                  return;
-                }
                 if (onSelectSubTab) {
                   onSelectSubTab(item.id);
                 }
               }}
-              className={`flex-1 flex flex-col items-center justify-center relative transition-transform active:scale-90 ${
-                isHome ? 'py-1 px-1 h-full' : 'py-1 px-0.5'
-              }`}
+              className="flex-1 h-full flex flex-col items-center justify-center relative py-1 px-1 cursor-pointer select-none"
               aria-label={item.label}
-              title={item.label}
+              title={item.id === 'back_home' ? 'হোম পেজে (Desti Hope) ফিরুন' : item.label}
             >
-              <div className="relative flex items-center justify-center">
+              <div className="relative flex items-center justify-center p-1 rounded-xl">
                 <Icon
-                  className={`transition-all duration-200 ${
+                  className={`w-7 h-7 transition-colors duration-150 ${
                     isHome
-                      ? `w-[27px] h-[27px] ${
-                          isActive
-                            ? `${activeColorClass} stroke-[2.3] scale-110 drop-shadow-[0_2px_6px_rgba(229,57,53,0.3)]`
-                            : 'text-gray-400 stroke-[1.85] hover:text-gray-700 hover:scale-105'
-                        }`
-                      : `w-6 h-6 ${
-                          isActive
-                            ? `${activeColorClass} stroke-[2.4] scale-110`
-                            : 'text-gray-500 stroke-[1.8] hover:text-gray-800'
-                        }`
+                      ? isActive
+                        ? `${activeColorClass} stroke-[2.4]`
+                        : 'text-gray-400 stroke-[2] hover:text-gray-600'
+                      : isActive
+                      ? `${isMedia ? 'text-purple-400' : activeColorClass} stroke-[2.4]`
+                      : item.id === 'back_home'
+                      ? (isMedia ? 'text-zinc-400 hover:text-rose-400' : 'text-gray-500 hover:text-[#E53935]') + ' stroke-[2]'
+                      : `${isMedia ? 'text-zinc-400 hover:text-zinc-200' : 'text-gray-500 hover:text-gray-700'} stroke-[2]`
                   }`}
                 />
 
                 {item.badge && (
-                  <span className="absolute -top-1.5 -right-2 bg-[#E53935] text-white text-[10px] font-black rounded-full min-w-[17px] h-[17px] px-1 flex items-center justify-center leading-none shadow-sm ring-2 ring-white">
+                  <span className="absolute -top-1 -right-2 bg-[#E53935] text-white text-[10px] font-black rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center leading-none shadow-xs ring-2 ring-white">
                     {item.badge}
                   </span>
                 )}
               </div>
 
-              {/* Label - hidden on Home page */}
-              {!isHome && (
-                <span
-                  className={`text-[8.5px] sm:text-[9.5px] mt-1 transition-colors leading-tight font-medium whitespace-nowrap tracking-tight ${
-                    isActive ? `font-bold ${activeColorClass}` : 'text-gray-500'
-                  }`}
-                >
-                  {item.label}
-                </span>
-              )}
-
-              {/* Active Indicator Dot/Bar */}
+              {/* Active Indicator Dot (Absolute positioned so it never pushes or shifts the icon position) */}
               {isActive && (
                 <span
-                  className={`${
-                    isHome
-                      ? 'w-1.5 h-1.5 bg-[#E53935] rounded-full mt-1 shadow-[0_0_6px_rgba(229,57,53,0.8)] animate-in fade-in zoom-in-50 duration-200'
-                      : 'w-4 h-0.5 bg-current rounded-full mt-0.5 animate-in fade-in zoom-in-50 duration-200'
+                  className={`absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ${
+                    isHome 
+                      ? 'bg-[#E53935]' 
+                      : isMedia 
+                      ? 'bg-purple-400' 
+                      : activeColorClass.includes('teal') 
+                      ? 'bg-teal-600' 
+                      : 'bg-[#E53935]'
                   }`}
                 />
               )}

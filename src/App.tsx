@@ -26,10 +26,14 @@ import { HelpBloodModal } from './components/modals/HelpBloodModal';
 import { MissingDetailsModal } from './components/modals/MissingDetailsModal';
 import { CreatePostModal } from './components/modals/CreatePostModal';
 import { EmergencyModal } from './components/modals/EmergencyModal';
-import { ActiveTimersModal } from './components/modals/ActiveTimersModal';
+import { AlarmTimerModal } from './components/modals/AlarmTimerModal';
+import { DestiNotesModal } from './components/modals/DestiNotesModal';
+import { DestiTranslateModal } from './components/modals/DestiTranslateModal';
+import { DestiAiModal } from './components/modals/DestiAiModal';
 import { ModuleSwitcherModal } from './components/modals/ModuleSwitcherModal';
 import { NotificationModal } from './components/modals/NotificationModal';
 import { BlueprintModal } from './components/modals/BlueprintModal';
+import { SettingsModal } from './components/modals/SettingsModal';
 
 // Dedicated Modules
 import { DestiChatView } from './components/modules/DestiChatView';
@@ -67,6 +71,9 @@ export default function App() {
   });
   const [currentUser, setCurrentUser] = useState<UserProfile>(defaultUser);
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    return localStorage.getItem('destihope_theme') === 'dark';
+  });
   const [dataSaverEnabled, setDataSaverEnabled] = useState(false);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'synced'>('idle');
@@ -79,6 +86,15 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('destihope_feed_data', JSON.stringify(feedPosts));
   }, [feedPosts]);
+
+  useEffect(() => {
+    localStorage.setItem('destihope_theme', isDarkMode ? 'dark' : 'light');
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
 
   // Synchronize offline feed posts when reconnecting
   const syncOfflineData = useCallback(() => {
@@ -156,10 +172,14 @@ export default function App() {
   const [selectedMissingPost, setSelectedMissingPost] = useState<FeedPost | null>(null);
   const [isEmergencyModalOpen, setIsEmergencyModalOpen] = useState(false);
   const [isActiveTimersModalOpen, setIsActiveTimersModalOpen] = useState(false);
+  const [isDestiNotesOpen, setIsDestiNotesOpen] = useState(false);
+  const [isDestiTranslateOpen, setIsDestiTranslateOpen] = useState(false);
+  const [isDestiAiOpen, setIsDestiAiOpen] = useState(false);
   const [isModuleSwitcherOpen, setIsModuleSwitcherOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isHopePointsInfoOpen, setIsHopePointsInfoOpen] = useState(false);
   const [isBlueprintModalOpen, setIsBlueprintModalOpen] = useState(false);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Sub-tabs state for each module
@@ -174,6 +194,10 @@ export default function App() {
   });
 
   const handleSelectSubTab = (subTab: string) => {
+    if (subTab === 'back_home') {
+      setActiveModule('hope');
+      return;
+    }
     setSubTabs(prev => ({ ...prev, [activeModule]: subTab }));
   };
 
@@ -267,9 +291,13 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center selection:bg-red-500 selection:text-white">
+    <div className={`min-h-screen flex justify-center selection:bg-red-500 selection:text-white transition-colors duration-200 ${
+      isDarkMode ? 'bg-gray-950 text-gray-100' : 'bg-gray-100 text-gray-900'
+    }`}>
       {/* Mobile Frame Container (Max width matching mobile experience precisely) */}
-      <main className="w-full max-w-md bg-white min-h-screen relative flex flex-col shadow-xl overflow-x-hidden">
+      <main className={`w-full max-w-md min-h-screen relative flex flex-col shadow-xl overflow-x-hidden transition-colors duration-200 ${
+        isDarkMode ? 'bg-gray-900 border-x border-gray-800' : 'bg-white'
+      }`}>
         {/* Toast Notification Alert */}
         {toastMessage && (
           <div className="fixed top-14 left-1/2 -translate-x-1/2 z-50 bg-gray-900/95 backdrop-blur-xs text-white text-xs font-bold py-2 px-4 rounded-full shadow-2xl flex items-center space-x-2 border border-white/20 animate-in fade-in slide-in-from-top-4 duration-200">
@@ -303,20 +331,15 @@ export default function App() {
               />
               <div className="flex-1 overflow-y-auto no-scrollbar pb-20">
                 <QuickActionsBar
+                  onAiClick={() => setIsDestiAiOpen(true)}
                   onLocationClick={() => {
-                    setActiveModule('care');
-                    showToast('কাছাকাছি হাসপাতাল তালিকা খোলা হয়েছে');
+                    setIsDestiAiOpen(true);
                   }}
                   onEmergencyCallClick={() => setIsEmergencyModalOpen(true)}
                   onTimerClick={() => setIsActiveTimersModalOpen(true)}
-                  onReportsClick={() => {
-                    setIsHopePointsInfoOpen(true);
-                  }}
-                  onLanguageToggle={() => {
-                    const nextLang = language === 'bn' ? 'en' : 'bn';
-                    setLanguage(nextLang);
-                    showToast(`ভাষা পরিবর্তিত হয়েছে: ${nextLang === 'bn' ? 'বাংলা' : 'English'}`);
-                  }}
+                  onReportsClick={() => setIsDestiNotesOpen(true)}
+                  onTranslateClick={() => setIsDestiTranslateOpen(true)}
+                  onLanguageToggle={() => setIsDestiTranslateOpen(true)}
                   onModuleGridClick={() => setIsModuleSwitcherOpen(true)}
                   currentLanguage={language}
                 />
@@ -349,8 +372,29 @@ export default function App() {
               onBackToHome={() => setActiveModule('hope')}
               onOpenModuleSwitcher={() => setIsModuleSwitcherOpen(true)}
               onSelectModule={(mod) => setActiveModule(mod)}
+              onOpenMenu={() => setIsSidebarOpen(true)}
+              onOpenNotifications={() => setIsNotificationOpen(true)}
+              onOpenCreatePost={() => setIsCreatePostOpen(true)}
               activeSubTab={subTabs['chat']}
               onSelectSubTab={handleSelectSubTab}
+              currentUser={currentUser}
+              onUpdateUser={setCurrentUser}
+              isDarkMode={isDarkMode}
+              onToggleDarkMode={() => setIsDarkMode((prev) => !prev)}
+              language={language}
+              onToggleLanguage={() => setLanguage((prev) => (prev === 'bn' ? 'en' : 'bn'))}
+              dataSaverEnabled={dataSaverEnabled}
+              onToggleDataSaver={() => {
+                setDataSaverEnabled((prev) => !prev);
+                showToast(`ডাটা সেভার মোড: ${!dataSaverEnabled ? 'চালু' : 'বন্ধ'}`);
+              }}
+              onEmergencyCallClick={() => setIsEmergencyModalOpen(true)}
+              onTimerClick={() => setIsActiveTimersModalOpen(true)}
+              onReportsClick={() => setIsDestiNotesOpen(true)}
+              onLocationClick={() => {
+                setActiveModule('care');
+                showToast('কাছাকাছি রক্তদান ও হাসপাতাল তালিকা');
+              }}
             />
           )}
 
@@ -453,17 +497,28 @@ export default function App() {
         {/* Navigation Sidebar Drawer */}
         <SidebarDrawer
           isOpen={isSidebarOpen}
+          activeModule={activeModule}
           onClose={() => setIsSidebarOpen(false)}
           onSelectModule={(mod) => {
             setActiveModule(mod);
             setIsSidebarOpen(false);
           }}
           currentUser={currentUser}
+          isDarkMode={isDarkMode}
+          onToggleDarkMode={() => {
+            setIsDarkMode((prev) => !prev);
+          }}
+          currentLang={language}
+          onToggleLanguage={() => {
+            setLanguage((prev) => (prev === 'bn' ? 'en' : 'bn'));
+          }}
           dataSaverEnabled={dataSaverEnabled}
           onToggleDataSaver={() => {
             setDataSaverEnabled(!dataSaverEnabled);
             showToast(`ডাটা সেভার মোড: ${!dataSaverEnabled ? 'চালু' : 'বন্ধ'}`);
           }}
+          onOpenSettings={() => setIsSettingsModalOpen(true)}
+          onOpenNotifications={() => setIsNotificationOpen(true)}
           onOpenBlueprint={() => setIsBlueprintModalOpen(true)}
           isOffline={isOffline}
           onToggleOfflineMode={handleToggleOfflineMode}
@@ -499,13 +554,39 @@ export default function App() {
           isOpen={isEmergencyModalOpen}
           onClose={() => setIsEmergencyModalOpen(false)}
           onCall={handleCall}
+          onOpenBloodRequest={() => {
+            setIsEmergencyModalOpen(false);
+            setIsCreatePostOpen(true);
+          }}
+          onOpenBloodBank={() => {
+            setIsEmergencyModalOpen(false);
+            setActiveModule('care');
+          }}
+          onShowToast={showToast}
         />
 
-        <ActiveTimersModal
+        <AlarmTimerModal
           isOpen={isActiveTimersModalOpen}
           onClose={() => setIsActiveTimersModalOpen(false)}
-          bloodPosts={feedPosts.filter((p) => p.type === 'blood')}
-          onSelectPost={handleOpenBloodHelp}
+          onShowToast={showToast}
+        />
+
+        <DestiNotesModal
+          isOpen={isDestiNotesOpen}
+          onClose={() => setIsDestiNotesOpen(false)}
+          onShowToast={showToast}
+        />
+
+        <DestiTranslateModal
+          isOpen={isDestiTranslateOpen}
+          onClose={() => setIsDestiTranslateOpen(false)}
+          onShowToast={showToast}
+        />
+
+        <DestiAiModal
+          isOpen={isDestiAiOpen}
+          onClose={() => setIsDestiAiOpen(false)}
+          onShowToast={showToast}
         />
 
         <ModuleSwitcherModal
@@ -531,6 +612,25 @@ export default function App() {
         <BlueprintModal
           isOpen={isBlueprintModalOpen}
           onClose={() => setIsBlueprintModalOpen(false)}
+        />
+
+        <SettingsModal
+          isOpen={isSettingsModalOpen}
+          onClose={() => setIsSettingsModalOpen(false)}
+          currentUser={currentUser}
+          isDarkMode={isDarkMode}
+          onToggleDarkMode={() => {
+            setIsDarkMode((prev) => !prev);
+          }}
+          currentLang={language}
+          onToggleLanguage={() => {
+            setLanguage((prev) => (prev === 'bn' ? 'en' : 'bn'));
+          }}
+          dataSaverEnabled={dataSaverEnabled}
+          onToggleDataSaver={() => {
+            setDataSaverEnabled((prev) => !prev);
+          }}
+          onSaveNotice={(msg) => showToast(msg)}
         />
 
         {/* Hope Points Explanation Modal */}

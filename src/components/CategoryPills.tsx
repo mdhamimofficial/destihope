@@ -28,10 +28,10 @@ export const CategoryPills: React.FC<CategoryPillsProps> = ({
               key={category}
               id={`pill-category-${category.toLowerCase().replace(/\s+/g, '-')}`}
               onClick={() => onSelectCategory(category)}
-              className={`px-4 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all duration-150 ${
+              className={`px-4 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all duration-150 ${
                 isActive
                   ? 'bg-[#00897B] text-white shadow-xs'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200/60'
               }`}
             >
               {category}

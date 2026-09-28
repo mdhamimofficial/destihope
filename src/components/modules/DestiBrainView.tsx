@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { BrainQuestion, DebateTopic, ActiveModule } from '../../types';
 import { mockBrainQuestions, mockDebateTopics } from '../../data/mockData';
+import { DestiBrainCreateTopicModal } from '../modals/DestiBrainCreateTopicModal';
 
 interface DestiBrainViewProps {
   onEarnHopePoints?: (points: number) => void;
@@ -57,8 +58,7 @@ export const DestiBrainView: React.FC<DestiBrainViewProps> = ({
   // Q&A State
   const [questions, setQuestions] = useState<BrainQuestion[]>(mockBrainQuestions);
   const [upvotedIds, setUpvotedIds] = useState<Record<string, boolean>>({});
-  const [newQuestionText, setNewQuestionText] = useState('');
-  const [showAskModal, setShowAskModal] = useState(false);
+  const [isTopicModalOpen, setIsTopicModalOpen] = useState(false);
 
   // Debate State
   const [debates, setDebates] = useState<DebateTopic[]>(mockDebateTopics);
@@ -179,26 +179,11 @@ export const DestiBrainView: React.FC<DestiBrainViewProps> = ({
     }));
   };
 
-  const handlePostQuestion = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newQuestionText.trim()) return;
-
-    const newQ: BrainQuestion = {
-      id: `q-${Date.now()}`,
-      title: newQuestionText,
-      author: 'তানভীর আহমেদ',
-      votes: 1,
-      upvotes: 1,
-      answersCount: 0,
-      tags: ['স্বাস্থ্য', 'জিজ্ঞাসা'],
-      time: 'এইমাত্র',
-      timeAgo: 'এইমাত্র'
-    };
-
-    setQuestions(prev => [newQ, ...prev]);
-    setNewQuestionText('');
-    setShowAskModal(false);
-    if (onEarnHopePoints) onEarnHopePoints(5);
+  const handleAddTopic = (newTopic: BrainQuestion) => {
+    setQuestions((prev) => [newTopic, ...prev]);
+    setIsTopicModalOpen(false);
+    if (onEarnHopePoints) onEarnHopePoints(15);
+    if (onSelectSubTab) onSelectSubTab('learn');
   };
 
   const voteDebate = (topicId: string, side: 'for' | 'against') => {
@@ -243,7 +228,10 @@ export const DestiBrainView: React.FC<DestiBrainViewProps> = ({
 
         <div className="flex-1 min-w-0 flex items-center justify-center">
           <div
-            onClick={onOpenCreatePost}
+            onClick={() => {
+              setIsTopicModalOpen(true);
+              if (onOpenCreatePost) onOpenCreatePost();
+            }}
             className="flex-1 min-w-0 flex items-center justify-between bg-white hover:bg-amber-50/40 active:bg-amber-50/70 border border-gray-200 hover:border-gray-300 active:border-gray-400 rounded-full pl-3.5 pr-1.5 py-1.5 sm:py-2 shadow-2xs cursor-pointer transition-all mx-1 sm:mx-2 group"
           >
             <span className="text-[11px] xs:text-xs sm:text-sm text-gray-500 group-hover:text-gray-700 font-medium truncate">
@@ -412,7 +400,7 @@ export const DestiBrainView: React.FC<DestiBrainViewProps> = ({
               <h3 className="text-xs font-bold text-gray-900">কমিউনিটি হেলথ প্রশ্নোত্তর</h3>
             </div>
             <button
-              onClick={() => setShowAskModal(true)}
+              onClick={() => setIsTopicModalOpen(true)}
               className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl flex items-center space-x-1 shadow-xs active:scale-95 transition-transform"
             >
               <Plus className="w-3.5 h-3.5" />
@@ -448,36 +436,6 @@ export const DestiBrainView: React.FC<DestiBrainViewProps> = ({
               </div>
             ))}
           </div>
-
-          {/* Ask Modal */}
-          {showAskModal && (
-            <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-              <div className="bg-white rounded-3xl p-5 max-w-sm w-full shadow-2xl space-y-3 animate-in zoom-in-95">
-                <h3 className="text-sm font-bold text-gray-900">নতুন স্বাস্থ্য প্রশ্ন পোস্ট করুন</h3>
-                <textarea
-                  rows={3}
-                  placeholder="আপনার প্রশ্নটি বিস্তারিত লিখুন..."
-                  value={newQuestionText}
-                  onChange={(e) => setNewQuestionText(e.target.value)}
-                  className="w-full text-xs p-3 rounded-xl border border-gray-200 focus:outline-none focus:border-amber-500"
-                />
-                <div className="flex space-x-2 pt-2">
-                  <button
-                    onClick={() => setShowAskModal(false)}
-                    className="flex-1 py-2 bg-gray-100 text-gray-700 rounded-xl text-xs font-bold"
-                  >
-                    বাতিল
-                  </button>
-                  <button
-                    onClick={handlePostQuestion}
-                    className="flex-1 py-2 bg-amber-600 text-white rounded-xl text-xs font-bold"
-                  >
-                    পোস্ট করুন (+৫ HP)
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       )}
 
@@ -645,6 +603,13 @@ export const DestiBrainView: React.FC<DestiBrainViewProps> = ({
           })}
         </div>
       )}
+
+      {/* Dedicated Desti Brain Case & Topic Modal */}
+      <DestiBrainCreateTopicModal
+        isOpen={isTopicModalOpen}
+        onClose={() => setIsTopicModalOpen(false)}
+        onSubmitTopic={handleAddTopic}
+      />
     </div>
   );
 };

@@ -1,11 +1,13 @@
 import React from 'react';
-import { MapPin, PhoneCall, Timer, FileText, Languages, LayoutGrid } from 'lucide-react';
+import { Sparkles, Siren, AlarmClock, FileText, Languages } from 'lucide-react';
 
 interface QuickActionsBarProps {
+  onAiClick?: () => void;
   onLocationClick: () => void;
   onEmergencyCallClick: () => void;
   onTimerClick: () => void;
   onReportsClick: () => void;
+  onTranslateClick?: () => void;
   onLanguageToggle: () => void;
   onModuleGridClick: () => void;
   currentLanguage: 'bn' | 'en';
@@ -37,10 +39,12 @@ export const MoreGridIcon: React.FC<{ className?: string; size?: number; strokeW
 );
 
 export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({
+  onAiClick,
   onLocationClick,
   onEmergencyCallClick,
   onTimerClick,
   onReportsClick,
+  onTranslateClick,
   onLanguageToggle,
   onModuleGridClick,
   currentLanguage,
@@ -48,67 +52,59 @@ export const QuickActionsBar: React.FC<QuickActionsBarProps> = ({
   return (
     <div className="bg-white px-4 py-2.5 border-b border-gray-100">
       <div className="flex items-center justify-between max-w-md mx-auto">
-        {/* 1. Location Pin */}
+        {/* 1. Desti AI */}
         <button
-          id="btn-quick-location"
-          onClick={onLocationClick}
-          title="কাছাকাছি অবস্থান ও সন্ধান"
-          className="p-2 text-gray-900 hover:text-red-600 transition-all active:scale-90 cursor-pointer flex items-center justify-center"
-          aria-label="Location services"
+          id="btn-quick-ai"
+          onClick={onAiClick || onLocationClick}
+          title="Desti AI (স্মার্ট কৃত্রিম বুদ্ধিমত্তা সহকারী)"
+          className="p-2 text-gray-900 hover:text-purple-600 transition-all active:scale-90 cursor-pointer flex items-center justify-center"
+          aria-label="Desti AI"
         >
-          <MapPin className="w-6 h-6 stroke-[2]" />
+          <Sparkles className="w-6 h-6 stroke-[2]" />
         </button>
 
-        {/* 2. Emergency Hotline Phone */}
+        {/* 2. Desti Emergency Hub (Siren) */}
         <button
           id="btn-quick-emergency-call"
           onClick={onEmergencyCallClick}
-          title="জরুরি হটলাইন"
-          className="p-2 text-gray-900 hover:text-red-600 transition-all active:scale-90 cursor-pointer flex items-center justify-center"
-          aria-label="Emergency hotlines"
+          title="Desti Emergency Hub (জরুরি হটলাইন, প্রাথমিক চিকিৎসা ও দুর্যোগ সহায়তা)"
+          className="p-2 text-gray-900 hover:text-[#E53935] transition-all active:scale-90 cursor-pointer flex items-center justify-center"
+          aria-label="Desti Emergency Hub"
         >
-          <PhoneCall className="w-6 h-6 stroke-[2]" />
+          <Siren className="w-6 h-6 stroke-[2]" />
         </button>
 
-        {/* 3. Timer with Red Dot Badge */}
+        {/* 3. Desti Clock - Smart Alarm & Focus Countdown */}
         <button
           id="btn-quick-timers"
           onClick={onTimerClick}
-          title="সক্রিয় রক্তের কাউন্টডাউন টাইমার"
-          className="p-2 text-gray-900 hover:text-red-600 transition-all active:scale-90 cursor-pointer flex items-center justify-center relative"
-          aria-label="Urgency timers"
+          title="Desti Clock (স্মার্ট অ্যালার্ম ও ফোকাস কাউন্টডাউন)"
+          className="p-2 text-gray-900 hover:text-red-600 transition-all active:scale-90 cursor-pointer flex items-center justify-center"
+          aria-label="Desti Clock"
         >
-          <div className="relative">
-            <Timer className="w-6 h-6 stroke-[2]" />
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#E53935] rounded-full ring-2 ring-white" />
-          </div>
+          <AlarmClock className="w-6 h-6 stroke-[2]" />
         </button>
 
-        {/* 4. Document / Reports */}
+        {/* 4. Desti Notes - Quick Note Taking */}
         <button
           id="btn-quick-reports"
           onClick={onReportsClick}
-          title="রিপোর্ট ও আবেদন সমূহ"
+          title="Desti Notes (যেকোনো কিছু সহজে নোট করুন)"
           className="p-2 text-gray-900 hover:text-teal-600 transition-all active:scale-90 cursor-pointer flex items-center justify-center"
-          aria-label="My reports and forms"
+          aria-label="Desti Notes"
         >
           <FileText className="w-6 h-6 stroke-[2]" />
         </button>
 
-        {/* 5. Language Switcher */}
+        {/* 5. Desti Translate (Universal Translator) */}
         <button
-          id="btn-quick-language"
-          onClick={onLanguageToggle}
-          title="ভাষা পরিবর্তন"
+          id="btn-quick-translate"
+          onClick={onTranslateClick || onLanguageToggle}
+          title="Desti Translate (যেকোনো ভাষা অনুবাদ করুন)"
           className="p-2 text-gray-900 hover:text-blue-600 transition-all active:scale-90 cursor-pointer flex items-center justify-center"
-          aria-label="Switch language"
+          aria-label="Desti Translate"
         >
-          <div className="flex items-center space-x-1">
-            <Languages className="w-5 h-5 stroke-[2]" />
-            <span className="text-[11px] font-bold text-blue-600 leading-none">
-              {currentLanguage === 'bn' ? 'বাং' : 'EN'}
-            </span>
-          </div>
+          <Languages className="w-6 h-6 stroke-[2]" />
         </button>
 
         {/* 6. More / Grid Icon matching exact Screenshot_20260918-010455.png */}

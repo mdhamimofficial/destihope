@@ -121,6 +121,7 @@ interface ModuleSwitcherModalProps {
   onClose: () => void;
   onSelectModule: (mod: ActiveModule) => void;
   activeModule: ActiveModule;
+  autoCloseTimerEnabled?: boolean;
 }
 
 export const ModuleSwitcherModal: React.FC<ModuleSwitcherModalProps> = ({
@@ -128,6 +129,7 @@ export const ModuleSwitcherModal: React.FC<ModuleSwitcherModalProps> = ({
   onClose,
   onSelectModule,
   activeModule,
+  autoCloseTimerEnabled = true,
 }) => {
   // Radius of orbit in pixels (balanced spacing for pure icons)
   const ORBIT_RADIUS = 115;
@@ -136,9 +138,9 @@ export const ModuleSwitcherModal: React.FC<ModuleSwitcherModalProps> = ({
 
   const currentMod = ALL_ORBIT_MODULES.find(m => m.id === activeModule) || HOME_MODULE_INFO;
 
-  // 5-second auto-close countdown when modal is open
+  // 5-second auto-close countdown when modal is open (if enabled)
   useEffect(() => {
-    if (!isOpen) {
+    if (!isOpen || !autoCloseTimerEnabled) {
       setTimeLeft(5);
       return;
     }
@@ -165,7 +167,7 @@ export const ModuleSwitcherModal: React.FC<ModuleSwitcherModalProps> = ({
       clearInterval(intervalId);
       clearTimeout(timeoutId);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, autoCloseTimerEnabled]);
 
   return (
     <AnimatePresence>
@@ -181,7 +183,7 @@ export const ModuleSwitcherModal: React.FC<ModuleSwitcherModalProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.12 }}
-            className="fixed inset-0 bg-gray-950/80 backdrop-blur-md cursor-pointer"
+            className="fixed inset-0 bg-gray-950/80 cursor-pointer"
             onClick={onClose}
           />
 
@@ -300,7 +302,7 @@ export const ModuleSwitcherModal: React.FC<ModuleSwitcherModalProps> = ({
             </div>
 
             {/* Currently Active Status Chip with Auto-Close 5s Countdown Timer */}
-            <div className="mt-5 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 flex items-center gap-3 text-white">
+            <div className="mt-5 px-3.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 flex items-center gap-3 text-white shadow-md">
               <div className="flex items-center gap-1.5">
                 <span className="text-[11px] text-gray-300">বর্তমান:</span>
                 <span 
@@ -311,12 +313,12 @@ export const ModuleSwitcherModal: React.FC<ModuleSwitcherModalProps> = ({
                   {currentMod.nameBn}
                 </span>
               </div>
-              <span className="text-[10px] text-amber-300/90 font-medium px-2 py-0.5 rounded-full bg-white/10 border border-white/10">
-                {timeLeft}s পর বন্ধ হবে
+              <span className="text-[10px] text-amber-300 font-medium px-2 py-0.5 rounded bg-slate-800 border border-slate-700">
+                {autoCloseTimerEnabled ? `${timeLeft}s পর বন্ধ হবে` : 'ম্যানুয়াল মোড'}
               </span>
             </div>
 
-            {/* Close Floating Capsule Button */}
+            {/* Close Solid Button */}
             <motion.button
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -327,7 +329,7 @@ export const ModuleSwitcherModal: React.FC<ModuleSwitcherModalProps> = ({
                 e.stopPropagation();
                 onClose();
               }}
-              className="mt-5 px-6 py-2 rounded-full bg-slate-800/80 hover:bg-slate-700 active:bg-slate-600 text-white text-xs font-bold tracking-wide flex items-center gap-2 border border-white/20 backdrop-blur-md transition-all active:scale-95 shadow-xl cursor-pointer"
+              className="mt-5 px-5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-white text-xs font-semibold tracking-wide flex items-center gap-2 border border-slate-700 transition-all active:scale-95 shadow-lg cursor-pointer"
               aria-label="বন্ধ করুন"
             >
               <X className="w-4 h-4" />

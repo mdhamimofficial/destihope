@@ -344,7 +344,7 @@ export const DestiProfileView: React.FC<DestiProfileViewProps> = ({
 
           {/* ================= HIGHLIGHTED: DESTICARE DONOR WILLINGNESS STATUS CARD ================= */}
           <div className="bg-white p-4 rounded-3xl border-2 border-rose-100 shadow-2xs space-y-3 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-rose-50 rounded-full blur-2xl -mr-8 -mt-8 pointer-events-none" />
+            <div className="absolute top-0 right-0 w-24 h-24 bg-rose-50 rounded-full opacity-60 pointer-events-none" />
             
             <div className="flex items-start justify-between">
               <div className="flex items-center space-x-2">
@@ -627,7 +627,7 @@ export const DestiProfileView: React.FC<DestiProfileViewProps> = ({
             <div className="space-y-4 animate-in fade-in duration-150">
               {/* Module Header Card - Donator Account */}
               <div className="bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white p-5 rounded-3xl shadow-md relative overflow-hidden">
-                <div className="absolute right-0 top-0 w-36 h-36 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10" />
+                <div className="absolute right-0 top-0 w-36 h-36 bg-white/10 rounded-full pointer-events-none" />
                 <div className="flex items-start justify-between relative z-10">
                   <div className="space-y-1">
                     <span className="text-[10px] font-black uppercase tracking-wider bg-black/20 px-2.5 py-0.5 rounded-full inline-block">
@@ -812,7 +812,12 @@ export const DestiProfileView: React.FC<DestiProfileViewProps> = ({
               {/* Donor Smart Card Preview - Only for users who have donated at least once */}
               {donationsCount >= 1 ? (
                 <div className="bg-slate-900 text-white rounded-3xl p-4 border border-slate-800 shadow-sm space-y-3 relative overflow-hidden">
-                  <div className="absolute right-0 top-0 w-32 h-32 bg-rose-500/10 rounded-full blur-xl pointer-events-none" />
+                  <div 
+                    className="absolute inset-0 pointer-events-none opacity-30" 
+                    style={{
+                      backgroundImage: 'radial-gradient(circle at 90% 10%, rgba(244, 63, 94, 0.2) 0%, transparent 60%)'
+                    }}
+                  />
                   <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                     <div className="flex items-center space-x-2">
                       <Droplet className="w-4 h-4 text-rose-500 fill-rose-500" />

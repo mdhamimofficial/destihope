@@ -2,6 +2,20 @@ export type ActiveModule = 'hope' | 'chat' | 'media' | 'brain' | 'care' | 'find'
 
 export type FeedCategory = 'For You' | 'Blood Help' | 'Missing' | 'News' | 'Community';
 
+export interface HubManualControls {
+  showLiveAlert: boolean;          // জরুরি লাইভ অ্যালার্ট ব্যানার
+  showQuickActions: boolean;       // কুইক অ্যাকশন বোতাম বার
+  showCategoryPills: boolean;      // ক্যাটাগরি ফিল্টার পিলস
+  compactFeedMode: boolean;        // কমপ্যাক্ট/ঘন ফিড মোড
+  autoPlayMedia: boolean;          // মিডিয়া অটো-প্লে
+  showModuleBadges: boolean;       // নোটিফিকেশন রেড ব্যাজ ও কাউন্টার
+  enableAnimations: boolean;       // ফ্লুইড অ্যানিমেশন ও মোশন
+  hapticSoundFeedback: boolean;    // ইন্টারঅ্যাকশন সাউন্ড/হ্যাপটিক
+  autoCloseOrbitTimer: boolean;    // ৫-সেকেন্ড অটো-ক্লোজ টাইমার
+  dataSaver: boolean;              // ডাটা সেভার
+  highContrastMode: boolean;       // হাই কনট্রাস্ট মোড
+}
+
 export interface FeedPost {
   id: string;
   type: 'blood' | 'missing' | 'news' | 'social';
@@ -52,14 +66,25 @@ export interface FeedPost {
 
 export interface ChatMessage {
   id: string;
-  sender: 'me' | 'other';
+  sender: 'me' | 'other' | 'system';
   text: string;
   time: string;
-  type?: 'text' | 'image' | 'voice' | 'location' | 'case_card';
+  type?: 'text' | 'image' | 'voice' | 'location' | 'case_card' | 'blood_card' | 'missing_card' | 'brain_card' | 'media_card';
+  mediaUrl?: string;
+  duration?: string;
+  moduleOrigin?: 'hope' | 'care' | 'find' | 'brain' | 'media';
   caseCardData?: {
     title: string;
     desc: string;
     badge: string;
+    bloodGroup?: string;
+    hospital?: string;
+    phone?: string;
+    caseId?: string;
+    photo?: string;
+    status?: string;
+    actionLabel?: string;
+    secondaryActionLabel?: string;
   };
 }
 
@@ -67,14 +92,19 @@ export interface ChatConversation {
   id: string;
   title: string;
   avatar: string;
-  type: 'personal' | 'group' | 'blood_chat' | 'missing_chat';
+  type: 'personal' | 'group' | 'blood_chat' | 'missing_chat' | 'saved';
   lastMessage: string;
   lastMessageTime: string;
   unreadCount: number;
   isPinned?: boolean;
+  isSaved?: boolean;
   onlineStatus?: boolean;
   membersCount?: number;
   badge?: string;
+  moduleOrigin?: 'hope' | 'care' | 'find' | 'brain' | 'media';
+  moduleTag?: string;
+  phone?: string;
+  verified?: boolean;
 }
 
 export interface MediaItem {
