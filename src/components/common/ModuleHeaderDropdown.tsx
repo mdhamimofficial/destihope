@@ -13,6 +13,7 @@ import {
   Layers
 } from 'lucide-react';
 import { ActiveModule } from '../../types';
+import { useLanguage } from '../../context/LanguageContext';
 
 // Custom SVG matching the exact 3-tier stacked layers from user's image with isometric perspective
 export const ModuleLayersIcon: React.FC<{ className?: string; size?: number; strokeWidth?: number }> = ({
@@ -51,7 +52,9 @@ interface ModuleInfo {
   id: ActiveModule;
   label: string;
   nameBn: string;
-  badge: string;
+  nameEn: string;
+  badgeBn: string;
+  badgeEn: string;
   icon: React.ElementType;
   accentColor: string;
   badgeBg: string;
@@ -62,7 +65,9 @@ export const MODULE_DEFINITIONS: ModuleInfo[] = [
     id: 'hope',
     label: 'DESTI HOPE',
     nameBn: 'সোশ্যাল ও হেল্প ফিড',
-    badge: 'হোম ফিড',
+    nameEn: 'Social & Help Feed',
+    badgeBn: 'হোম ফিড',
+    badgeEn: 'Home Feed',
     icon: Heart,
     accentColor: '#E53935',
     badgeBg: 'bg-red-50 text-red-700 border-red-200'
@@ -71,7 +76,9 @@ export const MODULE_DEFINITIONS: ModuleInfo[] = [
     id: 'care',
     label: 'DESTI CARE',
     nameBn: 'রক্তদান ও হাসপাতাল',
-    badge: 'জরুরি সেবা',
+    nameEn: 'Blood Donation & Care',
+    badgeBn: 'জরুরি সেবা',
+    badgeEn: 'Emergency',
     icon: Droplet,
     accentColor: '#E11D48',
     badgeBg: 'bg-rose-50 text-rose-700 border-rose-200'
@@ -80,7 +87,9 @@ export const MODULE_DEFINITIONS: ModuleInfo[] = [
     id: 'find',
     label: 'DESTI FIND',
     nameBn: 'নিখোঁজ অনুসন্ধান নেটওয়ার্ক',
-    badge: 'রেসকিউ রাডার',
+    nameEn: 'Missing Person Search',
+    badgeBn: 'রেসকিউ রাডার',
+    badgeEn: 'Rescue Radar',
     icon: UserSearch,
     accentColor: '#059669',
     badgeBg: 'bg-emerald-50 text-emerald-700 border-emerald-200'
@@ -89,7 +98,9 @@ export const MODULE_DEFINITIONS: ModuleInfo[] = [
     id: 'brain',
     label: 'DESTI BRAIN',
     nameBn: 'জ্ঞান, ডিবেট ও এআই ডাক্তার',
-    badge: 'নলেজ হাব',
+    nameEn: 'Knowledge, Debate & AI',
+    badgeBn: 'নলেজ হাব',
+    badgeEn: 'Knowledge Hub',
     icon: Brain,
     accentColor: '#D97706',
     badgeBg: 'bg-amber-50 text-amber-700 border-amber-200'
@@ -98,7 +109,9 @@ export const MODULE_DEFINITIONS: ModuleInfo[] = [
     id: 'chat',
     label: 'DESTI CHAT',
     nameBn: 'জরুরি চ্যাট ও অডিও কল',
-    badge: 'লাইভ কানেক্ট',
+    nameEn: 'Direct Chat & Calls',
+    badgeBn: 'লাইভ কানেক্ট',
+    badgeEn: 'Live Connect',
     icon: MessageSquare,
     accentColor: '#0D9488',
     badgeBg: 'bg-teal-50 text-teal-700 border-teal-200'
@@ -107,7 +120,9 @@ export const MODULE_DEFINITIONS: ModuleInfo[] = [
     id: 'media',
     label: 'DESTI MEDIA',
     nameBn: 'সচেতনতামূলক রিল ও ভিডিও',
-    badge: 'শর্টস ও মিডিয়া',
+    nameEn: 'Awareness Reels & Video',
+    badgeBn: 'শর্টস ও মিডিয়া',
+    badgeEn: 'Shorts & Media',
     icon: Film,
     accentColor: '#9333EA',
     badgeBg: 'bg-purple-50 text-purple-700 border-purple-200'
@@ -116,7 +131,9 @@ export const MODULE_DEFINITIONS: ModuleInfo[] = [
     id: 'profile',
     label: 'DESTI PROFILE',
     nameBn: 'ব্যক্তিগত প্রোফাইল ও সেটিংস',
-    badge: 'অ্যাকাউন্ট',
+    nameEn: 'Personal Profile & Settings',
+    badgeBn: 'অ্যাকাউন্ট',
+    badgeEn: 'Account',
     icon: User,
     accentColor: '#475569',
     badgeBg: 'bg-slate-50 text-slate-700 border-slate-200'
@@ -128,6 +145,7 @@ export const ModuleHeaderDropdown: React.FC<ModuleHeaderDropdownProps> = ({
   onSelectModule,
   darkMode = false
 }) => {
+  const { l } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -193,7 +211,7 @@ export const ModuleHeaderDropdown: React.FC<ModuleHeaderDropdownProps> = ({
                 ? 'text-zinc-300 group-hover:text-white' 
                 : 'text-gray-700 group-hover:text-black'
             }`}
-            title="মডিউল পরিবর্তন"
+            title={l('মডিউল পরিবর্তন', 'Switch Module')}
           >
             <ModuleLayersIcon className="w-3.5 h-3.5 stroke-[2.4]" />
           </div>
@@ -223,13 +241,13 @@ export const ModuleHeaderDropdown: React.FC<ModuleHeaderDropdownProps> = ({
               <span className={`text-[11px] font-bold uppercase tracking-wider ${
                 darkMode ? 'text-zinc-300' : 'text-gray-800'
               }`}>
-                মডিউল পরিবর্তন
+                {l('মডিউল পরিবর্তন', 'Switch Module')}
               </span>
             </div>
             <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
               darkMode ? 'bg-zinc-800 text-zinc-300' : 'bg-gray-200 text-gray-700'
             }`}>
-              ৭টি মডিউল
+              {l('৭টি মডিউল', '7 Modules')}
             </span>
           </div>
 
@@ -275,7 +293,7 @@ export const ModuleHeaderDropdown: React.FC<ModuleHeaderDropdownProps> = ({
                       <p className={`text-[10px] truncate ${
                         darkMode ? 'text-zinc-400' : 'text-gray-500'
                       }`}>
-                        {mod.nameBn}
+                        {l(mod.nameBn, mod.nameEn)}
                       </p>
                     </div>
                   </div>
@@ -289,7 +307,7 @@ export const ModuleHeaderDropdown: React.FC<ModuleHeaderDropdownProps> = ({
                           ? 'bg-zinc-800/80 text-zinc-400 border-zinc-700' 
                           : mod.badgeBg
                       }`}>
-                        {mod.badge}
+                        {l(mod.badgeBn, mod.badgeEn)}
                       </span>
                     )}
                   </div>

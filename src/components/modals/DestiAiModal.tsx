@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import {
   X,
   Sparkles,
@@ -28,6 +29,7 @@ import {
   Gauge,
   Camera,
   Trash2,
+  CheckCheck,
 } from 'lucide-react';
 
 interface DestiAiModalProps {
@@ -121,6 +123,7 @@ export const DestiAiModal: React.FC<DestiAiModalProps> = ({
   onClose,
   onShowToast,
 }) => {
+  const { l, isEn } = useLanguage();
   // User Control Preferences
   const [responseMode, setResponseMode] = useState<ResponseMode>(() => {
     return (localStorage.getItem('desti_mode_clean') as ResponseMode) || 'concise';
@@ -551,7 +554,7 @@ export const DestiAiModal: React.FC<DestiAiModalProps> = ({
             <button
               onClick={() => setShowSettingsSheet(true)}
               className="p-2 text-gray-600 hover:text-purple-700 hover:bg-purple-50 rounded-xl transition-all cursor-pointer"
-              title="এআই কন্ট্রোলস ও সেটিংস"
+              title={l("এআই কন্ট্রোলস ও সেটিংস", "AI Controls & Settings")}
               aria-label="সেটিংস"
             >
               <SlidersHorizontal className="w-4 h-4" />
@@ -561,7 +564,7 @@ export const DestiAiModal: React.FC<DestiAiModalProps> = ({
             <button
               onClick={handleClearHistory}
               className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-colors cursor-pointer"
-              title="চ্যাট হিস্ট্রি রিসেট করুন"
+              title={l("চ্যাট হিস্ট্রি রিসেট করুন", "Reset chat history")}
             >
               <RotateCcw className="w-4 h-4" />
             </button>
@@ -570,7 +573,7 @@ export const DestiAiModal: React.FC<DestiAiModalProps> = ({
             <button
               onClick={onClose}
               className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-colors cursor-pointer"
-              aria-label="বন্ধ করুন"
+              aria-label={l("বন্ধ করুন", "Close")}
             >
               <X className="w-5 h-5" />
             </button>
@@ -588,10 +591,10 @@ export const DestiAiModal: React.FC<DestiAiModalProps> = ({
                 <Sparkles className="w-6 h-6" />
               </div>
               <h2 className="text-base font-black text-gray-900">
-                কীভাবে আপনাকে সাহায্য করতে পারি?
+                {l('কীভাবে আপনাকে সাহায্য করতে পারি?', 'How can I help you today?')}
               </h2>
               <p className="text-xs text-gray-500 max-w-sm mx-auto">
-                যেকোনো প্রশ্ন লিখে জানান অথবা প্রেসক্রিপশন ও রিপোর্টের ছবি আপলোড করে জেনে নিন।
+                {l('যেকোনো প্রশ্ন লিখে জানান অথবা প্রেসক্রিপশন ও রিপোর্টের ছবি আপলোড করে জেনে নিন।', 'Ask any question or upload prescriptions/medical reports for clear explanations.')}
               </p>
             </div>
 
@@ -638,118 +641,168 @@ export const DestiAiModal: React.FC<DestiAiModalProps> = ({
             >
               {/* Avatar */}
               <div
-                className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 text-xs font-bold shadow-2xs mt-0.5 ${
+                className={`w-7.5 h-7.5 rounded-xl flex items-center justify-center shrink-0 text-xs font-bold shadow-2xs mt-0.5 ${
                   isUser
-                    ? 'bg-gray-900 text-white'
-                    : `bg-gradient-to-tr ${msgPersona.color} text-white`
+                    ? 'bg-gradient-to-tr from-purple-800 to-indigo-900 text-white ring-2 ring-purple-100'
+                    : `bg-gradient-to-tr ${msgPersona.color} text-white ring-2 ring-purple-100`
                 }`}
               >
-                {isUser ? <User className="w-3.5 h-3.5" /> : <MsgIcon className="w-3.5 h-3.5" />}
+                {isUser ? <User className="w-4 h-4" /> : <MsgIcon className="w-4 h-4" />}
               </div>
 
               {/* Message Bubble Container */}
-              <div className={`max-w-[85%] space-y-1.5 ${isUser ? 'items-end' : 'items-start'}`}>
-                {/* Uploaded image if present */}
-                {msg.image && (
-                  <div className="rounded-2xl overflow-hidden border border-gray-200/90 shadow-2xs max-w-xs mb-1">
-                    <img
-                      src={msg.image}
-                      alt="Uploaded by user"
-                      className="w-full max-h-60 object-cover rounded-2xl bg-gray-100"
-                    />
-                  </div>
-                )}
+              <div className={`max-w-[85%] sm:max-w-[80%] space-y-1.5 ${isUser ? 'items-end' : 'items-start'}`}>
+                {/* User Message Bubble */}
+                {isUser ? (
+                  <div className="space-y-1.5 text-right">
+                    {/* User Attached Image (if present) */}
+                    {msg.image && (
+                      <div className="rounded-2xl overflow-hidden border border-purple-300/40 shadow-sm max-w-xs ml-auto mb-1 bg-black/10">
+                        <img
+                          src={msg.image}
+                          alt="Uploaded by user"
+                          className="w-full max-h-60 object-cover rounded-2xl"
+                        />
+                      </div>
+                    )}
 
-                {/* Text Bubble */}
-                {msg.content && (
-                  <div
-                    className={`p-3.5 rounded-2xl ${fontClass} leading-relaxed whitespace-pre-wrap select-text ${
-                      isUser
-                        ? 'bg-gray-900 text-white rounded-tr-xs shadow-2xs font-medium'
-                        : 'bg-white text-gray-900 border border-gray-200/90 rounded-tl-xs shadow-2xs'
-                    }`}
-                  >
-                    {msg.content}
-                  </div>
-                )}
-
-                {/* Actions Dock */}
-                <div
-                  className={`flex items-center space-x-2 text-[10px] text-gray-400 px-1 ${
-                    isUser ? 'justify-end' : 'justify-start'
-                  }`}
-                >
-                  <span>{msg.timestamp}</span>
-
-                  {!isUser && (
-                    <>
-                      <span>•</span>
-                      {/* Copy */}
-                      <button
-                        onClick={() => handleCopy(msg.id, msg.content)}
-                        className="p-1 hover:text-purple-700 transition-colors cursor-pointer flex items-center space-x-1"
-                        title="কপি"
+                    {/* Text Bubble */}
+                    {msg.content && (
+                      <div
+                        className={`p-3.5 rounded-2xl rounded-tr-xs bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 text-white shadow-sm border border-purple-400/30 text-left select-text ${fontClass} font-medium leading-relaxed`}
                       >
-                        {copiedId === msg.id ? (
-                          <Check className="w-3 h-3 text-emerald-600" />
-                        ) : (
-                          <Copy className="w-3 h-3" />
-                        )}
-                        <span>{copiedId === msg.id ? 'কপি হয়েছে' : 'কপি'}</span>
-                      </button>
+                        {msg.content}
+                      </div>
+                    )}
 
-                      {/* Read aloud */}
-                      <button
-                        onClick={() => handleSpeak(msg.id, msg.content)}
-                        className={`p-1 hover:text-purple-700 transition-colors cursor-pointer flex items-center space-x-1 ${
-                          isSpeakingId === msg.id ? 'text-purple-600 font-bold' : ''
-                        }`}
-                        title="পড়ে শোনান"
-                      >
-                        {isSpeakingId === msg.id ? (
-                          <>
-                            <VolumeX className="w-3 h-3 text-red-500 animate-pulse" />
-                            <span className="text-red-600">থামুন</span>
-                          </>
-                        ) : (
-                          <>
-                            <Volume2 className="w-3 h-3" />
-                            <span>শুনুন</span>
-                          </>
-                        )}
-                      </button>
+                    {/* Timestamp & Delivery Indicator */}
+                    <div className="flex items-center justify-end space-x-1.5 text-[10.5px] text-gray-400 px-1 font-medium">
+                      <span>{msg.timestamp}</span>
+                      <span title="প্রেরিত">
+                        <CheckCheck className="w-3.5 h-3.5 text-purple-600" />
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  /* AI Message Bubble */
+                  <div className="space-y-1.5 text-left">
+                    <div className="p-4 rounded-2xl rounded-tl-xs bg-white text-gray-900 border border-slate-200/90 shadow-2xs space-y-2.5">
+                      {/* AI Bubble Top Header with Persona Badge & Timestamp */}
+                      <div className="flex items-center justify-between border-b border-gray-100 pb-2 text-[11px]">
+                        <div className="flex items-center space-x-1.5">
+                          <span className="font-bold text-gray-900">Desti AI</span>
+                          <span className="text-[10px] font-bold px-1.5 py-0.2 bg-purple-50 text-purple-700 border border-purple-200/80 rounded-md">
+                            {msgPersona.label}
+                          </span>
+                        </div>
+                        <span className="text-[10.5px] text-gray-400 font-medium">
+                          {msg.timestamp}
+                        </span>
+                      </div>
 
-                      {/* Regenerate */}
-                      {index > 0 && (
+                      {/* Content */}
+                      <div className={`${fontClass} leading-relaxed whitespace-pre-wrap select-text text-gray-800`}>
+                        {msg.content}
+                      </div>
+
+                      {/* Actions Dock */}
+                      <div className="flex items-center space-x-2 pt-1 border-t border-gray-100 text-[10.5px] text-gray-500 font-medium">
+                        {/* Copy */}
                         <button
-                          onClick={() => handleRegenerate(index)}
-                          className="p-1 hover:text-purple-700 transition-colors cursor-pointer flex items-center space-x-1 border-l border-gray-200 pl-1.5"
-                          title="পুনরায় লিখুন"
+                          onClick={() => handleCopy(msg.id, msg.content)}
+                          className="px-2 py-1 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors cursor-pointer flex items-center space-x-1"
+                          title="কপি"
                         >
-                          <RefreshCw className="w-3 h-3" />
+                          {copiedId === msg.id ? (
+                            <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          ) : (
+                            <Copy className="w-3.5 h-3.5" />
+                          )}
+                          <span>{copiedId === msg.id ? 'কপি হয়েছে' : 'কপি'}</span>
                         </button>
-                      )}
-                    </>
-                  )}
-                </div>
+
+                        {/* Read aloud */}
+                        <button
+                          onClick={() => handleSpeak(msg.id, msg.content)}
+                          className={`px-2 py-1 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors cursor-pointer flex items-center space-x-1 ${
+                            isSpeakingId === msg.id ? 'text-purple-700 bg-purple-50 font-bold' : ''
+                          }`}
+                          title="পড়ে শোনান"
+                        >
+                          {isSpeakingId === msg.id ? (
+                            <>
+                              <VolumeX className="w-3.5 h-3.5 text-red-500 animate-pulse" />
+                              <span className="text-red-600 font-bold">থামুন</span>
+                            </>
+                          ) : (
+                            <>
+                              <Volume2 className="w-3.5 h-3.5" />
+                              <span>শুনুন</span>
+                            </>
+                          )}
+                        </button>
+
+                        {/* Regenerate */}
+                        {index > 0 && (
+                          <button
+                            onClick={() => handleRegenerate(index)}
+                            className="px-2 py-1 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors cursor-pointer flex items-center space-x-1 border-l border-gray-200 pl-2"
+                            title="পুনরায় লিখুন"
+                          >
+                            <RefreshCw className="w-3.5 h-3.5" />
+                            <span className="hidden sm:inline">পুনরায় লিখুন</span>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           );
         })}
 
-        {/* Loading Spinner */}
+        {/* Clean Loading Skeleton State */}
         {isLoading && (
-          <div className="flex items-start gap-2.5 animate-in fade-in">
+          <div className="flex items-start gap-2.5 animate-in fade-in duration-200">
+            {/* Avatar with glowing ring */}
             <div
-              className={`w-7 h-7 rounded-xl bg-gradient-to-tr ${CurrentPersona.color} text-white flex items-center justify-center shrink-0 shadow-2xs`}
+              className={`w-7.5 h-7.5 rounded-xl bg-gradient-to-tr ${CurrentPersona.color} text-white flex items-center justify-center shrink-0 shadow-2xs ring-2 ring-purple-200 animate-pulse`}
             >
-              <PersonaIcon className="w-3.5 h-3.5" />
+              <PersonaIcon className="w-4 h-4" />
             </div>
-            <div className="bg-white border border-gray-200/90 rounded-2xl rounded-tl-xs p-3.5 shadow-2xs flex items-center space-x-2 text-xs text-purple-700">
-              <Loader2 className="w-4 h-4 animate-spin text-purple-600" />
-              <span className="font-bold">
-                {selectedImage ? 'ছবি ও রিপোর্ট বিশ্লেষণ করছে...' : 'Desti AI উত্তর লিখছে...'}
-              </span>
+
+            {/* Skeleton Bubble */}
+            <div className="max-w-[85%] sm:max-w-[80%] w-full bg-white border border-slate-200/90 rounded-2xl rounded-tl-xs p-4 shadow-2xs space-y-3">
+              {/* Skeleton Header with typing indicator dots */}
+              <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                <div className="flex items-center space-x-2">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-purple-600" />
+                  <span className="text-xs font-bold text-purple-800">
+                    {selectedImage ? 'ছবি ও রিপোর্ট বিশ্লেষণ করছে' : 'Desti AI উত্তর প্রস্তুত করছে'}
+                  </span>
+                  <span className="inline-flex space-x-1 items-center">
+                    <span className="w-1.5 h-1.5 bg-purple-600 rounded-full animate-bounce [animation-delay:0ms]"></span>
+                    <span className="w-1.5 h-1.5 bg-purple-600 rounded-full animate-bounce [animation-delay:150ms]"></span>
+                    <span className="w-1.5 h-1.5 bg-purple-600 rounded-full animate-bounce [animation-delay:300ms]"></span>
+                  </span>
+                </div>
+                <span className="text-[10.5px] text-gray-300">প্রক্রিয়াধীন...</span>
+              </div>
+
+              {/* Skeleton Content Bars */}
+              <div className="space-y-2 py-1">
+                <div className="h-3.5 bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 rounded-md animate-pulse w-11/12"></div>
+                <div className="h-3.5 bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 rounded-md animate-pulse w-9/12"></div>
+                <div className="h-3.5 bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 rounded-md animate-pulse w-10/12"></div>
+                <div className="h-3.5 bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 rounded-md animate-pulse w-7/12"></div>
+              </div>
+
+              {/* Skeleton Footer Bar */}
+              <div className="flex items-center space-x-2 pt-1 border-t border-gray-100">
+                <div className="h-3 w-12 bg-slate-100 rounded animate-pulse"></div>
+                <div className="h-3 w-12 bg-slate-100 rounded animate-pulse"></div>
+              </div>
             </div>
           </div>
         )}
@@ -877,17 +930,6 @@ export const DestiAiModal: React.FC<DestiAiModalProps> = ({
             <Send className="w-4 h-4" />
           </button>
         </form>
-
-        {/* Sub-bar hint */}
-        <div className="flex items-center justify-between px-2 pt-1.5 text-[10px] text-gray-400">
-          <div className="flex items-center space-x-1.5">
-            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full inline-block"></span>
-            <span>{CurrentPersona.label}</span>
-            <span>•</span>
-            <span>{responseMode === 'concise' ? 'সংক্ষিপ্ত' : responseMode === 'detailed' ? 'বিস্তারিত' : 'ফরমাল'}</span>
-          </div>
-          <span>ছবি আপলোড ও ভয়েস সাপোর্ট সক্রিয়</span>
-        </div>
       </footer>
 
       {/* 4. PROFESSIONAL CONTROLS & SETTINGS DRAWER (মডেল/স্টাইল নিয়ন্ত্রণের জন্য গোছানো প্যানেল) */}

@@ -27,6 +27,7 @@ import {
   User
 } from 'lucide-react';
 import { UserProfile } from '../../types';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -53,6 +54,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   onToggleDataSaver,
   onSaveNotice,
 }) => {
+  const { language, setLanguage, l, isEn } = useLanguage();
   const [activeTab, setActiveTab] = useState<'preferences' | 'privacy' | 'security' | 'notifications' | 'account'>('preferences');
   
   // Local fallback states if not controlled
@@ -120,7 +122,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   };
 
   const activeDark = onToggleDarkMode ? isDarkMode : localDarkMode;
-  const activeLanguage = onToggleLanguage ? currentLang : localLang;
+  const activeLanguage = language;
   const activeDataSaver = onToggleDataSaver ? dataSaverEnabled : localDataSaver;
 
   return (
@@ -142,8 +144,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               <ShieldCheck className="w-5 h-5 stroke-[2.2]" />
             </div>
             <div>
-              <h2 className={`font-bold text-base leading-tight ${activeDark ? 'text-white' : 'text-gray-900'}`}>সেটিংস ও প্রাইভেসি</h2>
-              <p className={`text-xs ${activeDark ? 'text-gray-400' : 'text-gray-500'}`}>অ্যাকাউন্ট নিরাপত্তা ও গোপনীয়তা নিয়ন্ত্রণ</p>
+              <h2 className={`font-bold text-base leading-tight ${activeDark ? 'text-white' : 'text-gray-900'}`}>{l('সেটিংস ও প্রাইভেসি', 'Settings & Privacy')}</h2>
+              <p className={`text-xs ${activeDark ? 'text-gray-400' : 'text-gray-500'}`}>{l('অ্যাকাউন্ট নিরাপত্তা ও গোপনীয়তা নিয়ন্ত্রণ', 'Manage security, privacy & preferences')}</p>
             </div>
           </div>
           <button
@@ -174,7 +176,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             }`}
           >
             <Sliders className="w-3.5 h-3.5" />
-            <span>প্রেফারেন্স</span>
+            <span>{l('প্রেফারেন্স', 'Preferences')}</span>
           </button>
           <button
             onClick={() => setActiveTab('privacy')}
@@ -189,7 +191,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             }`}
           >
             <EyeOff className="w-3.5 h-3.5" />
-            <span>প্রাইভেসি</span>
+            <span>{l('প্রাইভেসি', 'Privacy')}</span>
           </button>
           <button
             onClick={() => setActiveTab('security')}
@@ -204,7 +206,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             }`}
           >
             <Lock className="w-3.5 h-3.5" />
-            <span>নিরাপত্তা</span>
+            <span>{l('নিরাপত্তা', 'Security')}</span>
           </button>
           <button
             onClick={() => setActiveTab('notifications')}
@@ -219,7 +221,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             }`}
           >
             <Bell className="w-3.5 h-3.5" />
-            <span>নোটিফিকেশন</span>
+            <span>{l('নোটিফিকেশন', 'Notifications')}</span>
           </button>
           <button
             onClick={() => setActiveTab('account')}
@@ -234,7 +236,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             }`}
           >
             <User className="w-3.5 h-3.5" />
-            <span>অ্যাকাউন্ট</span>
+            <span>{l('অ্যাকাউন্ট', 'Account')}</span>
           </button>
         </div>
 
@@ -258,10 +260,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     </div>
                     <div>
                       <div className={`text-xs font-bold leading-tight ${activeDark ? 'text-white' : 'text-gray-900'}`}>
-                        ডার্ক মোড (Dark Theme)
+                        {l('ডার্ক মোড (Dark Theme)', 'Dark Mode (Dark Theme)')}
                       </div>
                       <div className={`text-[11px] mt-0.5 ${activeDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        {activeDark ? 'ডার্ক থিম সক্রিয় রয়েছে (চোখের স্বস্তিদায়ক)' : 'লাইট থিম সক্রিয় রয়েছে (স্বাভাবিক ভিউ)'}
+                        {activeDark ? l('ডার্ক থিম সক্রিয় রয়েছে (চোখের স্বস্তিদায়ক)', 'Dark theme is active (comfortable for eyes)') : l('লাইট থিম সক্রিয় রয়েছে (স্বাভাবিক ভিউ)', 'Light theme is active (standard view)')}
                       </div>
                     </div>
                   </div>
@@ -293,10 +295,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   </div>
                   <div>
                     <div className={`text-xs font-bold leading-tight ${activeDark ? 'text-white' : 'text-gray-900'}`}>
-                      অ্যাপ্লিকেশন ভাষা (App Language)
+                      {l('অ্যাপ্লিকেশন ভাষা (App Language)', 'App Language (ভাষা)')}
                     </div>
                     <div className={`text-[11px] mt-0.5 ${activeDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                      মেনু ও নোটিফিকেশনের মূল ভাষা নির্বাচন করুন
+                      {l('মেনু ও নোটিফিকেশনের মূল ভাষা নির্বাচন করুন', 'Select primary language for interface & alerts')}
                     </div>
                   </div>
                 </div>
@@ -317,7 +319,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   >
                     <div>
                       <div className="text-xs font-bold">বাংলা (Bangla)</div>
-                      <div className={`text-[10px] ${activeDark ? 'text-gray-400' : 'text-gray-500'}`}>ডিফল্ট বাংলা ইন্টারফেস</div>
+                      <div className={`text-[10px] ${activeDark ? 'text-gray-400' : 'text-gray-500'}`}>{l('ডিফল্ট বাংলা ইন্টারফেস', 'Default Bangla Interface')}</div>
                     </div>
                     {activeLanguage === 'bn' && <Check className="w-4 h-4 text-blue-500" />}
                   </button>
@@ -337,7 +339,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   >
                     <div>
                       <div className="text-xs font-bold">English (ইংরেজি)</div>
-                      <div className={`text-[10px] ${activeDark ? 'text-gray-400' : 'text-gray-500'}`}>English Interface</div>
+                      <div className={`text-[10px] ${activeDark ? 'text-gray-400' : 'text-gray-500'}`}>{l('ইংরেজি ইন্টারফেস', 'English Interface')}</div>
                     </div>
                     {activeLanguage === 'en' && <Check className="w-4 h-4 text-blue-500" />}
                   </button>
@@ -357,10 +359,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     </div>
                     <div>
                       <div className={`text-xs font-bold leading-tight ${activeDark ? 'text-white' : 'text-gray-900'}`}>
-                        ডাটা সেভার (Data Saver Mode)
+                        {l('ডাটা সেভার (Data Saver Mode)', 'Data Saver Mode')}
                       </div>
                       <div className={`text-[11px] mt-0.5 ${activeDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                        {activeDataSaver ? 'কম ব্যান্ডউইথ খরচ হচ্ছে, ছবি কমপ্রেসড' : 'স্বাভাবিক কোয়ালিটিতে ছবি ও কন্টেন্ট প্রদর্শন'}
+                        {activeDataSaver ? l('কম ব্যান্ডউইথ খরচ হচ্ছে, ছবি কমপ্রেসড', 'Lower data used, compressed media') : l('স্বাভাবিক কোয়ালিটিতে ছবি ও কন্টেন্ট প্রদর্শন', 'Full quality media and content')}
                       </div>
                     </div>
                   </div>
@@ -383,14 +385,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               {/* 4. Additional App Preferences */}
               <div className="space-y-2.5 pt-1">
                 <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-1">
-                  অন্যান্য পছন্দসমূহ
+                  {l('অন্যান্য পছন্দসমূহ', 'Other Preferences')}
                 </div>
 
                 {/* Sound Effects */}
                 <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50 border border-gray-100">
                   <div className="pr-3">
-                    <div className="text-xs font-bold text-gray-900">অ্যাকশন সাউন্ড ইফেক্ট</div>
-                    <div className="text-[11px] text-gray-500">লাইক, কমেন্ট ও দান নিশ্চিতকরণে মৃদু সাউন্ড</div>
+                    <div className="text-xs font-bold text-gray-900">{l('অ্যাকশন সাউন্ড ইফেক্ট', 'Action Sound Effects')}</div>
+                    <div className="text-[11px] text-gray-500">{l('লাইক, কমেন্ট ও দান নিশ্চিতকরণে মৃদু সাউন্ড', 'Sound feedback on likes and actions')}</div>
                   </div>
                   <button
                     type="button"
@@ -411,8 +413,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 {/* Auto Play Video */}
                 <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50 border border-gray-100">
                   <div className="pr-3">
-                    <div className="text-xs font-bold text-gray-900">ভিডিও স্বয়ংক্রিয় প্লেব্যাক</div>
-                    <div className="text-[11px] text-gray-500">ফিডে স্ক্রোল করার সময় ভিডিও নিজে থেকে চলবে</div>
+                    <div className="text-xs font-bold text-gray-900">{l('ভিডিও স্বয়ংক্রিয় প্লেব্যাক', 'Auto-play Videos')}</div>
+                    <div className="text-[11px] text-gray-500">{l('ফিডে স্ক্রোল করার সময় ভিডিও নিজে থেকে চলবে', 'Videos play automatically while scrolling')}</div>
                   </div>
                   <button
                     type="button"

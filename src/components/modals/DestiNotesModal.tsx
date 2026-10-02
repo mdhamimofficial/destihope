@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import {
   X,
   Plus,
@@ -136,6 +137,7 @@ export const DestiNotesModal: React.FC<DestiNotesModalProps> = ({
   onClose,
   onShowToast,
 }) => {
+  const { l, isEn } = useLanguage();
   const [notes, setNotes] = useState<DestiNote[]>(() => {
     try {
       const saved = localStorage.getItem('destihope_clean_notes');
@@ -355,7 +357,7 @@ export const DestiNotesModal: React.FC<DestiNotesModalProps> = ({
             <button
               onClick={onClose}
               className="p-2 -ml-2 text-gray-600 hover:text-black hover:bg-gray-100 rounded-full transition-all cursor-pointer"
-              aria-label="ফিরে যান"
+              aria-label={l('ফিরে যান', 'Go Back')}
             >
               <ArrowLeft className="w-5 h-5 stroke-[2.2]" />
             </button>
@@ -381,7 +383,7 @@ export const DestiNotesModal: React.FC<DestiNotesModalProps> = ({
             <button
               onClick={onClose}
               className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-all cursor-pointer"
-              aria-label="বন্ধ করুন"
+              aria-label={l('বন্ধ করুন', 'Close')}
             >
               <X className="w-5 h-5" />
             </button>

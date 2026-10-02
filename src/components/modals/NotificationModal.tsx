@@ -1,5 +1,6 @@
 import React from 'react';
 import { X, Bell, Droplet, Search, Award, MessageSquare } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface NotificationModalProps {
   isOpen: boolean;
@@ -14,14 +15,19 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
   onOpenBloodCase,
   onOpenMissingCase,
 }) => {
+  const { l } = useLanguage();
+
   if (!isOpen) return null;
 
   const notifications = [
     {
       id: 'notif-1',
-      title: 'জরুরি রক্তের নোটিফিকেশন',
-      desc: 'ঢাকা মেডিকেল কলেজ হাসপাতালে একজন রোগীর জন্য জরুরি O+ রক্ত প্রয়োজন। আপনার রক্ত গ্রুপ O+।',
-      time: '১৫ মিনিট আগে',
+      title: l('জরুরি রক্তের নোটিফিকেশন', 'Urgent Blood Alert'),
+      desc: l(
+        'ঢাকা মেডিকেল কলেজ হাসপাতালে একজন রোগীর জন্য জরুরি O+ রক্ত প্রয়োজন। আপনার রক্ত গ্রুপ O+।',
+        'Patient urgently needs O+ blood at Dhaka Medical College Hospital. Your blood group matches O+.'
+      ),
+      time: l('১৫ মিনিট আগে', '15m ago'),
       type: 'blood',
       icon: Droplet,
       color: 'text-red-600 bg-red-50',
@@ -29,9 +35,12 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
     },
     {
       id: 'notif-2',
-      title: 'হোপ পয়েন্টস অর্জিত',
-      desc: 'একটি রক্তের কেস শেয়ার করায় আপনার প্রোফাইলে +১০ Hope Points যুক্ত হয়েছে!',
-      time: '১ ঘণ্টা আগে',
+      title: l('হোপ পয়েন্টস অর্জিত', 'Hope Points Earned'),
+      desc: l(
+        'একটি রক্তের কেস শেয়ার করায় আপনার প্রোফাইলে +১০ Hope Points যুক্ত হয়েছে!',
+        'You earned +10 Hope Points for sharing an emergency blood request!'
+      ),
+      time: l('১ ঘণ্টা আগে', '1h ago'),
       type: 'points',
       icon: Award,
       color: 'text-teal-600 bg-teal-50',
@@ -39,9 +48,12 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
     },
     {
       id: 'notif-3',
-      title: 'নিখোঁজ ব্যক্তির নতুন আপডেট',
-      desc: 'কেস FIND-BD-8840 (ফারহানা আক্তার): উদ্ধার সম্পন্ন হয়েছে।',
-      time: '৩ ঘণ্টা আগে',
+      title: l('নিখোঁজ ব্যক্তির নতুন আপডেট', 'Missing Person Case Update'),
+      desc: l(
+        'কেস FIND-BD-8840 (ফারহানা আক্তার): উদ্ধার সম্পন্ন হয়েছে।',
+        'Case FIND-BD-8840 (Farhana Akter): Safely rescued and reunited.'
+      ),
+      time: l('৩ ঘণ্টা আগে', '3h ago'),
       type: 'missing',
       icon: Search,
       color: 'text-amber-600 bg-amber-50',
@@ -61,7 +73,7 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
         <div className="p-4 border-b border-gray-100 flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Bell className="w-5 h-5 text-[#E53935]" />
-            <h3 className="font-bold text-gray-900 text-base">নোটিফিকেশন</h3>
+            <h3 className="font-bold text-gray-900 text-base">{l('নোটিফিকেশন', 'Notifications')}</h3>
           </div>
           <button
             type="button"
@@ -71,8 +83,8 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
               onClose();
             }}
             className="w-10 h-10 -mr-2 -my-2 flex items-center justify-center text-gray-500 hover:text-gray-900 rounded-full hover:bg-gray-100 active:bg-gray-200 active:scale-90 transition-all cursor-pointer touch-manipulation"
-            aria-label="বন্ধ করুন"
-            title="বন্ধ করুন"
+            aria-label={l('বন্ধ করুন', 'Close')}
+            title={l('বন্ধ করুন', 'Close')}
           >
             <X className="w-6 h-6 stroke-[2.2]" />
           </button>

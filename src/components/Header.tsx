@@ -15,6 +15,7 @@ import {
   CloudUpload
 } from 'lucide-react';
 import { ActiveModule } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
 export type SyncStatus = 'idle' | 'syncing' | 'synced';
 
@@ -51,6 +52,9 @@ export const Header: React.FC<HeaderProps> = ({
   onRefresh,
   isRefreshing = false,
 }) => {
+  const { language, l } = useLanguage();
+  const isEn = language === 'en';
+
   const getSecondWord = (mod: ActiveModule) => {
     switch (mod) {
       case 'chat': return 'CHAT';
@@ -81,14 +85,14 @@ export const Header: React.FC<HeaderProps> = ({
 
   const getComposerProps = (mod: ActiveModule) => {
     switch (mod) {
-      case 'chat': return { text: 'মেসেজ বা চ্যাট লিখুন...', icon: MessageCirclePlus };
-      case 'media': return { text: 'নতুন ভিডিও বা রিল আপলোড করুন...', icon: UploadCloud };
-      case 'brain': return { text: 'নতুন প্রশ্ন বা ডিবেট পোস্ট করুন...', icon: Lightbulb };
-      case 'care': return { text: 'জরুরি রক্তের আবেদন পোস্ট করুন...', icon: Droplet };
-      case 'find': return { text: 'নিখোঁজ ব্যক্তির তথ্য পোস্ট করুন...', icon: UserSearch };
+      case 'chat': return { text: l('মেসেজ বা চ্যাট লিখুন...', 'Type a message or chat...'), icon: MessageCirclePlus };
+      case 'media': return { text: l('নতুন ভিডিও বা রিল আপলোড করুন...', 'Upload a new video or reel...'), icon: UploadCloud };
+      case 'brain': return { text: l('নতুন প্রশ্ন বা ডিবেট পোস্ট করুন...', 'Ask a health question or topic...'), icon: Lightbulb };
+      case 'care': return { text: l('জরুরি রক্তের আবেদন পোস্ট করুন...', 'Post urgent blood donation request...'), icon: Droplet };
+      case 'find': return { text: l('নিখোঁজ ব্যক্তির তথ্য পোস্ট করুন...', 'Report a missing person notice...'), icon: UserSearch };
       case 'hope':
       default:
-        return { text: 'নতুন পোস্ট বা জরুরি তথ্য লিখুন...', icon: SquarePen };
+        return { text: l('নতুন পোস্ট বা জরুরি তথ্য লিখুন...', 'Write a post or urgent update...'), icon: SquarePen };
     }
   };
 
@@ -102,11 +106,11 @@ export const Header: React.FC<HeaderProps> = ({
         <div id="banner-offline-mode" className="bg-amber-500 text-white text-[10px] font-bold py-1 px-3 flex items-center justify-between w-full shadow-inner animate-in fade-in duration-200">
           <div className="flex items-center gap-1.5 mx-auto">
             <WifiOff className="w-3.5 h-3.5 shrink-0" />
-            <span>অফলাইন মোড (পোস্ট ও পরিবর্তন অফলাইনে সেভ হচ্ছে)</span>
+            <span>{l('অফলাইন মোড (পোস্ট ও পরিবর্তন অফলাইনে সেভ হচ্ছে)', 'Offline Mode (Posts and changes saved locally)')}</span>
           </div>
           {pendingSyncCount > 0 && (
             <span className="bg-amber-700/60 text-amber-100 text-[9px] px-1.5 py-0.5 rounded-full font-medium shrink-0">
-              {pendingSyncCount} পেন্ডিং
+              {pendingSyncCount} {l('পেন্ডিং', 'pending')}
             </span>
           )}
         </div>
@@ -117,7 +121,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div id="banner-sync-progress" className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 text-white text-[11px] font-semibold py-1.5 px-3 flex items-center justify-center gap-2 w-full shadow-sm animate-in slide-in-from-top-2 duration-200">
           <RefreshCw className="w-3.5 h-3.5 animate-spin text-blue-200" />
           <span>
-            ডেটা সিঙ্ক হচ্ছে (Syncing Data)... {pendingSyncCount > 0 ? `${pendingSyncCount}টি নতুন পরিবর্তন আপডেট করা হচ্ছে` : 'অফলাইন পরিবর্তনসমূহ সার্ভারে যুক্ত হচ্ছে'}
+            {l('ডেটা সিঙ্ক হচ্ছে...', 'Syncing data...')} {pendingSyncCount > 0 ? (isEn ? `${pendingSyncCount} changes updating` : `${pendingSyncCount}টি নতুন পরিবর্তন আপডেট করা হচ্ছে`) : (isEn ? 'Syncing offline changes with server' : 'অফলাইন পরিবর্তনসমূহ সার্ভারে যুক্ত হচ্ছে')}
           </span>
         </div>
       )}
@@ -128,7 +132,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center gap-2 mx-auto">
             <CheckCircle2 className="w-4 h-4 text-emerald-200 shrink-0" />
             <span>
-              ডেটা সিঙ্ক সম্পন্ন (Data Synced)! {syncedCount > 0 ? `${syncedCount}টি অফলাইন পোস্ট লাইভ ফিডে সফলভাবে আপডেট হয়েছে` : 'সব ডেটা আপ-টু-ডেট আছে'}
+              {l('ডেটা সিঙ্ক সম্পন্ন (Data Synced)!', 'Data Synced Successfully!')} {syncedCount > 0 ? (isEn ? `${syncedCount} offline posts updated` : `${syncedCount}টি অফলাইন পোস্ট লাইভ ফিডে সফলভাবে আপডেট হয়েছে`) : (isEn ? 'All data is up to date' : 'সব ডেটা আপ-টু-ডেট আছে')}
             </span>
           </div>
         </div>
@@ -144,7 +148,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-gray-800 hover:bg-gray-100 active:bg-gray-200 rounded-full transition-all active:scale-95 shrink-0"
             aria-label="Open navigation menu"
           >
-            <Menu className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
+            <Menu className="w-5.5 h-5.5 sm:w-6 sm:h-6 stroke-[2.3]" />
           </button>
 
           {/* Brand Logo */}
@@ -174,7 +178,7 @@ export const Header: React.FC<HeaderProps> = ({
             </span>
             <div className="flex items-center gap-1 shrink-0 ml-1.5">
               <span className="hidden md:inline text-[11px] font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-100">
-                পোস্ট করুন
+                {l('পোস্ট করুন', 'Post')}
               </span>
               <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-rose-50 group-hover:bg-rose-100 flex items-center justify-center shrink-0 transition-colors">
                 <ComposerIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-600 group-hover:scale-105 transition-transform" />
@@ -204,29 +208,29 @@ export const Header: React.FC<HeaderProps> = ({
             <div 
               id="header-sync-indicator-syncing"
               className="flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200 px-2 py-1 rounded-full text-[11px] font-semibold animate-pulse"
-              title="অফলাইন পরিবর্তন সিঙ্ক করা হচ্ছে..."
+              title={l('অফলাইন পরিবর্তন সিঙ্ক করা হচ্ছে...', 'Syncing offline changes...')}
             >
               <RefreshCw className="w-3.5 h-3.5 animate-spin text-blue-600" />
-              <span className="hidden xs:inline">সিঙ্ক হচ্ছে</span>
+              <span className="hidden xs:inline">{l('সিঙ্ক হচ্ছে', 'Syncing')}</span>
             </div>
           ) : syncStatus === 'synced' ? (
             <div 
               id="header-sync-indicator-synced"
               className="flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-1 rounded-full text-[11px] font-bold animate-in fade-in"
-              title="ডেটা সফলভাবে সিঙ্ক সম্পন্ন হয়েছে"
+              title={l('ডেটা সফলভাবে সিঙ্ক সম্পন্ন হয়েছে', 'Data synced successfully')}
             >
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span className="hidden xs:inline">সিঙ্কড</span>
+              <span className="hidden xs:inline">{l('সিঙ্কড', 'Synced')}</span>
             </div>
           ) : pendingSyncCount > 0 ? (
             <button
               id="btn-header-manual-sync"
               onClick={onManualSync}
               className="flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 px-2 py-1 rounded-full text-[11px] font-bold transition-all active:scale-95"
-              title={`${pendingSyncCount}টি পোস্ট সিঙ্ক করার অপেক্ষায় আছে। ক্লিক করে এখনই সিঙ্ক করুন`}
+              title={isEn ? `${pendingSyncCount} posts pending sync. Click to sync now` : `${pendingSyncCount}টি পোস্ট সিঙ্ক করার অপেক্ষায় আছে। ক্লিক করে এখনই সিঙ্ক করুন`}
             >
               <CloudUpload className="w-3.5 h-3.5 text-amber-700" />
-              <span className="hidden xs:inline">সিঙ্ক করুন</span>
+              <span className="hidden xs:inline">{l('সিঙ্ক করুন', 'Sync')}</span>
               <span className="w-4 h-4 bg-amber-600 text-white rounded-full text-[9px] flex items-center justify-center font-extrabold">
                 {pendingSyncCount}
               </span>
@@ -239,9 +243,9 @@ export const Header: React.FC<HeaderProps> = ({
               id="btn-header-refresh-feed"
               onClick={onRefresh}
               disabled={isRefreshing}
-              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center text-gray-800 hover:bg-gray-100 active:bg-gray-200 rounded-full transition-all active:scale-90 relative"
-              aria-label="ফিড রিফ্রেশ করুন"
-              title="নতুন পোস্ট ও আপডেট দেখতে রিফ্রেশ করুন"
+              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center text-gray-800 hover:bg-gray-100 active:bg-gray-200 rounded-full transition-all active:scale-90"
+              aria-label={l('ফিড রিফ্রেশ করুন', 'Refresh feed')}
+              title={l('নতুন পোস্ট ও আপডেট দেখতে রিফ্রেশ করুন', 'Refresh feed for latest posts')}
             >
               <RefreshCw
                 className={`w-5 h-5 sm:w-5 sm:h-5 text-gray-700 transition-transform ${

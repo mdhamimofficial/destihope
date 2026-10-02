@@ -14,6 +14,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { BloodDonor } from '../../types';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface ContactDonorModalProps {
   donor: BloodDonor | null;
@@ -30,6 +31,7 @@ export const ContactDonorModal: React.FC<ContactDonorModalProps> = ({
   onCall,
   userLocation
 }) => {
+  const { l, isEn } = useLanguage();
   const [copied, setCopied] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
   const [patientName, setPatientName] = useState('');

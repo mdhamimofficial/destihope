@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import {
   X,
   ShieldCheck,
@@ -71,6 +72,7 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
   onOpenBloodRequest,
   onShowToast,
 }) => {
+  const { l, isEn } = useLanguage();
   const [activeTab, setActiveTab] = useState<TabType>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -169,80 +171,80 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
   const hotlines: HotlineItem[] = [
     {
       id: '999',
-      name: 'জাতীয় জরুরি সেবা (পুলিশ, অ্যাম্বুলেন্স, ফায়ার)',
+      name: l('জাতীয় জরুরি সেবা (পুলিশ, অ্যাম্বুলেন্স, ফায়ার)', 'National Emergency Service (Police, Ambulance, Fire)'),
       number: '999',
-      tag: 'টোল ফ্রি • ২৪/৭ সার্বক্ষণিক',
-      desc: 'পুলিশ সহায়তা, সরকারি অ্যাম্বুলেন্স তলব ও ফায়ার রেসকিউ ইউনিট',
+      tag: l('টোল ফ্রি • ২৪/৭ সার্বক্ষণিক', 'Toll Free • 24/7 Available'),
+      desc: l('পুলিশ সহায়তা, সরকারি অ্যাম্বুলেন্স তলব ও ফায়ার রেসকিউ ইউনিট', 'Police assistance, govt ambulance dispatch & fire rescue unit'),
       icon: ShieldCheck,
       badgeColor: 'bg-red-50 text-red-700 border-red-200',
       isTollFree: true,
     },
     {
       id: '16263',
-      name: 'স্বাস্থ্য বাতায়ন (২৪/৭ সরকারি সার্বক্ষণিক ডাক্তার)',
+      name: l('স্বাস্থ্য বাতায়ন (২৪/৭ সরকারি সার্বক্ষণিক ডাক্তার)', 'Shastho Batayon (24/7 Government Tele-Doctor)'),
       number: '16263',
-      tag: 'টেলিমেডিসিন সেবা',
-      desc: 'জরুরি অসুস্থতায় অভিজ্ঞ চিকিৎসকের সরাসরি পরামর্শ ও দিকনির্দেশনা',
+      tag: l('টেলিমেডিসিন সেবা', 'Telemedicine Service'),
+      desc: l('জরুরি অসুস্থতায় অভিজ্ঞ চিকিৎসকের সরাসরি পরামর্শ ও দিকনির্দেশনা', 'Direct consultation and triage guidance from licensed physicians'),
       icon: Heart,
       badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
       isTollFree: false,
     },
     {
       id: '16163',
-      name: 'ফায়ার সার্ভিস ও সিভিল ডিফেন্স নিয়ন্ত্রণ কক্ষ',
+      name: l('ফায়ার সার্ভিস ও সিভিল ডিফেন্স নিয়ন্ত্রণ কক্ষ', 'Fire Service & Civil Defense Control Room'),
       number: '16163',
-      tag: 'উদ্ধার ও অগ্নিনির্বাপণ',
-      desc: 'অগ্নিকাণ্ড, ভবন ধস ও মারাত্মক দুর্ঘটনায় উদ্ধারকারী দল',
+      tag: l('উদ্ধার ও অগ্নিনির্বাপণ', 'Rescue & Firefighting'),
+      desc: l('অগ্নিকাণ্ড, ভবন ধস ও মারাত্মক দুর্ঘটনায় উদ্ধারকারী দল', 'Fire extinguishing, building collapse & trauma rescue teams'),
       icon: Flame,
       badgeColor: 'bg-amber-50 text-amber-800 border-amber-200',
       isTollFree: false,
     },
     {
       id: '333',
-      name: 'জাতীয় নাগরিক ও ত্রাণ সহায়তা হেল্পলাইন',
+      name: l('জাতীয় নাগরিক ও ত্রাণ সহায়তা হেল্পলাইন', 'National Citizen & Relief Helpline (333)'),
       number: '333',
-      tag: 'টোল ফ্রি • খাদ্য ও সামাজিক সেবা',
-      desc: 'জরুরি খাদ্য ও দুর্যোগ সহায়তা এবং সরকারি সেবা পাওয়ার তথ্য',
+      tag: l('টোল ফ্রি • খাদ্য ও সামাজিক সেবা', 'Toll Free • Food & Social Welfare'),
+      desc: l('জরুরি খাদ্য ও দুর্যোগ সহায়তা এবং সরকারি সেবা পাওয়ার তথ্য', 'Emergency food aid, flood relief & government utility information'),
       icon: HelpCircle,
       badgeColor: 'bg-blue-50 text-blue-700 border-blue-200',
       isTollFree: true,
     },
     {
       id: '109',
-      name: 'নারী ও শিশু নির্যাতন প্রতিরোধ জাতীয় হেল্পলাইন',
+      name: l('নারী ও শিশু নির্যাতন প্রতিরোধ জাতীয় হেল্পলাইন', 'National Women & Children Protection Helpline'),
       number: '109',
-      tag: 'টোল ফ্রি • আইনি ও আশ্রয় সুরক্ষা',
-      desc: 'সহিংসতা, নির্যাতন ও জরুরি সুরক্ষায় প্রশাসনের তাৎক্ষণিক পদক্ষেপ',
+      tag: l('টোল ফ্রি • আইনি ও আশ্রয় সুরক্ষা', 'Toll Free • Legal & Safe Shelter'),
+      desc: l('সহিংসতা, নির্যাতন ও জরুরি সুরক্ষায় প্রশাসনের তাৎক্ষণিক পদক্ষেপ', 'Administrative intervention against domestic violence & harassment'),
       icon: AlertCircle,
       badgeColor: 'bg-purple-50 text-purple-700 border-purple-200',
       isTollFree: true,
     },
     {
       id: '1090',
-      name: 'দুর্যোগের আগাম সতর্কবার্তা ও আবহাওয়া বুলেটিন',
+      name: l('দুর্যোগের আগাম সতর্কবার্তা ও আবহাওয়া বুলেটিন', 'Disaster Early Warning & Weather Bulletin (1090)'),
       number: '1090',
-      tag: 'টোল ফ্রি • সাইক্লোন ও বন্যা',
-      desc: 'ঘূর্ণিঝড়, বন্যা ও প্রাকৃতিক দুর্যোগের সরকারি নির্ভরযোগ্য পূর্বাভাস',
+      tag: l('টোল ফ্রি • সাইক্লোন ও বন্যা', 'Toll Free • Cyclone & Flood Alert'),
+      desc: l('ঘূর্ণিঝড়, বন্যা ও প্রাকৃতিক দুর্যোগের সরকারি নির্ভরযোগ্য পূর্বাভাস', 'Reliable government forecasts for cyclones, typhoons & inundations'),
       icon: Radio,
       badgeColor: 'bg-teal-50 text-teal-700 border-teal-200',
       isTollFree: true,
     },
     {
       id: '1098',
-      name: 'শিশু সহায়তা হেল্পলাইন (Childline)',
+      name: l('শিশু সহায়তা হেল্পলাইন (Childline)', 'National Childline Helpline (1098)'),
       number: '1098',
-      tag: 'টোল ফ্রি • শিশু সুরক্ষা',
-      desc: 'ঝুঁকিপূর্ণ বা বিপদে থাকা শিশুর সার্বিক নিরাপত্তা ও সহায়তা',
+      tag: l('টোল ফ্রি • শিশু সুরক্ষা', 'Toll Free • Child Protection'),
+      desc: l('ঝুঁকিপূর্ণ বা বিপদে থাকা শিশুর সার্বিক নিরাপত্তা ও সহায়তা', 'Total protection and emergency rescue for distressed children'),
       icon: Heart,
       badgeColor: 'bg-indigo-50 text-indigo-700 border-indigo-200',
       isTollFree: true,
     },
     {
       id: '16116',
-      name: 'বিদ্যুৎ জরুরি কন্ট্রোল রুম ও শর্টসার্কিট ঝুঁকি',
+      name: l('বিদ্যুৎ জরুরি কন্ট্রোল রুম ও শর্টসার্কিট ঝুঁকি', 'Electricity Emergency Control & Short-Circuit Risk'),
       number: '16116',
-      tag: 'বিদ্যুৎ বিপর্যয় টিম',
-      desc: 'ছেঁড়া বিদ্যুৎ তার, ট্রান্সফরমার অগ্নিকাণ্ড ও শর্টসার্কিট নিরসন',
+      tag: l('বিদ্যুৎ বিপর্যয় টিম', 'Power Outage Emergency Team'),
+      desc: l('ছেঁড়া বিদ্যুৎ তার, ট্রান্সফরমার অগ্নিকাণ্ড ও শর্টসার্কিট নিরসন', 'Snapped high-voltage cables, transformer fires & emergency outages'),
       icon: Flame,
       badgeColor: 'bg-orange-50 text-orange-800 border-orange-200',
       isTollFree: false,
@@ -252,9 +254,9 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
   // First Aid Guides
   const firstAidGuides = [
     {
-      title: 'হঠাৎ কার্ডিয়াক অ্যারেস্ট / শ্বাস বন্ধ হলে (CPR)',
-      badge: 'জীবন বাঁচানোর প্রটোকল',
-      summary: 'মস্তিষ্কে অক্সিজেন চলাচল বজায় রাখতে তাৎক্ষণিক বুক চাপুন।',
+      title: l('হঠাৎ কার্ডিয়াক অ্যারেস্ট / শ্বাস বন্ধ হলে (CPR)', 'Sudden Cardiac Arrest / Respiratory Arrest (CPR)'),
+      badge: l('জীবন বাঁচানোর প্রটোকল', 'Lifesaving Protocol'),
+      summary: l('মস্তিষ্কে অক্সিজেন চলাচল বজায় রাখতে তাৎক্ষণিক বুক চাপুন।', 'Perform chest compressions immediately to preserve brain oxygenation.'),
       steps: [
         'রোগীর কাঁধ ধরে জোরে ডাকুন ও শ্বাস-প্রশ্বাস পরীক্ষা করুন (১০ সেকেন্ডের বেশি সময় নেবেন না)।',
         'তাৎক্ষণিকভাবে ৯৯৯-এ কল দিন এবং ফোন স্পিকারে রাখুন।',
@@ -265,9 +267,9 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
       donts: 'নরম তোশক বা খাটের ওপর রোগীকে রেখে CPR দেবেন না।',
     },
     {
-      title: 'তীব্র রক্তক্ষরণ দ্রুত বন্ধ করার নিয়ম',
-      badge: 'রক্তক্ষরণ নিয়ন্ত্রণ',
-      summary: 'রক্ত পড়া বন্ধ না করলে রোগী দ্রুত শকে চলে যেতে পারে।',
+      title: l('তীব্র রক্তক্ষরণ দ্রুত বন্ধ করার নিয়ম', 'Stopping Severe External Hemorrhage'),
+      badge: l('রক্তক্ষরণ নিয়ন্ত্রণ', 'Bleeding Control'),
+      summary: l('রক্ত পড়া বন্ধ না করলে রোগী দ্রুত শকে চলে যেতে পারে।', 'Apply continuous direct pressure to prevent hypovolemic shock.'),
       steps: [
         'পরিষ্কার গজ বা সুতি কাপড় দিয়ে ক্ষতস্থানের ওপর সরাসরি দুই হাত দিয়ে একটানা শক্ত চাপ বজায় রাখুন।',
         'ক্ষতস্থান সম্ভব হলে হৃদপিণ্ডের উচ্চতার ওপরে তুলে রাখুন।',
@@ -278,9 +280,9 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
       donts: 'ক্ষতের মধ্যে কোনো ধারালো বস্তু (কাচ/লোহা) থাকলে তা টেনে বের করবেন না।',
     },
     {
-      title: 'সাপের কামড়ে জরুরি করণীয় ও বর্জনীয়',
-      badge: 'সতর্কতা নির্দেশিকা',
-      summary: 'রোগীকে সম্পূর্ণ স্থির রেখে দ্রুত হাসপাতালে নিন।',
+      title: l('সাপের কামড়ে জরুরি করণীয় ও বর্জনীয়', 'Snakebite Emergency: Do’s and Don’ts'),
+      badge: l('সতর্কতা নির্দেশিকা', 'Safety Protocol'),
+      summary: l('রোগীকে সম্পূর্ণ স্থির রেখে দ্রুত হাসপাতালে নিন।', 'Keep patient totally immobile and transport to nearest hospital immediately.'),
       steps: [
         'রোগীকে স্থির ও সম্পূর্ণ শান্ত রাখুন। আতঙ্কিত হয়ে দৌড়াদৌড়ি বা হাঁটাচলা করতে দেবেন না।',
         'আক্রান্ত হাত বা পায়ের আংটি, ঘড়ি বা আঁটসাঁট কাপড় দ্রুত খুলে ফেলুন।',
@@ -291,9 +293,9 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
       donts: 'দড়ি দিয়ে শক্ত বাঁধন দেবেন না, ব্লেড দিয়ে কাটবেন না, রক্ত চুষবেন না, ওঝার কাছে যাবেন না।',
     },
     {
-      title: 'আগুনে পোড়া ও ফুটন্ত পানির তাৎক্ষণিক যত্ন',
-      badge: 'বার্ন কেয়ার',
-      summary: 'পোড়ার তীব্রতা কমাতে সাধারণ পানি ঢালুন।',
+      title: l('আগুনে পোড়া ও ফুটন্ত পানির তাৎক্ষণিক যত্ন', 'Immediate Care for Burns & Scalds'),
+      badge: l('বার্ন কেয়ার', 'Burn Care'),
+      summary: l('পোড়ার তীব্রতা কমাতে সাধারণ পানি ঢালুন।', 'Pour ambient tap water continuously for 15-20 minutes.'),
       steps: [
         'পোড়া জায়গায় অবিলম্বে একটানা ১৫-২০ মিনিট সাধারণ তাপমাত্রার বহমান পরিষ্কার পানি ঢালুন।',
         'শরীরের সাথে সেঁটে থাকা কাপড় টেনে খুলবেন না; আলতো করে পরিষ্কার পাতলা কাপড় দিয়ে ঢেকে রাখুন।',
@@ -304,9 +306,9 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
       donts: 'বরফ, ডিমের কুসুম, টুথপেস্ট বা তেল লাগাবেন না। ফোস্কা ফাটাবেন না।',
     },
     {
-      title: 'ব্রেন স্ট্রোক দ্রুত সনাক্তকরণ (FAST নিয়ম)',
-      badge: 'জরুরি স্ট্রোক সংকেত',
-      summary: 'প্রথম ৪.৫ ঘণ্টার মধ্যে হাসপাতালে নেওয়া জীবন-মরণ নির্ধারক।',
+      title: l('ব্রেন স্ট্রোক দ্রুত সনাক্তকরণ (FAST নিয়ম)', 'Rapid Stroke Identification (FAST Rule)'),
+      badge: l('জরুরি স্ট্রোক সংকেত', 'Emergency Stroke Signs'),
+      summary: l('প্রথম ৪.৫ ঘণ্টার মধ্যে হাসপাতালে নেওয়া জীবন-মরণ নির্ধারক।', 'Reaching a CT-scan equipped facility within 4.5 hours is critical.'),
       steps: [
         'F (Face): রোগীকে হাসতে বলুন — মুখের একপাশ কি বেঁকে যাচ্ছে?',
         'A (Arms): দুই হাত সমান্তরাল ওপরে তুলতে বলুন — এক হাত কি অবশ হয়ে নিচে নেমে যাচ্ছে?',
@@ -321,9 +323,9 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
   // Disaster Awareness Guides
   const disasterGuides = [
     {
-      title: 'বন্যা ও আকস্মিক পাহাড়ি ঢলে প্রস্তুতি',
+      title: l('বন্যা ও আকস্মিক পাহাড়ি ঢলে প্রস্তুতি', 'Preparedness for Floods & Flash Surges'),
       icon: Wind,
-      badge: 'বন্যা সুরক্ষা',
+      badge: l('বন্যা সুরক্ষা', 'Flood Safety'),
       summary: 'পানির বিপদসীমা বাড়ার আগেই পরিবারের জরুরি সামগ্রী গুছিয়ে নিরাপদ আশ্রয়ে যান।',
       steps: [
         'জরুরি শুকনো খাবার (মুড়ি, চিঁড়া, গুড়), বিশুদ্ধ পানি, খাবার স্যালাইন ও নিয়মিত ওষুধ ওয়াটারপ্রুফ ব্যাগে রাখুন।',
@@ -333,9 +335,9 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
       ],
     },
     {
-      title: 'ঘূর্ণিঝড় ও জলোচ্ছ্বাসের সতর্কবার্তা',
+      title: l('ঘূর্ণিঝড় ও জলোচ্ছ্বাসের সতর্কবার্তা', 'Cyclone & Coastal Inundation Warnings'),
       icon: Radio,
-      badge: 'সাইক্লোন নিরাপত্তা',
+      badge: l('সাইক্লোন নিরাপত্তা', 'Cyclone Protection'),
       summary: '১০৯০ নম্বরে কল করে সরকারি সর্বশেষ বিপদ সংকেত নিয়মিত যাচাই করুন।',
       steps: [
         'রেডিও, টিভি বা মোবাইল থেকে ঘূর্ণিঝড়ের গতিবিধি পর্যবেক্ষণ করুন।',
@@ -345,9 +347,9 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
       ],
     },
     {
-      title: 'ভূমিকম্পে তাৎক্ষণিক আত্মরক্ষা (Drop, Cover, Hold On)',
+      title: l('ভূমিকম্পে তাৎক্ষণিক আত্মরক্ষা (Drop, Cover, Hold On)', 'Earthquake Survival (Drop, Cover, Hold On)'),
       icon: ShieldAlert,
-      badge: 'ভূমিকম্প সতর্কতা',
+      badge: l('ভূমিকম্প সতর্কতা', 'Earthquake Alert'),
       summary: 'ভূমিকম্পের সময় দৌড়াদৌড়ি না করে নিজেকে সুরক্ষিত রাখুন।',
       steps: [
         'ঝাঁকুনি শুরু হলে সাথে সাথে শক্ত টেবিল বা খাটের নিচে ঢুকে বসে মাথা ও ঘাড় হাত দিয়ে ঢেকে রাখুন।',
@@ -357,9 +359,9 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
       ],
     },
     {
-      title: 'বজ্রপাত থেকে বাঁচার জরুরি নিয়ম',
+      title: l('বজ্রপাত থেকে বাঁচার জরুরি নিয়ম', 'Lightning Strike Safety Guidelines'),
       icon: Zap,
-      badge: 'বজ্রপাত সচেতনতা',
+      badge: l('বজ্রপাত সচেতনতা', 'Lightning Awareness'),
       summary: 'মেঘের ডাক শুনলেই খোলা মাঠ বা গাছের নিচ থেকে সরে পাকা ভবনে আশ্রয় নিন।',
       steps: [
         'বজ্রপাতের সময় খোলা মাঠে, নদীর ধারে বা কোনো বড় গাছের নিচে অবস্থান করবেন না।',
@@ -456,11 +458,11 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
   });
 
   const tabList = [
-    { id: 'all', label: 'সব সেবা' },
-    { id: 'hotlines', label: 'জরুরি হটলাইন' },
-    { id: 'firstaid', label: 'প্রাথমিক চিকিৎসা জ্ঞান' },
-    { id: 'disaster', label: 'দুর্যোগে রক্ষার জ্ঞান' },
-    { id: 'upcoming', label: 'আসন্ন সেবা (Coming Soon)' },
+    { id: 'all', label: l('সব সেবা', 'All Services') },
+    { id: 'hotlines', label: l('জরুরি হটলাইন', 'Hotlines') },
+    { id: 'firstaid', label: l('প্রাথমিক চিকিৎসা জ্ঞান', 'First Aid') },
+    { id: 'disaster', label: l('দুর্যোগে রক্ষার জ্ঞান', 'Disaster Prep') },
+    { id: 'upcoming', label: l('আসন্ন সেবা (Coming Soon)', 'Coming Soon') },
   ];
 
   return (
@@ -477,8 +479,8 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
             <button
               onClick={onClose}
               className="p-2 -ml-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 active:scale-95 rounded-full transition-all cursor-pointer"
-              aria-label="ফিরে যান"
-              title="ফিরে যান"
+              aria-label={l('ফিরে যান', 'Go Back')}
+              title={l('ফিরে যান', 'Go Back')}
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
@@ -491,7 +493,7 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
                   Desti Emergency Hub
                 </h1>
                 <p className="text-[11px] text-gray-500 font-medium">
-                  জরুরি সেবা ও জীবন রক্ষাকারী সহায়তা কেন্দ্র
+                  {l('জরুরি সেবা ও জীবন রক্ষাকারী সহায়তা কেন্দ্র', 'Emergency Services & Lifesaving Support')}
                 </p>
               </div>
             </div>
@@ -500,7 +502,7 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
           <button
             onClick={onClose}
             className="p-2 -mr-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 active:scale-90 rounded-full transition-all cursor-pointer"
-            aria-label="বন্ধ করুন"
+            aria-label={l('বন্ধ করুন', 'Close')}
           >
             <X className="w-5 h-5" />
           </button>
@@ -555,9 +557,9 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">
-                  তাৎক্ষণিক জরুরি নম্বরসমূহ
+                  {l('তাৎক্ষণিক জরুরি নম্বরসমূহ', 'Immediate Emergency Numbers')}
                 </span>
-                <span className="text-[11px] text-gray-400 font-medium">সরাসরি ডায়াল করুন</span>
+                <span className="text-[11px] text-gray-400 font-medium">{l('সরাসরি ডায়াল করুন', 'Direct Dial')}</span>
               </div>
 
               <div className="grid grid-cols-2 gap-2.5">
@@ -657,13 +659,13 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
                     onClick={() => setIsEditingIce(false)}
                     className="px-3 py-1 text-xs text-gray-500 hover:text-gray-700"
                   >
-                    বাতিল
+                    {l('বাতিল', 'Cancel')}
                   </button>
                   <button
                     onClick={handleSaveIce}
                     className="px-3.5 py-1 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-lg"
                   >
-                    সংরক্ষণ করুন
+                    {l('সংরক্ষণ করুন', 'Save')}
                   </button>
                 </div>
               </div>
@@ -688,7 +690,7 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
                 {[
                   { name: 'নারী ও শিশু নির্যাতন প্রতিরোধ সেল', number: '109', tag: 'টোল ফ্রি • আইনি সুরক্ষা', icon: AlertCircle, color: 'text-purple-600' },
                   { name: 'দুর্যোগের আগাম সতর্কবার্তা', number: '1090', tag: 'টোল ফ্রি • সাইক্লোন/বন্যা', icon: Radio, color: 'text-teal-600' },
-                  { name: 'শিশু সহায়তা হেল্পলাইন (Childline)', number: '1098', tag: 'টোল ফ্রি • শিশু সুরক্ষা', icon: Heart, color: 'text-indigo-600' },
+                  { name: l('শিশু সহায়তা হেল্পলাইন (Childline)', 'National Childline Helpline (1098)'), number: '1098', tag: l('টোল ফ্রি • শিশু সুরক্ষা', 'Toll Free • Child Protection'), icon: Heart, color: 'text-indigo-600' },
                   { name: 'বিদ্যুৎ বিপর্যয় ও শর্টসার্কিট টিম', number: '16116', tag: 'বিদ্যুৎ জরুরি কন্ট্রোল', icon: Flame, color: 'text-orange-600' },
                 ].map((item) => (
                   <div
@@ -894,7 +896,7 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
                       <button
                         onClick={() => handleCopy(hotline.number, hotline.id, hotline.name)}
                         className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
-                        title="নম্বর কপি করুন"
+                        title={l('নম্বর কপি করুন', 'Copy Number')}
                       >
                         {isCopied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
                       </button>
@@ -1408,7 +1410,7 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({
                           onClick={() => setBookedAmbulance(null)}
                           className="px-3 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold text-xs rounded-xl"
                         >
-                          বাতিল
+                          {l('বাতিল', 'Cancel')}
                         </button>
                       </div>
                     </div>

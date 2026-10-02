@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import { 
   FileText, 
   Download, 
@@ -18,6 +19,7 @@ interface BlueprintModalProps {
 }
 
 export const BlueprintModal: React.FC<BlueprintModalProps> = ({ isOpen, onClose }) => {
+  const { l, isEn } = useLanguage();
   const [copied, setCopied] = React.useState(false);
 
   if (!isOpen) return null;
@@ -65,7 +67,7 @@ export const BlueprintModal: React.FC<BlueprintModalProps> = ({ isOpen, onClose 
             onClick={onClose}
             className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
             title="বন্ধ করুন"
-            aria-label="বন্ধ করুন"
+            aria-label={l('বন্ধ করুন', 'Close')}
           >
             <X className="w-4 h-4" />
           </button>

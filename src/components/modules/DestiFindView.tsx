@@ -33,6 +33,7 @@ import {
 import { MissingCase, UserProfile, ActiveModule } from '../../types';
 import { mockMissingCases } from '../../data/mockData';
 import { getNextCaseId, peekNextCaseId, SUPPORTED_COUNTRIES } from '../../utils/caseIdGenerator';
+import { useLanguage } from '../../context/LanguageContext';
 
 export type SearchFilterType = 'name' | 'desti_id' | 'police_id';
 
@@ -78,6 +79,8 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
   currentUser,
   onUpdateUser
 }) => {
+  const { l, language } = useLanguage();
+  const isEn = language === 'en';
   const [cases, setCases] = useState<MissingCase[]>(mockMissingCases);
   const [filterStatus] = useState<'all' | 'Searching' | 'Found'>('all');
   const [searchCaseQuery, setSearchCaseQuery] = useState('');
@@ -191,10 +194,10 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
             <button
               id="btn-hamburger-menu"
               onClick={onOpenMenu || onOpenModuleSwitcher}
-              className="w-10 h-10 -ml-1 flex items-center justify-center text-gray-800 hover:bg-gray-100 active:bg-gray-200 rounded-full transition-all active:scale-95 cursor-pointer"
+              className="w-9 h-9 sm:w-10 sm:h-10 -ml-1 flex items-center justify-center text-gray-800 hover:bg-gray-100 active:bg-gray-200 rounded-full transition-all active:scale-95 cursor-pointer"
               aria-label="Open navigation menu"
             >
-              <Menu className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.5]" />
+              <Menu className="w-5.5 h-5.5 sm:w-6 sm:h-6 stroke-[2.3]" />
             </button>
 
             {/* Brand Logo */}
@@ -222,7 +225,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
             className="flex-1 min-w-0 flex items-center justify-between bg-white hover:bg-emerald-50/40 active:bg-emerald-50/70 border border-gray-200 hover:border-gray-300 active:border-gray-400 rounded-full pl-3.5 pr-1.5 py-1.5 sm:py-2 shadow-2xs cursor-pointer transition-all mx-1 sm:mx-2 group"
           >
             <span className="text-[11px] xs:text-xs sm:text-sm text-gray-500 group-hover:text-gray-700 font-medium truncate">
-              নিখোঁজ ব্যক্তির তথ্য পোস্ট করুন...
+              {l('নিখোঁজ ব্যক্তির তথ্য পোস্ট করুন...', 'Post missing person notice...')}
             </span>
             <div className="flex items-center gap-1 shrink-0 ml-1.5">
               <span className="hidden md:inline text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
@@ -284,8 +287,11 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
               <input
                 type="text"
                 placeholder={
-                  SEARCH_FILTER_OPTIONS.find(f => f.id === activeSearchFilter)?.placeholder ||
-                  "খুঁজুন..."
+                  activeSearchFilter === 'name'
+                    ? l('নিখোঁজ ব্যক্তির নাম দিয়ে খুঁজুন...', 'Search by missing person name...')
+                    : activeSearchFilter === 'police_id'
+                    ? l('পুলিশ কেইস বা জিডি আইডি (যেমন: GD-1284)...', 'Police Case or GD ID (e.g. GD-1284)...')
+                    : l('Desti Find ID (যেমন: FIND-BD-8902)...', 'Desti Find ID (e.g. FIND-BD-8902)...')
                 }
                 value={searchCaseQuery}
                 onChange={(e) => setSearchCaseQuery(e.target.value)}
@@ -297,7 +303,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                   type="button"
                   onClick={() => setSearchCaseQuery('')}
                   className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center bg-gray-400 hover:bg-gray-500 text-white rounded-full ml-2 transition-colors cursor-pointer shrink-0"
-                  title="মুছে ফেলুন"
+                  title={l("মুছে ফেলুন", "Clear")}
                 >
                   <X className="w-3 h-3 sm:w-4 sm:h-4" />
                 </button>
@@ -307,7 +313,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
               type="button"
               onClick={() => setIsFilterSettingsOpen(!isFilterSettingsOpen)}
               className={`p-1.5 sm:p-2 shrink-0 rounded-full transition-colors cursor-pointer ${isFilterSettingsOpen ? 'bg-emerald-50 text-emerald-600' : 'text-gray-700 hover:bg-gray-100'}`}
-              title="সার্চ ফিল্টার"
+              title={l("সার্চ ফিল্টার", "Search Filters")}
             >
               <SlidersHorizontal className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
             </button>
@@ -317,7 +323,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
           {isFilterSettingsOpen && (
             <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-1.5 pt-0.5 animate-in slide-in-from-top-2 fade-in duration-200">
               <div className="flex items-center space-x-1.5 overflow-x-auto no-scrollbar py-0.5">
-                <span className="text-[10px] text-gray-400 font-bold shrink-0">ফিল্টার:</span>
+                <span className="text-[10px] text-gray-400 font-bold shrink-0">{l("ফিল্টার:", "Filter:")}</span>
                 {SEARCH_FILTER_OPTIONS.map((f) => {
                   const isSelected = activeSearchFilter === f.id;
                   const isDefault = defaultFilter === f.id;
@@ -333,12 +339,12 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                       }`}
                     >
                       <span>{f.icon}</span>
-                      <span>{f.label}</span>
+                      <span>{f.id === 'name' ? l('নাম', 'Name') : f.id === 'police_id' ? l('পুলিশ কেইস/জিডি', 'Police Case/GD') : f.label}</span>
                       {isDefault && (
                         <span className={`text-[8.5px] px-1 py-0.2 rounded font-black tracking-tight ${
                           isSelected ? 'bg-emerald-700 text-emerald-100' : 'bg-emerald-100 text-emerald-700'
                         }`}>
-                          ডিফল্ট
+                          {l("ডিফল্ট", "Default")}
                         </span>
                       )}
                     </button>
@@ -356,12 +362,12 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                     title="বর্তমান ফিল্টারটিকে আপনার স্থায়ী ডিফল্ট সার্চ ফিল্টার করুন"
                   >
                     <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-                    <span>'{SEARCH_FILTER_OPTIONS.find(f => f.id === activeSearchFilter)?.label}' ডিফল্ট করুন</span>
+                    <span>'{SEARCH_FILTER_OPTIONS.find(f => f.id === activeSearchFilter)?.label}' {l('ডিফল্ট করুন', 'Set as Default')}</span>
                   </button>
                 ) : (
                   <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50/80 px-2 py-0.5 rounded-md flex items-center space-x-1">
                     <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-                    <span>ডিফল্ট ফিল্টার সক্রিয়</span>
+                    <span>{l("ডিফল্ট ফিল্টার সক্রিয়", "Default Filter Active")}</span>
                   </span>
                 )}
               </div>
@@ -385,16 +391,16 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
               <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto text-gray-400">
                 <Search className="w-6 h-6" />
               </div>
-              <p className="text-xs font-bold text-gray-800">কোনো নিখোঁজ কেস পাওয়া যায়নি</p>
+              <p className="text-xs font-bold text-gray-800">{l('কোনো নিখোঁজ কেস পাওয়া যায়নি', 'No missing cases found')}</p>
               <p className="text-[11px] text-gray-500 max-w-xs mx-auto">
-                নাম, কেস আইডি বা জেলা সঠিকভাবে লিখেছেন কি না পরীক্ষা করে আবার চেষ্টা করুন।
+                {l('নাম, কেস আইডি বা জেলা সঠিকভাবে লিখেছেন কি না পরীক্ষা করে আবার চেষ্টা করুন।', 'Please check name, case ID, or district and try again.')}
               </p>
               {searchCaseQuery && (
                 <button
                   onClick={() => setSearchCaseQuery('')}
                   className="text-xs text-emerald-600 font-bold hover:underline cursor-pointer pt-1"
                 >
-                  সার্চ ক্লিয়ার করুন
+                  {l('সার্চ ক্লিয়ার করুন', 'Clear Search')}
                 </button>
               )}
             </div>
@@ -421,7 +427,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                           ? 'bg-emerald-600 text-white'
                           : 'bg-red-600 text-white animate-pulse'
                       }`}>
-                        {isFound ? 'উদ্ধারকৃত' : 'সন্ধান চলছে'}
+                        {isFound ? l('উদ্ধারকৃত', 'Rescued') : l('সন্ধান চলছে', 'Searching')}
                       </span>
                     </div>
 
@@ -434,12 +440,12 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                         {c.policeCaseId && (
                           <div className="flex items-center gap-1 mt-0.5">
                             <span className="text-[9.5px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-1.5 py-0.2 rounded font-mono">
-                              👮 কেইস/জিডি: {c.policeCaseId}
+                              👮 {l('কেইস/জিডি:', 'Case/GD:')} {c.policeCaseId}
                             </span>
                           </div>
                         )}
                         <p className="text-[11px] text-gray-600 font-semibold mt-0.5">
-                          বয়স: {c.age} বছর • {c.gender}
+                          {l('বয়স:', 'Age:')} {c.age} {l('বছর', 'yrs')} • {c.gender === 'অন্যান্য' ? l('অন্যান্য', 'Other') : c.gender}
                         </p>
                         <p className="text-[11px] text-gray-500 mt-1 flex items-center gap-1 line-clamp-1">
                           <MapPin className="w-3.5 h-3.5 text-gray-400 shrink-0" />
@@ -447,7 +453,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                         </p>
                         <p className="text-[10px] text-gray-400 mt-0.5 flex items-center gap-1">
                           <Calendar className="w-3 h-3 text-gray-400 shrink-0" />
-                          নিখোঁজ: {c.lastSeenDate ?? c.lastSeenTime}
+                          {l('নিখোঁজ:', 'Missing:')} {c.lastSeenDate ?? c.lastSeenTime}
                         </p>
                       </div>
 
@@ -463,7 +469,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                           className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl flex items-center space-x-1 shadow-xs active:scale-95 transition-transform"
                         >
                           <Phone className="w-3 h-3" />
-                          <span>কল করুন</span>
+                          <span>{l("কল করুন", "Call")}</span>
                         </button>
                       </div>
                     </div>
@@ -484,16 +490,16 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <Radio className="w-5 h-5 text-emerald-600 animate-pulse" />
-                <h3 className="text-xs font-bold text-gray-900">কাছাকাছি নিখোঁজ অনুসন্ধান রাডার</h3>
+                <h3 className="text-xs font-bold text-gray-900">{l('কাছাকাছি নিখোঁজ অনুসন্ধান রাডার', 'Nearby Missing Radar')}</h3>
               </div>
               <span className="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-200">
-                জিপিএস সক্রিয়
+                {l('জিপিএস সক্রিয়', 'GPS Active')}
               </span>
             </div>
 
             {/* Radius selector */}
             <div className="flex items-center justify-between pt-1">
-              <span className="text-xs text-gray-600 font-semibold">অনুসন্ধান ব্যাসার্ধ:</span>
+              <span className="text-xs text-gray-600 font-semibold">{l('অনুসন্ধান ব্যাসার্ধ:', 'Search Radius:')}</span>
               <div className="flex space-x-1.5">
                 {[1, 3, 5, 10].map((km) => (
                   <button
@@ -505,7 +511,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
-                    {km} কিমি
+                    {km} {l('কিমি', 'km')}
                   </button>
                 ))}
               </div>
@@ -552,10 +558,10 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
           <div className="p-3.5 bg-emerald-50 rounded-2xl border border-emerald-200 text-xs text-emerald-900 space-y-1">
             <span className="font-bold flex items-center gap-1">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              আপনার এলাকায় ২ জন নিখোঁজ ব্যক্তির রিপোর্ট রয়েছে
+              {l('আপনার এলাকায় ২ জন নিখোঁজ ব্যক্তির রিপোর্ট রয়েছে', '2 missing persons reported near your location')}
             </span>
             <p className="text-[11px] text-emerald-800">
-              কাউকে শনাক্ত করতে পারলে তাৎক্ষণিক স্বজন বা পুলিশকে অবহিত করুন।
+              {l('কাউকে শনাক্ত করতে পারলে তাৎক্ষণিক স্বজন বা পুলিশকে অবহিত করুন।', 'If you spot anyone, immediately notify relatives or police.')}
             </p>
           </div>
         </div>
@@ -566,21 +572,21 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
         <div className="flex-1 p-4 overflow-y-auto">
           <form onSubmit={handleCreateReport} className="bg-white p-4 rounded-3xl border border-gray-200/90 shadow-sm space-y-3">
             <div className="border-b border-gray-100 pb-2">
-              <h3 className="text-sm font-bold text-gray-900">নিখোঁজ ব্যক্তির তথ্য দিন</h3>
-              <p className="text-[11px] text-gray-500 mt-0.5">তথ্য যাচাই করে দ্রুত জরুরি নেটওয়ার্কে সম্প্রচার করা হবে।</p>
+              <h3 className="text-sm font-bold text-gray-900">{l('নিখোঁজ ব্যক্তির তথ্য দিন', 'Report Missing Person')}</h3>
+              <p className="text-[11px] text-gray-500 mt-0.5">{l('তথ্য যাচাই করে দ্রুত জরুরি নেটওয়ার্কে সম্প্রচার করা হবে।', 'Details will be verified and broadcasted to the emergency network.')}</p>
             </div>
 
             {reportSubmitted ? (
               <div className="p-6 text-center text-emerald-700 space-y-2.5 bg-emerald-50 rounded-2xl border border-emerald-200">
                 <CheckCircle2 className="w-10 h-10 mx-auto text-emerald-600 animate-bounce" />
-                <h4 className="font-bold text-sm">রিপোর্ট সফলভাবে সম্প্রচারিত হয়েছে!</h4>
+                <h4 className="font-bold text-sm">{l('রিপোর্ট সফলভাবে সম্প্রচারিত হয়েছে!', 'Report broadcasted successfully!')}</h4>
                 {lastGeneratedCaseId && (
                   <div className="bg-white py-1.5 px-3 rounded-xl border border-emerald-300 shadow-2xs inline-block my-1">
-                    <span className="text-[10px] text-gray-500 block">বরাদ্দকৃত কেস আইডি:</span>
+                    <span className="text-[10px] text-gray-500 block">{l('বরাদ্দকৃত কেস আইডি:', 'Assigned Case ID:')}</span>
                     <span className="text-sm font-black font-mono text-emerald-700">{lastGeneratedCaseId}</span>
                   </div>
                 )}
-                <p className="text-xs text-emerald-600">আমাদের ভলান্টিয়ার টিম দ্রুত উদ্ধার তৎপরতায় যুক্ত হয়েছে।</p>
+                <p className="text-xs text-emerald-600">{l('আমাদের ভলান্টিয়ার টিম দ্রুত উদ্ধার তৎপরতায় যুক্ত হয়েছে।', 'Volunteer team has been deployed to assist rescue.')}</p>
               </div>
             ) : (
               <>
@@ -588,10 +594,10 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                 <div className="space-y-2 bg-emerald-50/50 p-3 rounded-2xl border border-emerald-100">
                   <div className="flex items-center justify-between">
                     <label className="text-xs font-bold text-gray-800">
-                      দেশ কোড নির্বাচন করুন *
+                      {l('দেশ কোড নির্বাচন করুন *', 'Select Country Code *')}
                     </label>
                     <span className="text-[10px] text-emerald-700 font-medium">
-                      ১ জানুয়ারি থেকে বার্ষিক রিসেট
+                      {l('১ জানুয়ারি থেকে বার্ষিক রিসেট', 'Yearly sequence resets Jan 1')}
                     </span>
                   </div>
                   <div className="grid grid-cols-4 gap-1.5">
@@ -613,7 +619,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                   </div>
 
                   <div className="flex items-center justify-between bg-white px-3 py-2 rounded-xl border border-emerald-200 shadow-2xs mt-1">
-                    <span className="text-[11px] font-bold text-gray-700">জেনারেটেড কেস আইডি:</span>
+                    <span className="text-[11px] font-bold text-gray-700">{l('জেনারেটেড কেস আইডি:', 'Generated Case ID:')}</span>
                     <span className="text-xs font-black font-mono text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-300">
                       {peekNextCaseId(selectedCountry)}
                     </span>
@@ -621,7 +627,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-gray-700 block mb-1">নিখোঁজ ব্যক্তির পুরো নাম *</label>
+                  <label className="text-xs font-bold text-gray-700 block mb-1">{l('নিখোঁজ ব্যক্তির পুরো নাম *', 'Full Name of Person *')}</label>
                   <input
                     type="text"
                     required
@@ -634,7 +640,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
 
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="text-xs font-bold text-gray-700 block mb-1">বয়স (বছর) *</label>
+                    <label className="text-xs font-bold text-gray-700 block mb-1">{l('বয়স (বছর) *', 'Age (years) *')}</label>
                     <input
                       type="number"
                       required
@@ -645,7 +651,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-gray-700 block mb-1">সর্বশেষ অবস্থান *</label>
+                    <label className="text-xs font-bold text-gray-700 block mb-1">{l('সর্বশেষ অবস্থান *', 'Last Seen Location *')}</label>
                     <input
                       type="text"
                       required
@@ -658,7 +664,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-gray-700 block mb-1">অভিভাবকের মোবাইল নম্বর *</label>
+                  <label className="text-xs font-bold text-gray-700 block mb-1">{l('অভিভাবকের মোবাইল নম্বর *', 'Guardian Contact Number *')}</label>
                   <input
                     type="tel"
                     required
@@ -671,7 +677,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
 
                 <div>
                   <label className="text-xs font-bold text-gray-700 block mb-1">
-                    পুলিশ কেইস বা জিডি নম্বর (যদি থাকে)
+                    {l('পুলিশ কেইস বা জিডি নম্বর (যদি থাকে)', 'Police Case / GD No. (Optional)')}
                   </label>
                   <input
                     type="text"
@@ -684,15 +690,15 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
 
                 <div className="p-3 border-2 border-dashed border-gray-200 rounded-2xl text-center space-y-1 bg-gray-50">
                   <Camera className="w-6 h-6 text-gray-400 mx-auto" />
-                  <span className="text-xs font-bold text-gray-700 block">সাম্প্রতিক ছবি আপলোড করুন</span>
-                  <span className="text-[10px] text-gray-400 block">ক্লিয়ার ছবি দ্রুত উদ্ধারে সহায়তা করে</span>
+                  <span className="text-xs font-bold text-gray-700 block">{l('সাম্প্রতিক ছবি আপলোড করুন', 'Upload Recent Photo')}</span>
+                  <span className="text-[10px] text-gray-400 block">{l('ক্লিয়ার ছবি দ্রুত উদ্ধারে সহায়তা করে', 'Clear photos help swift identification')}</span>
                 </div>
 
                 <button
                   type="submit"
                   className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-xs font-bold shadow-md active:scale-95 transition-transform"
                 >
-                  জরুরি রিপোর্ট সম্প্রচার করুন
+                  {l('জরুরি রিপোর্ট সম্প্রচার করুন', 'Broadcast Emergency Notice')}
                 </button>
               </>
             )}
@@ -706,10 +712,10 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
           <div className="p-3 bg-white rounded-2xl border border-gray-100 flex items-center justify-between">
             <div className="flex items-center space-x-1.5">
               <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-              <h3 className="text-xs font-bold text-gray-900">সফল উদ্ধার আর্কাইভ</h3>
+              <h3 className="text-xs font-bold text-gray-900">{l('সফল উদ্ধার আর্কাইভ', 'Successful Rescue Archive')}</h3>
             </div>
             <span className="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-full">
-              ভলান্টিয়ার সাফল্য
+              {l('ভলান্টিয়ার সাফল্য', 'Volunteer Success')}
             </span>
           </div>
 
@@ -721,12 +727,12 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                   <div className="flex items-center justify-between">
                     <h4 className="text-xs font-bold text-gray-900 truncate">{c.personName}</h4>
                     <span className="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-md">
-                      নিরাপদে উদ্ধার
+                      {l('নিরাপদে উদ্ধার', 'Safely Rescued')}
                     </span>
                   </div>
                   <p className="text-[11px] text-gray-500 mt-0.5">{c.lastSeenLocation}, {c.district}</p>
                   <p className="text-[10px] text-emerald-600 font-semibold mt-1">
-                    ❤️ পরিবারের কাছে হস্তান্তর সম্পন্ন
+                    {l('❤️ পরিবারের কাছে হস্তান্তর সম্পন্ন', '❤️ Safely reunited with family')}
                   </p>
                 </div>
               </div>
@@ -754,7 +760,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                   <span className="text-[10px] font-black uppercase tracking-wider text-emerald-300 block leading-tight">
                     Desti Rescue Corps
                   </span>
-                  <span className="text-[9px] text-gray-400 font-medium">ভলান্টিয়ার রেসপন্ডার ইউনিট</span>
+                  <span className="text-[9px] text-gray-400 font-medium">{l('ভলান্টিয়ার রেসপন্ডার ইউনিট', 'Volunteer Responder Unit')}</span>
                 </div>
               </div>
 
@@ -794,7 +800,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                     {currentUser?.name || 'তানভীর আহমেদ'}
                   </h3>
                   <span className="text-[9px] bg-emerald-500/20 text-emerald-300 font-bold px-1.5 py-0.5 rounded border border-emerald-400/30 shrink-0">
-                    সার্টিফাইড
+                    {l('সার্টিফাইড', 'Certified')}
                   </span>
                 </div>
 
@@ -823,11 +829,11 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
 
                 <div className="grid grid-cols-2 gap-2 mt-2 text-[10px] text-gray-300">
                   <div>
-                    <span className="text-gray-500 block text-[9px]">রক্তের গ্রুপ:</span>
+                    <span className="text-gray-500 block text-[9px]">{l('রক্তের গ্রুপ:', 'Blood Group:')}</span>
                     <span className="font-bold text-rose-400">{currentUser?.bloodGroup || 'O+'}</span>
                   </div>
                   <div>
-                    <span className="text-gray-500 block text-[9px]">এলাকা:</span>
+                    <span className="text-gray-500 block text-[9px]">{l('এলাকা:', 'Area:')}</span>
                     <span className="font-bold text-gray-200 truncate block">মিরপুর, ঢাকা</span>
                   </div>
                 </div>
@@ -842,7 +848,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                 className="flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl flex items-center justify-center space-x-1.5 shadow-md active:scale-95 transition-all cursor-pointer"
               >
                 <QrCode className="w-3.5 h-3.5" />
-                <span>ডিজিটাল আইডি কার্ড</span>
+                <span>{l("ডিজিটাল আইডি কার্ড", "Digital ID Card")}</span>
               </button>
               <button
                 type="button"
@@ -853,7 +859,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                 className="py-2 px-3 bg-white/10 hover:bg-white/20 text-gray-200 text-xs font-bold rounded-xl flex items-center justify-center space-x-1 border border-white/10 active:scale-95 transition-all cursor-pointer"
               >
                 <Share2 className="w-3.5 h-3.5" />
-                <span>শেয়ার</span>
+                <span>{l("শেয়ার", "Share")}</span>
               </button>
             </div>
             {showShareToast && (
@@ -868,7 +874,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
             <div className="flex items-center justify-between px-1">
               <h4 className="text-xs font-bold text-gray-800 flex items-center space-x-1.5">
                 <Activity className="w-4 h-4 text-emerald-600" />
-                <span>উদ্ধার তৎপরতা ও অবদান</span>
+                <span>{l('উদ্ধার তৎপরতা ও অবদান', 'Rescue Mission & Impact')}</span>
               </h4>
               <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
                 র‍্যাঙ্ক: গোল্ড রেসপন্ডার 🎖️
@@ -878,22 +884,22 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
             <div className="grid grid-cols-4 gap-2">
               <div className="p-2.5 bg-white rounded-2xl border border-gray-200/80 text-center shadow-2xs">
                 <span className="text-base font-black text-emerald-600 block">৮</span>
-                <span className="text-[10px] font-bold text-gray-700 block">সফল উদ্ধার</span>
+                <span className="text-[10px] font-bold text-gray-700 block">{l('সফল উদ্ধার', 'Rescued')}</span>
                 <span className="text-[8.5px] text-gray-400">ব্যক্তিগত অবদান</span>
               </div>
               <div className="p-2.5 bg-white rounded-2xl border border-gray-200/80 text-center shadow-2xs">
                 <span className="text-base font-black text-teal-600 block">১৫</span>
-                <span className="text-[10px] font-bold text-gray-700 block">সার্চ মিশন</span>
+                <span className="text-[10px] font-bold text-gray-700 block">{l('সার্চ মিশন', 'Search Missions')}</span>
                 <span className="text-[8.5px] text-gray-400">মাঠপর্যায়ে</span>
               </div>
               <div className="p-2.5 bg-white rounded-2xl border border-gray-200/80 text-center shadow-2xs">
                 <span className="text-base font-black text-blue-600 block">৪৮</span>
-                <span className="text-[10px] font-bold text-gray-700 block">ফিল্ড আওয়ার</span>
+                <span className="text-[10px] font-bold text-gray-700 block">{l('ফিল্ড আওয়ার', 'Field Hours')}</span>
                 <span className="text-[8.5px] text-gray-400">স্বেচ্ছাসেবা</span>
               </div>
               <div className="p-2.5 bg-white rounded-2xl border border-gray-200/80 text-center shadow-2xs">
                 <span className="text-base font-black text-amber-600 block">৯৮%</span>
-                <span className="text-[10px] font-bold text-gray-700 block">রেসপন্স রেট</span>
+                <span className="text-[10px] font-bold text-gray-700 block">{l('রেসপন্স রেট', 'Response Rate')}</span>
                 <span className="text-[8.5px] text-gray-400">দ্রুত সাড়া</span>
               </div>
             </div>
@@ -935,7 +941,7 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
                   🚑
                 </div>
                 <div className="min-w-0">
-                  <h5 className="text-[11px] font-bold text-gray-900 truncate">ফার্স্ট এইড সার্টিফাইড</h5>
+                  <h5 className="text-[11px] font-bold text-gray-900 truncate">ফার্স্ট এইড {l('সার্টিফাইড', 'Certified')}</h5>
                   <p className="text-[9.5px] text-gray-500">উদ্ধার পরবর্তী জরুরি প্রাথমিক চিকিৎসা</p>
                 </div>
               </div>
@@ -957,10 +963,10 @@ export const DestiFindView: React.FC<DestiFindViewProps> = ({
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-emerald-950 flex items-center space-x-1.5">
                 <Phone className="w-4 h-4 text-emerald-700" />
-                <span>জরুরি রেসকিউ হটলাইন ও কমান্ড</span>
+                <span>{l('জরুরি রেসকিউ হটলাইন ও কমান্ড', 'Emergency Rescue Hotlines & Command')}</span>
               </span>
               <span className="text-[9px] bg-emerald-200/80 text-emerald-900 px-1.5 py-0.5 rounded font-bold">
-                ২৪/৭ সচল
+                {l('২৪/৭ সচল', '24/7 Active')}
               </span>
             </div>
 

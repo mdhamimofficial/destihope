@@ -272,22 +272,165 @@ export const mockConversations: ChatConversation[] = [
 
 export const mockMediaList: MediaItem[] = [
   {
-    id: 'media-1',
+    id: 'media-burn-care',
     type: 'video',
-    title: 'পদ্মা রেল সংযোগ: দক্ষিণাঞ্চলের অর্থনীতিতে নতুন দিগন্ত',
+    title: 'আগুনে পোড়ার প্রথম ১০ মিনিট: যা কখনোই করবেন না ও জরুরি বিজ্ঞানসম্মত ফার্স্ট এইড',
     creator: {
-      name: 'বাংলা ইনসাইটস',
+      name: 'ডা. সানজিদা আহমেদ (BMDC রেজি: ৪১৫২০)',
+      avatar: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=120&q=80',
+      isVerified: true,
+      subscribers: '340K'
+    },
+    thumbnail: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80',
+    duration: '11:20',
+    views: '184K',
+    uploadDate: '২ দিন আগে',
+    likes: 14200,
+    commentsCount: 428,
+    category: 'ফার্স্ট এইড',
+    description: 'আগুনে পোড়া ক্ষতস্থানে টুথপেস্ট, ডিমের সাদা অংশ বা বরফ দেওয়ার ক্ষতিকর দিক এবং প্রথম ১০ মিনিটে সাধারণ ট্যাপের পানি ঢেলে কীভাবে স্থায়ী দাগ ও ইনফেকশন রোধ করবেন—তা বিস্তারিত দেখানো হয়েছে। জরুরি প্রয়োজনে জাতীয় স্বাস্থ্য বাতায়ন ১৬২৬৩ নম্বরে যোগাযোগ করুন।',
+    isFactChecked: true,
+    factCheckedBy: 'জাতীয় বার্ন ও প্লাস্টিক সার্জারি ইনস্টিটিউট গাইডলাইন',
+    chapters: [
+      { time: '00:00', title: 'ভূমিকা ও ভুল চিকিৎসা', seconds: 0 },
+      { time: '01:45', title: '১৫ মিনিট পানি ঢালার নিয়ম', seconds: 105 },
+      { time: '04:30', title: 'ফোসকা পড়লে করণীয়', seconds: 270 },
+      { time: '08:15', title: 'কখন দ্রুত হাসপাতালে যাবেন', seconds: 495 }
+    ],
+    lifeAction: {
+      label: 'জরুরি অ্যাম্বুলেন্স ও বার্ন সাপোর্ট খুঁজুন',
+      actionType: 'emergency',
+      targetModule: 'care',
+      linkText: 'DestiCare হসপিটালে যান'
+    },
+    hopeReward: 15
+  },
+  {
+    id: 'media-blood-rescue',
+    type: 'video',
+    title: 'ঢামেক জরুরি আইসিইউ: মাত্র দেড় ঘণ্টায় বিরল O নেগেটিভ রক্তের সন্ধানে ঢাকার ভলান্টিয়াররা',
+    creator: {
+      name: 'DestiCare সেন্ট্রাল স্কোয়াড',
+      avatar: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=120&q=80',
+      isVerified: true,
+      subscribers: '190K'
+    },
+    thumbnail: 'https://images.unsplash.com/photo-1615461066841-6116e61058f4?auto=format&fit=crop&w=800&q=80',
+    duration: '16:45',
+    views: '240K',
+    uploadDate: '৩ দিন আগে',
+    likes: 19800,
+    commentsCount: 612,
+    category: 'রক্তদান অভিযান',
+    description: 'ঢাকা মেডিকেল কলেজ হাসপাতালের ইমার্জেন্সি থেকে আসা ও-নেগেটিভ রক্তের জরুরি ডাক কীভাবে ডেস্টিক্যারের ডিজিটাল নোটিফিকেশন সিস্টেমের মাধ্যমে তাৎক্ষণিকভাবে ডোনার ম্যানেজ করে রোগীর প্রাণ বাঁচাল—তার মাঠপর্যায়ের রিয়েল ডকুমেন্টারি।',
+    isFactChecked: true,
+    factCheckedBy: 'DestiCare ব্লাড ব্যাংক প্যানেল ভেরিফাইড',
+    chapters: [
+      { time: '00:00', title: 'ইমার্জেন্সি এলার্ট প্রাপ্তি', seconds: 0 },
+      { time: '03:10', title: 'ক্রস ম্যাচিং ও ভলান্টিয়ার যোগাযোগ', seconds: 190 },
+      { time: '09:20', title: 'ডোনার রাইড ও রক্ত সংগ্রহ', seconds: 560 },
+      { time: '14:30', title: 'রোগীর পরিবার ও চিকিৎসকের প্রতিক্রিয়া', seconds: 870 }
+    ],
+    lifeAction: {
+      label: 'জরুরি রক্তের চাহিদা লাইভ দেখুন ও ডোনার হোন',
+      actionType: 'blood',
+      targetModule: 'care',
+      linkText: 'রক্তদান নেটওয়ার্কে যুক্ত হোন'
+    },
+    hopeReward: 20
+  },
+  {
+    id: 'media-missing-child',
+    type: 'video',
+    title: 'সীতাকুণ্ডে নিখোঁজ হওয়া ৮ বছরের শিশু সিয়ামকে উদ্ধার অভিযানের রোমহর্ষক ঘটনা',
+    creator: {
+      name: 'DestiFind রেসকিউ টিম বিডি',
+      avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=120&q=80',
+      isVerified: true,
+      subscribers: '280K'
+    },
+    thumbnail: 'https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=800&q=80',
+    duration: '18:50',
+    views: '310K',
+    uploadDate: '৪ দিন আগে',
+    likes: 27500,
+    commentsCount: 890,
+    category: 'নিখোঁজ উদ্ধার',
+    description: 'মেলা থেকে হারিয়ে যাওয়া শিশু সিয়ামকে স্থানীয় স্বেচ্ছাসেবক, ড্রোনের নজরদারি এবং DestiFind-এর অটোমেটেড ফেসিয়াল ও সোশ্যাল নোটিফিকেশনের মাধ্যমে পরিবারের কোলে ফিরিয়ে দেওয়ার শ্বাসরুদ্ধকর অভিযান।',
+    isFactChecked: true,
+    factCheckedBy: 'স্থানীয় থানা ও ভলান্টিয়ার নেটওয়ার্ক প্রত্যয়িত',
+    chapters: [
+      { time: '00:00', title: 'কেস রিপোর্ট ও পরিবারিক উদ্বেগ', seconds: 0 },
+      { time: '04:15', title: 'এলাকাভিত্তিক রাডার সার্চ টিম গঠন', seconds: 255 },
+      { time: '11:30', title: 'সন্দেহভাজন স্পট চিহ্নিতকরণ', seconds: 690 },
+      { time: '16:00', title: 'সিয়ামের ঘরে ফেরা', seconds: 960 }
+    ],
+    lifeAction: {
+      label: 'বর্তমান নিখোঁজ ব্যক্তিদের কেস দেখুন ও সাহায্য করুন',
+      actionType: 'find',
+      targetModule: 'find',
+      linkText: 'DestiFind কেস বোর্ড'
+    },
+    hopeReward: 25
+  },
+  {
+    id: 'media-snake-bite',
+    type: 'video',
+    title: 'সাপে কাটলে বাঁধন নয়! রাসেলস ভাইপার ও সাধারণ সাপের কামড়ে জীবনরক্ষাকারী নির্দেশিকা',
+    creator: {
+      name: 'ডা. রফিকুল ইসলাম (মেডিসিন বিশেষজ্ঞ)',
+      avatar: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=120&q=80',
+      isVerified: true,
+      subscribers: '510K'
+    },
+    thumbnail: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=800&q=80',
+    duration: '13:10',
+    views: '420K',
+    uploadDate: '৫ দিন আগে',
+    likes: 38400,
+    commentsCount: 1140,
+    category: 'ফার্স্ট এইড',
+    description: 'সাপে কাটলে দড়ি দিয়ে শক্ত করে বাঁধার মারাত্মক ক্ষতি, বিষ ছড়ানোর গতি এবং সরকারি হাসপাতালে ১০০% বিনামূল্যে অ্যান্টিভেনম পাওয়ার প্রক্রিয়া। রোগীকে শান্ত রাখা ও দ্রুত হাসপাতালে পৌঁছানোই জীবন বাঁচায়।',
+    isFactChecked: true,
+    factCheckedBy: 'স্বাস্থ্য অধিদপ্তর (DGHS) নির্দেশিকা',
+    chapters: [
+      { time: '00:00', title: 'সাধারণ ভ্রান্ত ধারণা ও ব্লেড দিয়ে কাটার বিপদ', seconds: 0 },
+      { time: '03:20', title: 'আক্রান্ত অঙ্গ নিশ্চল রাখার স্প্লিন্ট নিয়ম', seconds: 200 },
+      { time: '07:45', title: 'সরকারি হাসপাতালে ফ্রি অ্যান্টিভেনম প্রাপ্যতা', seconds: 465 },
+      { time: '11:00', title: 'জরুরি অ্যাম্বুলেন্স যোগাযোগ', seconds: 660 }
+    ],
+    lifeAction: {
+      label: 'নিকটস্থ উপজেলা স্বাস্থ্য কমপ্লেক্স তালিকা',
+      actionType: 'emergency',
+      targetModule: 'care',
+      linkText: 'স্বাস্থ্যকেন্দ্র খুঁজুন'
+    },
+    hopeReward: 15
+  },
+  {
+    id: 'media-tech-ai',
+    type: 'video',
+    title: 'স্মার্ট বাংলাদেশ: এআই যুগে বাংলাদেশি শিক্ষার্থীদের সেরা ৫টি টেক ও ফ্রিল্যান্সিং স্কিল',
+    creator: {
+      name: 'বাংলা টেক ইনসাইটস',
       avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=120&q=80',
       isVerified: true,
-      subscribers: '124K'
+      subscribers: '210K'
     },
-    thumbnail: 'https://images.unsplash.com/photo-1477959858617-67f30bc75b82?auto=format&fit=crop&w=600&q=80',
-    duration: '14:25',
-    views: '45K',
-    uploadDate: '১ দিন আগে',
-    likes: 3800,
-    commentsCount: 145,
-    category: 'উন্নয়ন ও অর্থনীতি'
+    thumbnail: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80',
+    duration: '15:30',
+    views: '95K',
+    uploadDate: '১ সপ্তাহ আগে',
+    likes: 8200,
+    commentsCount: 310,
+    category: 'ক্যারিয়ার ও স্কিল',
+    description: '২০২৬ সালে শিক্ষার্থীদের জন্য এআই প্রম্পটিং, ফুল-স্ট্যাক কোডিং, ডেটা এনালাইটিক্স ও কনটেন্ট স্ট্র্যাটেজির সুনির্দিষ্ট রোডম্যাপ এবং দেশীয় ও আন্তর্জাতিক ফ্রিল্যান্সিং মার্কেটপ্লেসে টিকে থাকার টিপস।',
+    chapters: [
+      { time: '00:00', title: 'এআই মার্কেট রূপান্তর', seconds: 0 },
+      { time: '03:10', title: 'প্রম্পট ইঞ্জিনিয়ারিং ও অটোমেশন', seconds: 190 },
+      { time: '08:45', title: 'ফ্রিল্যান্সিং পোর্টফোলিও তৈরির নিয়ম', seconds: 525 }
+    ],
+    hopeReward: 10
   },
   {
     id: 'reel-1',
@@ -296,15 +439,24 @@ export const mockMediaList: MediaItem[] = [
     creator: {
       name: 'DestiCare টিপস',
       avatar: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=120&q=80',
-      isVerified: true
+      isVerified: true,
+      subscribers: '150K'
     },
     thumbnail: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=400&q=80',
     duration: '0:45',
-    views: '120K',
+    views: '142K',
     uploadDate: '৩ ঘণ্টা আগে',
-    likes: 12400,
-    commentsCount: 310,
-    category: 'স্বাস্থ্য'
+    likes: 15400,
+    commentsCount: 410,
+    category: 'রক্তদান',
+    isFactChecked: true,
+    factCheckedBy: 'DestiCare মেডিকেল প্যানেল',
+    lifeAction: {
+      label: 'রক্তদানের যোগ্যতা টেস্ট করুন',
+      actionType: 'blood',
+      targetModule: 'care',
+      linkText: 'ডোনার প্রোফাইল'
+    }
   },
   {
     id: 'reel-2',
@@ -313,32 +465,92 @@ export const mockMediaList: MediaItem[] = [
     creator: {
       name: 'রেসকিউ নেটওয়ার্ক বিডি',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80',
-      isVerified: true
+      isVerified: true,
+      subscribers: '95K'
     },
     thumbnail: 'https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=400&q=80',
     duration: '0:58',
-    views: '89K',
+    views: '110K',
     uploadDate: '৬ ঘণ্টা আগে',
-    likes: 8900,
-    commentsCount: 220,
-    category: 'প্রযুক্তি ও উদ্ধার'
+    likes: 12200,
+    commentsCount: 290,
+    category: 'উদ্ধার অভিযান'
+  },
+  {
+    id: 'reel-3',
+    type: 'reel',
+    title: 'হঠাৎ কেউ অচেতন হয়ে পড়লে সিপিআর (CPR) দেওয়ার সঠিক পদ্ধতি 🫀',
+    creator: {
+      name: 'ডা. সানজিদা আহমেদ',
+      avatar: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=120&q=80',
+      isVerified: true,
+      subscribers: '340K'
+    },
+    thumbnail: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=400&q=80',
+    duration: '0:52',
+    views: '230K',
+    uploadDate: '৮ ঘণ্টা আগে',
+    likes: 21900,
+    commentsCount: 540,
+    category: 'ফার্স্ট এইড',
+    isFactChecked: true,
+    factCheckedBy: 'রেড ক্রিসেন্ট বিডি সার্টিফাইড'
+  },
+  {
+    id: 'reel-4',
+    type: 'reel',
+    title: 'সড়ক দুর্ঘটনায় আহত ব্যক্তিকে গাড়ি থেকে বের করার সুরক্ষিত টেকনিক 🚑',
+    creator: {
+      name: 'Desti ভলান্টিয়ার স্কোয়াড',
+      avatar: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=120&q=80',
+      isVerified: true,
+      subscribers: '120K'
+    },
+    thumbnail: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=400&q=80',
+    duration: '0:48',
+    views: '98K',
+    uploadDate: '১২ ঘণ্টা আগে',
+    likes: 9100,
+    commentsCount: 180,
+    category: 'ফার্স্ট এইড'
   },
   {
     id: 'audio-1',
     type: 'audio',
-    title: 'পডকাস্ট #১২: তরুণ প্রজন্মের নাগরিক দায়িত্ব ও সামাজিক পরিবর্তন',
+    title: 'পডকাস্ট #১২: তরুণ প্রজন্মের নাগরিক দায়িত্ব ও জরুরি সমাজসেবা',
     creator: {
       name: 'ভয়েস অফ ঢাকা',
       avatar: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=120&q=80',
-      isVerified: true
+      isVerified: true,
+      subscribers: '85K'
     },
     thumbnail: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=600&q=80',
     duration: '32:10',
-    views: '15K',
+    views: '25K',
     uploadDate: '২ দিন আগে',
-    likes: 1200,
-    commentsCount: 94,
-    category: 'পডকাস্ট'
+    likes: 2100,
+    commentsCount: 140,
+    category: 'পডকাস্ট',
+    description: 'জরুরি পরিস্থিতিতে ভলান্টিয়ার নেটওয়ার্ক কীভাবে জীবন রক্ষা করতে পারে এবং কীভাবে একজন শিক্ষার্থী পড়াশোনার পাশাপাশি সামাজিক কাজে ভূমিকা রাখতে পারে।'
+  },
+  {
+    id: 'audio-2',
+    type: 'audio',
+    title: 'পডকাস্ট #১৩: মানসিক স্বাস্থ্য ও স্ট্রেস রিকভারি নির্দেশিকা',
+    creator: {
+      name: 'ডা. মেহের নিগার (মনোরোগ বিশেষজ্ঞ)',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80',
+      isVerified: true,
+      subscribers: '140K'
+    },
+    thumbnail: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600&q=80',
+    duration: '28:40',
+    views: '38K',
+    uploadDate: '৩ দিন আগে',
+    likes: 3400,
+    commentsCount: 220,
+    category: 'পডকাস্ট',
+    description: 'পরীক্ষার চাপ, কাজের ক্লান্তি ও দুশ্চিন্তা কাটিয়ে ওঠার সহজ বৈজ্ঞানিক শ্বাস-প্রশ্বাসের টেকনিক।'
   }
 ];
 

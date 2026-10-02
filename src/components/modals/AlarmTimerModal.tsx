@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import {
   X,
   AlarmClock,
@@ -68,6 +69,7 @@ export const AlarmTimerModal: React.FC<AlarmTimerModalProps> = ({
   onClose,
   onShowToast,
 }) => {
+  const { l, isEn } = useLanguage();
   const [activeTab, setActiveTab] = useState<'countdown' | 'alarm'>('countdown');
 
   // ---------- COUNTDOWN TIMER STATE ----------
@@ -264,7 +266,7 @@ export const AlarmTimerModal: React.FC<AlarmTimerModalProps> = ({
           <button
             onClick={onClose}
             className="p-2 -mr-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 active:scale-90 rounded-full transition-all cursor-pointer"
-            aria-label="বন্ধ করুন"
+            aria-label={l('বন্ধ করুন', 'Close')}
           >
             <X className="w-5 h-5" />
           </button>

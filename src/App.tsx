@@ -31,6 +31,7 @@ import { DestiNotesModal } from './components/modals/DestiNotesModal';
 import { DestiTranslateModal } from './components/modals/DestiTranslateModal';
 import { DestiAiModal } from './components/modals/DestiAiModal';
 import { ModuleSwitcherModal } from './components/modals/ModuleSwitcherModal';
+import { DailyToolsModal } from './components/modals/DailyToolsModal';
 import { NotificationModal } from './components/modals/NotificationModal';
 import { BlueprintModal } from './components/modals/BlueprintModal';
 import { SettingsModal } from './components/modals/SettingsModal';
@@ -54,9 +55,14 @@ import {
   currentUser as defaultUser 
 } from './data/mockData';
 import { Award, Check, Sparkles, X } from 'lucide-react';
+import { useLanguage } from './context/LanguageContext';
 
 export default function App() {
-  const [activeModule, setActiveModule] = useState<ActiveModule>('hope');
+  const { language, setLanguage, toggleLanguage, l, t } = useLanguage();
+  const [activeModule, setActiveModule] = useState<ActiveModule>(() => {
+    const saved = localStorage.getItem('destihope_active_module');
+    return (saved as ActiveModule) || 'media';
+  });
   const [activeCategory, setActiveCategory] = useState<FeedCategory>('For You');
   const [feedPosts, setFeedPosts] = useState<FeedPost[]>(() => {
     const cached = localStorage.getItem('destihope_feed_data');
@@ -70,7 +76,6 @@ export default function App() {
     return initialFeedPosts;
   });
   const [currentUser, setCurrentUser] = useState<UserProfile>(defaultUser);
-  const [language, setLanguage] = useState<'bn' | 'en'>('bn');
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     return localStorage.getItem('destihope_theme') === 'dark';
   });
@@ -86,6 +91,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('destihope_feed_data', JSON.stringify(feedPosts));
   }, [feedPosts]);
+
+  useEffect(() => {
+    localStorage.setItem('destihope_active_module', activeModule);
+  }, [activeModule]);
 
   useEffect(() => {
     localStorage.setItem('destihope_theme', isDarkMode ? 'dark' : 'light');
@@ -176,6 +185,7 @@ export default function App() {
   const [isDestiTranslateOpen, setIsDestiTranslateOpen] = useState(false);
   const [isDestiAiOpen, setIsDestiAiOpen] = useState(false);
   const [isModuleSwitcherOpen, setIsModuleSwitcherOpen] = useState(false);
+  const [isDailyToolsOpen, setIsDailyToolsOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isHopePointsInfoOpen, setIsHopePointsInfoOpen] = useState(false);
   const [isBlueprintModalOpen, setIsBlueprintModalOpen] = useState(false);
@@ -186,7 +196,7 @@ export default function App() {
   const [subTabs, setSubTabs] = useState<Record<string, string>>({
     hope: 'feed',
     chat: 'all',
-    media: 'reels',
+    media: 'feed',
     brain: 'ai',
     care: 'bloodbank',
     find: 'cases',
@@ -339,8 +349,8 @@ export default function App() {
                   onTimerClick={() => setIsActiveTimersModalOpen(true)}
                   onReportsClick={() => setIsDestiNotesOpen(true)}
                   onTranslateClick={() => setIsDestiTranslateOpen(true)}
-                  onLanguageToggle={() => setIsDestiTranslateOpen(true)}
-                  onModuleGridClick={() => setIsModuleSwitcherOpen(true)}
+                  onLanguageToggle={toggleLanguage}
+                  onModuleGridClick={() => setIsDailyToolsOpen(true)}
                   currentLanguage={language}
                 />
                 <LiveAlertBanner
@@ -382,11 +392,15 @@ export default function App() {
               isDarkMode={isDarkMode}
               onToggleDarkMode={() => setIsDarkMode((prev) => !prev)}
               language={language}
-              onToggleLanguage={() => setLanguage((prev) => (prev === 'bn' ? 'en' : 'bn'))}
+              onToggleLanguage={() => {
+                toggleLanguage();
+                const nextLang = language === 'bn' ? 'en' : 'bn';
+                showToast(nextLang === 'en' ? 'Language switched to English' : 'ভাষা পরিবর্তন করে বাংলা করা হয়েছে');
+              }}
               dataSaverEnabled={dataSaverEnabled}
               onToggleDataSaver={() => {
                 setDataSaverEnabled((prev) => !prev);
-                showToast(`ডাটা সেভার মোড: ${!dataSaverEnabled ? 'চালু' : 'বন্ধ'}`);
+                showToast(language === 'en' ? `Data Saver: ${!dataSaverEnabled ? 'ON' : 'OFF'}` : `ডাটা সেভার মোড: ${!dataSaverEnabled ? 'চালু' : 'বন্ধ'}`);
               }}
               onEmergencyCallClick={() => setIsEmergencyModalOpen(true)}
               onTimerClick={() => setIsActiveTimersModalOpen(true)}
@@ -404,10 +418,13 @@ export default function App() {
               onSelectModule={(mod) => setActiveModule(mod)}
               onOpenMenu={() => setIsSidebarOpen(true)}
               onOpenNotifications={() => setIsNotificationOpen(true)}
-              onSearchClick={() => showToast('মিডিয়া মডিউলে সার্চ ফিচার আসছে')}
+              onSearchClick={() => {}}
               onOpenCreatePost={() => setIsCreatePostOpen(true)}
               activeSubTab={subTabs['media']}
               onSelectSubTab={handleSelectSubTab}
+              currentUser={currentUser}
+              onUpdateUser={setCurrentUser}
+              onEarnHopePoints={(pts, reason) => addHopePoints(pts, reason)}
             />
           )}
 
@@ -510,7 +527,9 @@ export default function App() {
           }}
           currentLang={language}
           onToggleLanguage={() => {
-            setLanguage((prev) => (prev === 'bn' ? 'en' : 'bn'));
+            toggleLanguage();
+            const nextLang = language === 'bn' ? 'en' : 'bn';
+            showToast(nextLang === 'en' ? 'Language switched to English' : 'ভাষা পরিবর্তন করে বাংলা করা হয়েছে');
           }}
           dataSaverEnabled={dataSaverEnabled}
           onToggleDataSaver={() => {
@@ -581,6 +600,10 @@ export default function App() {
           isOpen={isDestiTranslateOpen}
           onClose={() => setIsDestiTranslateOpen(false)}
           onShowToast={showToast}
+          isDarkMode={isDarkMode}
+          onToggleDarkMode={() => {
+            setIsDarkMode((prev) => !prev);
+          }}
         />
 
         <DestiAiModal
@@ -594,6 +617,28 @@ export default function App() {
           onClose={() => setIsModuleSwitcherOpen(false)}
           onSelectModule={(mod) => setActiveModule(mod)}
           activeModule={activeModule}
+          currentUser={currentUser}
+          dataSaverEnabled={dataSaverEnabled}
+          onToggleDataSaver={() => {
+            setDataSaverEnabled((prev) => !prev);
+            showToast(language === 'en' ? `Data Saver: ${!dataSaverEnabled ? 'ON' : 'OFF'}` : `ডাটা সেভার মোড: ${!dataSaverEnabled ? 'চালু' : 'বন্ধ'}`);
+          }}
+          onOpenSettings={() => setIsSettingsModalOpen(true)}
+          onOpenNotifications={() => setIsNotificationOpen(true)}
+          onShowHopePointsInfo={() => setIsHopePointsInfoOpen(true)}
+        />
+
+        <DailyToolsModal
+          isOpen={isDailyToolsOpen}
+          onClose={() => setIsDailyToolsOpen(false)}
+          onOpenBloodRequest={() => setIsCreatePostOpen(true)}
+          onOpenEmergencyHub={() => setIsEmergencyModalOpen(true)}
+          onOpenTimerModal={() => setIsActiveTimersModalOpen(true)}
+          onOpenTranslateModal={() => setIsDestiTranslateOpen(true)}
+          isDarkMode={isDarkMode}
+          onToggleDarkMode={() => {
+            setIsDarkMode((prev) => !prev);
+          }}
         />
 
         <NotificationModal
@@ -624,7 +669,9 @@ export default function App() {
           }}
           currentLang={language}
           onToggleLanguage={() => {
-            setLanguage((prev) => (prev === 'bn' ? 'en' : 'bn'));
+            toggleLanguage();
+            const nextLang = language === 'bn' ? 'en' : 'bn';
+            showToast(nextLang === 'en' ? 'Language switched to English' : 'ভাষা পরিবর্তন করে বাংলা করা হয়েছে');
           }}
           dataSaverEnabled={dataSaverEnabled}
           onToggleDataSaver={() => {

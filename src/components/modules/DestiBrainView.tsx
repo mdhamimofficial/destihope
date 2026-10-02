@@ -20,6 +20,7 @@ import {
 import { BrainQuestion, DebateTopic, ActiveModule } from '../../types';
 import { mockBrainQuestions, mockDebateTopics } from '../../data/mockData';
 import { DestiBrainCreateTopicModal } from '../modals/DestiBrainCreateTopicModal';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface DestiBrainViewProps {
   onEarnHopePoints?: (points: number) => void;
@@ -44,6 +45,8 @@ export const DestiBrainView: React.FC<DestiBrainViewProps> = ({
   activeSubTab = 'ai',
   onSelectSubTab
 }) => {
+  const { l, isEn } = useLanguage();
+
   // AI Assistant state
   const [aiPrompt, setAiPrompt] = useState('');
   const [aiMessages, setAiMessages] = useState<Array<{ sender: 'user' | 'ai'; text: string; time: string }>>([
@@ -208,10 +211,10 @@ export const DestiBrainView: React.FC<DestiBrainViewProps> = ({
         <div className="flex items-center shrink-0">
           <button
             onClick={onOpenMenu}
-            className="w-10 h-10 -ml-1 flex items-center justify-center text-gray-800 hover:bg-gray-100 active:bg-gray-200 rounded-full transition-all active:scale-95"
+            className="w-9 h-9 sm:w-10 sm:h-10 -ml-1 flex items-center justify-center text-gray-800 hover:bg-gray-100 active:bg-gray-200 rounded-full transition-all active:scale-95 cursor-pointer"
             aria-label="Open navigation menu"
           >
-            <Menu className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.5]" />
+            <Menu className="w-5.5 h-5.5 sm:w-6 sm:h-6 stroke-[2.3]" />
           </button>
           
           {/* Brand Logo */}

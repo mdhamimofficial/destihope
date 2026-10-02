@@ -38,6 +38,7 @@ import { getDivisionOfDistrict } from '../../data/bangladeshLocations';
 import { BloodDonor, UserProfile, DonorWillingnessStatus, ActiveModule } from '../../types';
 import { ContactDonorModal } from '../modals/ContactDonorModal';
 import { ManageDonorStatusModal } from '../modals/ManageDonorStatusModal';
+import { useLanguage } from '../../context/LanguageContext';
 import { PullToRefresh } from '../common/PullToRefresh';
 
 interface DestiCareViewProps {
@@ -65,6 +66,7 @@ export const DestiCareView: React.FC<DestiCareViewProps> = ({
   currentUser,
   onUpdateUser
 }) => {
+  const { l, isEn } = useLanguage();
   // Search toggle state (for expanding search row on search icon click)
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   // Blood group filter
@@ -303,46 +305,47 @@ export const DestiCareView: React.FC<DestiCareViewProps> = ({
         </div>
       )}
 
-      {/* Top Navigation Bar: Identical to Home Page (DESTI HOPE -> DESTI CARE) */}
+      {/* Top Navigation Bar: Beautiful, standard header matching all other modules */}
       <header className="bg-white border-b border-gray-100 sticky top-0 z-30">
-        <div className="flex items-center justify-between px-2 sm:px-3 py-1.5 sm:py-2 gap-1 sm:gap-2 w-full">
+        <div className="flex items-center justify-between px-1.5 sm:px-3 py-1.5 sm:py-2 gap-1 sm:gap-1.5 w-full">
           {/* Left section: Hamburger Menu & Brand Logo */}
           <div className="flex items-center shrink-0">
             <button
               id="btn-hamburger-menu"
               onClick={onOpenMenu || onOpenModuleSwitcher}
-              className="w-10 h-10 -ml-1 flex items-center justify-center text-gray-800 hover:bg-gray-100 active:bg-gray-200 rounded-full transition-all active:scale-95 cursor-pointer"
+              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-gray-800 hover:bg-gray-100 active:bg-gray-200 rounded-full transition-all active:scale-95 cursor-pointer shrink-0"
               aria-label="Open navigation menu"
             >
-              <Menu className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.5]" />
+              <Menu className="w-5.5 h-5.5 sm:w-6 sm:h-6 stroke-[2.3]" />
             </button>
 
             {/* Brand Logo */}
             <div 
               onClick={() => onSelectModule && onSelectModule('hope')}
-              className="flex items-center tracking-tight px-1.5 py-1 cursor-pointer select-none -ml-0.5 active:opacity-80 transition-opacity"
+              className="flex items-center cursor-pointer select-none pl-0.5 pr-1 py-0.5 active:opacity-80 transition-opacity"
+              title={l('Desti Hope হোমে যান', 'Go to Desti Hope Home')}
             >
-              <span className="font-black text-base sm:text-lg text-gray-950">DESTI</span>
-              <span className="font-black text-base sm:text-lg text-rose-600 ml-0.5">
+              <span className="font-black text-base sm:text-lg tracking-tight text-gray-950">DESTI</span>
+              <span className="font-black text-base sm:text-lg tracking-tight text-rose-600 ml-0.5">
                 CARE
               </span>
             </div>
           </div>
 
-          {/* Center: Post composer input pill (like Home feed) */}
+          {/* Center: Post composer input pill (spacious & beautiful matching DestiHope) */}
           <div
             id="input-create-post-trigger"
             onClick={onOpenCreateBloodRequest}
-            className="flex-1 min-w-0 flex items-center justify-between bg-white hover:bg-rose-50/40 active:bg-rose-50/70 border border-gray-200 hover:border-gray-300 active:border-gray-400 rounded-full pl-3.5 pr-1.5 py-1.5 sm:py-2 shadow-2xs cursor-pointer transition-all mx-1 sm:mx-2 group"
+            className="flex-1 min-w-0 flex items-center justify-between bg-white hover:bg-rose-50/40 active:bg-rose-50/70 border border-gray-200 hover:border-gray-300 active:border-gray-400 rounded-full pl-3 sm:pl-3.5 pr-1.5 py-1.5 sm:py-2 shadow-2xs cursor-pointer transition-all mx-1 sm:mx-2 group"
           >
             <span className="text-[11px] xs:text-xs sm:text-sm text-gray-500 group-hover:text-gray-700 font-medium truncate">
-              জরুরি রক্তের আবেদন পোস্ট করুন...
+              {l('জরুরি রক্তের আবেদন পোস্ট করুন...', 'Post urgent blood donation request...')}
             </span>
             <div className="flex items-center gap-1 shrink-0 ml-1.5">
               <span className="hidden md:inline text-[11px] font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-100">
-                পোস্ট করুন
+                {l('পোস্ট করুন', 'Post')}
               </span>
-              <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-rose-50 group-hover:bg-rose-100 flex items-center justify-center shrink-0 ml-1 transition-colors">
+              <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-rose-50 group-hover:bg-rose-100 flex items-center justify-center shrink-0 transition-colors">
                 <Droplet className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-600 fill-rose-600 group-hover:scale-105 transition-transform" />
               </div>
             </div>
@@ -350,34 +353,19 @@ export const DestiCareView: React.FC<DestiCareViewProps> = ({
 
           {/* Right section: Search and Notification Icons */}
           <div className="flex items-center space-x-0 sm:space-x-0.5 shrink-0">
-            {/* Refresh Button */}
-            <button
-              id="btn-care-header-refresh"
-              onClick={handleRefreshCare}
-              disabled={isCareRefreshing}
-              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center text-gray-800 hover:bg-gray-100 active:bg-gray-200 rounded-full transition-all active:scale-90 relative cursor-pointer"
-              aria-label="রিফ্রেশ করুন"
-              title="ডোনার ও রক্তের তালিকা রিফ্রেশ করুন"
-            >
-              <RefreshCw
-                className={`w-5 h-5 sm:w-5 sm:h-5 text-gray-700 transition-transform ${
-                  isCareRefreshing ? 'animate-spin text-rose-600' : 'hover:rotate-180 duration-500'
-                }`}
-              />
-            </button>
-
             {/* Search Button */}
             <button
               id="btn-header-search"
               onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className={`w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full transition-all active:scale-90 cursor-pointer ${
+              className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full transition-all active:scale-90 cursor-pointer ${
                 isSearchOpen || donorSearchQuery || hasLocationFilter
                   ? 'text-rose-600 bg-rose-50'
                   : 'text-gray-800 hover:bg-gray-100 active:bg-gray-200'
               }`}
               aria-label="Search"
+              title={l('ডোনার ও রক্তের গ্রুপ অনুসন্ধান', 'Search donors & blood group')}
             >
-              <Search className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.3]" />
+              <Search className="w-5 h-5 sm:w-5.5 sm:h-5.5 stroke-[2.2]" />
             </button>
 
             {/* Notification Bell Button */}
@@ -388,11 +376,12 @@ export const DestiCareView: React.FC<DestiCareViewProps> = ({
                   onOpenNotifications();
                 }
               }}
-              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center text-gray-800 hover:bg-gray-100 active:bg-gray-200 rounded-full relative transition-all active:scale-90 cursor-pointer"
+              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-gray-800 hover:bg-gray-100 active:bg-gray-200 rounded-full relative transition-all active:scale-90 cursor-pointer"
               aria-label="Notifications"
+              title={l('নোটিফিকেশন', 'Notifications')}
             >
-              <Bell className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.3]" />
-              <span className="absolute top-1 right-1 min-w-[17px] h-[17px] px-1 bg-[#E53935] text-white text-[9px] font-black rounded-full flex items-center justify-center border-2 border-white leading-none shadow-xs">
+              <Bell className="w-5 h-5 sm:w-5.5 sm:h-5.5 stroke-[2.2]" />
+              <span className="absolute top-1 right-1 min-w-[16px] h-4 px-1 bg-[#E53935] text-white text-[9px] font-black rounded-full flex items-center justify-center border-2 border-white leading-none shadow-xs">
                 1
               </span>
             </button>
@@ -409,8 +398,8 @@ export const DestiCareView: React.FC<DestiCareViewProps> = ({
                   type="text"
                   placeholder={
                     activeSubTab === 'hospitals'
-                      ? 'হাসপাতাল খুঁজুন...'
-                      : 'ডোনার, রক্ত বা এলাকা খুঁজুন...'
+                      ? l('হাসপাতাল খুঁজুন...', 'Search hospitals...')
+                      : l('ডোনার, রক্ত বা এলাকা খুঁজুন...', 'Search donors, blood, or location...')
                   }
                   value={donorSearchQuery}
                   onChange={(e) => setDonorSearchQuery(e.target.value)}
@@ -516,10 +505,10 @@ export const DestiCareView: React.FC<DestiCareViewProps> = ({
           {/* Blood Group Matrix Bar */}
           <div className="p-3 bg-white border-b border-gray-100">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-gray-700">রক্তের গ্রুপ বাছাই করুন:</span>
+              <span className="text-xs font-bold text-gray-700">{l('রক্তের গ্রুপ বাছাই করুন:', 'Select Blood Group:')}</span>
               {selectedGroup !== 'all' && (
                 <button onClick={() => setSelectedGroup('all')} className="text-[11px] text-rose-600 font-semibold cursor-pointer">
-                  রিসেট
+                  {l('রিসেট', 'Reset')}
                 </button>
               )}
             </div>
@@ -545,11 +534,11 @@ export const DestiCareView: React.FC<DestiCareViewProps> = ({
             <div className="flex items-center justify-between text-xs text-gray-500 font-semibold px-1">
               <span className="flex items-center gap-1.5 text-gray-700 font-bold">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-                <span>রক্তদানে প্রস্তুত রক্তদাতা ({filteredDonors.length} জন)</span>
+                <span>{l('রক্তদানে প্রস্তুত রক্তদাতা', 'Available Donors')} ({filteredDonors.length} {l('জন', 'donors')})</span>
               </span>
               <span className="text-emerald-700 flex items-center gap-1">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                যাচাইকৃত ডোনার
+                {l('যাচাইকৃত ডোনার', 'Verified Donors')}
               </span>
             </div>
 

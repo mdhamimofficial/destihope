@@ -314,6 +314,8 @@ export const DestiChatView: React.FC<DestiChatViewProps> = ({
   onReportsClick,
   onLocationClick
 }) => {
+  const isEn = language === 'en';
+  const l = (bn: string, en: string) => isEn ? en : bn;
   const [conversations, setConversations] = useState<ChatConversation[]>(mockConversations);
   const [activeChat, setActiveChat] = useState<ChatConversation | null>(null);
   const [messagesMap, setMessagesMap] = useState<Record<string, ChatMessage[]>>(initialMessagesMap);
@@ -1236,7 +1238,7 @@ export const DestiChatView: React.FC<DestiChatViewProps> = ({
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="খুঁজুন..."
+                  placeholder={l('খুঁজুন...', 'Search...')}
                   className="w-full bg-transparent border-none focus:outline-hidden text-xs sm:text-sm text-gray-800 placeholder:text-gray-500 font-medium min-w-0"
                 />
                 {searchQuery && (
@@ -2083,8 +2085,8 @@ export const DestiChatView: React.FC<DestiChatViewProps> = ({
                       <Clock className="w-4 h-4" />
                     </div>
                     <div>
-                      <p className="text-xs font-bold text-gray-900">লাস্ট সিন ও অ্যাক্টিভ স্ট্যাটাস</p>
-                      <p className="text-[10.5px] text-gray-500">অন্যরা দেখতে পাবে আপনি কখন অনলাইনে ছিলেন</p>
+                      <p className="text-xs font-bold text-gray-900">{l('লাস্ট সিন ও অ্যাক্টিভ স্ট্যাটাস', 'Last Seen & Online Status')}</p>
+                      <p className="text-[10.5px] text-gray-500">{l('অন্যরা দেখতে পাবে আপনি কখন অনলাইনে ছিলেন', 'Let others see when you were last online')}</p>
                     </div>
                   </div>
                   <button 
@@ -2106,8 +2108,8 @@ export const DestiChatView: React.FC<DestiChatViewProps> = ({
                       <CheckCheck className="w-4 h-4" />
                     </div>
                     <div>
-                      <p className="text-xs font-bold text-gray-900">রিড রিসিটস (নীল টিক)</p>
-                      <p className="text-[10.5px] text-gray-500">মেসেজ পড়া হলে প্রেরক নিশ্চিত হবেন</p>
+                      <p className="text-xs font-bold text-gray-900">{l('রিড রিসিটস (নীল টিক)', 'Read Receipts (Blue Ticks)')}</p>
+                      <p className="text-[10.5px] text-gray-500">{l('মেসেজ পড়া হলে প্রেরক নিশ্চিত হবেন', 'Senders will know when you read messages')}</p>
                     </div>
                   </div>
                   <button 
@@ -2129,8 +2131,8 @@ export const DestiChatView: React.FC<DestiChatViewProps> = ({
                       <Bell className="w-4 h-4" />
                     </div>
                     <div>
-                      <p className="text-xs font-bold text-gray-900">চ্যাট পুশ নোটিফিকেশন ও সাউন্ড</p>
-                      <p className="text-[10.5px] text-gray-500">নতুন মেসেজে শব্দ ও অ্যালার্ট আসবে</p>
+                      <p className="text-xs font-bold text-gray-900">{l('চ্যাট পুশ নোটিফিকেশন ও সাউন্ড', 'Chat Push Notifications & Sounds')}</p>
+                      <p className="text-[10.5px] text-gray-500">{l('নতুন মেসেজে শব্দ ও অ্যালার্ট আসবে', 'Get audible alerts for incoming messages')}</p>
                     </div>
                   </div>
                   <button 
@@ -2152,8 +2154,8 @@ export const DestiChatView: React.FC<DestiChatViewProps> = ({
                       <Wifi className="w-4 h-4" />
                     </div>
                     <div>
-                      <p className="text-xs font-bold text-gray-900">ডাটা সেভার (অল্প ইন্টারনেট)</p>
-                      <p className="text-[10.5px] text-gray-500">ছবি ও মিডিয়া স্বয়ংক্রিয় ডাউনলোড হবে না</p>
+                      <p className="text-xs font-bold text-gray-900">{l('ডাটা সেভার (অল্প ইন্টারনেট)', 'Data Saver Mode (Low Internet)')}</p>
+                      <p className="text-[10.5px] text-gray-500">{l('ছবি ও মিডিয়া স্বয়ংক্রিয় ডাউনলোড হবে না', 'Photos & media won’t auto-download')}</p>
                     </div>
                   </div>
                   <button 
@@ -2172,8 +2174,8 @@ export const DestiChatView: React.FC<DestiChatViewProps> = ({
                       <Trash2 className="w-4 h-4" />
                     </div>
                     <div>
-                      <p className="text-xs font-bold text-gray-900">চ্যাট ক্যাশ ও মেমোরি খালি করুন</p>
-                      <p className="text-[10.5px] text-gray-500">৩২.৪ এমবি অফলাইন মেসেজ ও মিডিয়া সংরক্ষিত</p>
+                      <p className="text-xs font-bold text-gray-900">{l('চ্যাট ক্যাশ ও মেমোরি খালি করুন', 'Clear Chat Cache & Memory')}</p>
+                      <p className="text-[10.5px] text-gray-500">{l('৩২.৪ এমবি অফলাইন মেসেজ ও মিডিয়া সংরক্ষিত', '32.4 MB offline messages & media stored')}</p>
                     </div>
                   </div>
                   <button 
@@ -2190,7 +2192,7 @@ export const DestiChatView: React.FC<DestiChatViewProps> = ({
               <div className="bg-linear-to-r from-teal-900 to-emerald-950 rounded-2xl p-4 text-white shadow-xs space-y-2">
                 <div className="flex items-center space-x-2">
                   <Lock className="w-4.5 h-4.5 text-emerald-400 shrink-0" />
-                  <h4 className="text-xs font-bold text-white">এন্ড-টু-এন্ড এনক্রিপ্টেড চ্যাট (E2EE)</h4>
+                  <h4 className="text-xs font-bold text-white">{l('এন্ড-টু-এন্ড এনক্রিপ্টেড চ্যাট (E2EE)', 'End-to-End Encrypted Chat (E2EE)')}</h4>
                 </div>
                 <p className="text-[11px] text-emerald-100/85 leading-relaxed">
                   DestiChat-এর সমস্ত ব্যক্তিগত ও দলগত বার্তা, অডিও ভয়েস নোট এবং ফাইল সুরক্ষিত। শুধু আপনি এবং বার্তা প্রাপক ছাড়া তৃতীয় কোনো পক্ষ এটি দেখতে পারবে না।
@@ -2208,7 +2210,7 @@ export const DestiChatView: React.FC<DestiChatViewProps> = ({
                   className="flex-1 py-2.5 px-4 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 shadow-xs transition-colors cursor-pointer"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  <span>চ্যাট ইনবক্সে ফিরে যান</span>
+                  <span>{l('চ্যাট ইনবক্সে ফিরে যান', 'Return to Chat Inbox')}</span>
                 </button>
 
                 <button
@@ -2216,7 +2218,7 @@ export const DestiChatView: React.FC<DestiChatViewProps> = ({
                   onClick={() => onSelectModule?.('profile')}
                   className="py-2.5 px-4 bg-white hover:bg-gray-100 text-gray-700 border border-gray-200 rounded-xl text-xs font-bold flex items-center justify-center space-x-1 transition-colors cursor-pointer"
                 >
-                  <span>মূল DestiHope প্রোফাইল</span>
+                  <span>{l('মূল DestiHope প্রোফাইল', 'Main DestiHope Profile')}</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -2471,7 +2473,7 @@ export const DestiChatView: React.FC<DestiChatViewProps> = ({
                         <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mb-3">
                           <Bookmark className="w-6 h-6 fill-amber-200" />
                         </div>
-                        <h4 className="text-sm font-bold text-gray-900 mb-1">কোনো সংরক্ষিত বার্তা নেই</h4>
+                        <h4 className="text-sm font-bold text-gray-900 mb-1">{l('কোনো সংরক্ষিত বার্তা নেই', 'No saved messages')}</h4>
                         <p className="text-xs text-gray-500 leading-relaxed mb-4">
                           যেকোনো চ্যাটের পাশের বুকমার্ক আইকন চেপে সেভ করতে পারেন অথবা নিজের গুরুত্বপূর্ণ নোট লিখে রাখুন।
                         </p>
@@ -2495,7 +2497,7 @@ export const DestiChatView: React.FC<DestiChatViewProps> = ({
                         <div className="w-12 h-12 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center mb-3">
                           <User className="w-6 h-6" />
                         </div>
-                        <h4 className="text-sm font-bold text-gray-900 mb-1">কোনো ব্যক্তিগত চ্যাট নেই</h4>
+                        <h4 className="text-sm font-bold text-gray-900 mb-1">{l('কোনো ব্যক্তিগত চ্যাট নেই', 'No personal chats')}</h4>
                         <p className="text-xs text-gray-500 leading-relaxed mb-4">
                           কাউকে সরাসরি মেসেজ পাঠাতে "নতুন message" বোতাম ব্যবহার করুন।
                         </p>
@@ -2509,7 +2511,7 @@ export const DestiChatView: React.FC<DestiChatViewProps> = ({
                     ) : (
                       <div className="flex flex-col items-center">
                         <Search className="w-8 h-8 mb-2 stroke-1 text-gray-300" />
-                        <p className="text-xs font-medium text-gray-600">কোনো চ্যাট পাওয়া যায়নি</p>
+                        <p className="text-xs font-medium text-gray-600">{l('কোনো চ্যাট পাওয়া যায়নি', 'No chats found')}</p>
                         <button 
                           onClick={() => { setActiveCategoryTab('all'); setTabSubFilter('all'); setActiveModuleSubFilter('all'); setSearchQuery(''); }}
                           className="mt-2 text-xs text-teal-600 font-bold hover:underline cursor-pointer"
@@ -2533,7 +2535,7 @@ export const DestiChatView: React.FC<DestiChatViewProps> = ({
             <div className="px-4 py-3 bg-teal-700 text-white flex items-center justify-between">
               <div className="flex items-center space-x-1.5">
                 <SquarePen className="w-4 h-4" />
-                <h3 className="text-sm font-bold">নতুন বার্তা কম্পোজ করুন</h3>
+                <h3 className="text-sm font-bold">{l('নতুন বার্তা কম্পোজ করুন', 'Compose New Message')}</h3>
               </div>
               <button 
                 onClick={() => setIsNewChatModalOpen(false)}
@@ -2548,7 +2550,7 @@ export const DestiChatView: React.FC<DestiChatViewProps> = ({
                 <Search className="w-4 h-4 text-gray-400 mr-2" />
                 <input 
                   type="text" 
-                  placeholder="নাম, রক্তদাতা বা ভলান্টিয়ার খুঁজুন..."
+                  placeholder={l("নাম, রক্তদাতা বা ভলান্টিয়ার খুঁজুন...", "Search by name, donor, or volunteer...")}
                   className="w-full bg-transparent border-none focus:outline-hidden text-xs"
                 />
               </div>

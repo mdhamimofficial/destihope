@@ -2,46 +2,38 @@ import React from 'react';
 import { 
   Home, 
   Droplet, 
-  AlertTriangle, 
-  Clock, 
   MessageCircle, 
   MessageSquare,
   Users, 
-  PhoneCall, 
   PlaySquare, 
-  Film, 
-  Headphones, 
-  Bookmark, 
-  Brain, 
-  HelpCircle, 
-  Award, 
-  Swords, 
   Building2, 
   Siren, 
-  ShieldCheck, 
   UserSearch, 
-  MapPin, 
-  PlusCircle, 
   CheckCircle2, 
   User, 
-  Sparkles,
   Layers,
   Clapperboard,
   Radio,
-  LayoutGrid
+  PlusCircle,
+  HelpCircle,
+  Award,
+  Swords,
+  Brain,
+  ShieldCheck
 } from 'lucide-react';
 import { ActiveModule } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
-// Custom SVG Icon matching user's exact 3-tier stacked layers module icon ("মডিউল") from Screenshot_20260918-095234.png
+// Custom SVG Icon matching user's exact 3-tier stacked layers module icon ("মডিউল")
 export const ModuleLayersIcon: React.FC<{ 
   className?: string; 
   size?: number; 
   strokeWidth?: number;
   showDot?: boolean;
 }> = ({
-  className = "w-6 h-6",
-  size = 24,
-  strokeWidth = 2.4,
+  className = "w-5.5 h-5.5",
+  size = 22,
+  strokeWidth = 2.2,
   showDot = false,
 }) => (
   <svg
@@ -64,35 +56,8 @@ export const ModuleLayersIcon: React.FC<{
     <polyline points="2 17 12 22 22 17" />
     {/* Satellite dot if requested */}
     {showDot && (
-      <circle cx="21" cy="4" r="2.2" fill="currentColor" stroke="none" />
+      <circle cx="21" cy="4" r="2" fill="currentColor" stroke="none" />
     )}
-  </svg>
-);
-
-// Custom SVG Icon representing "Home + Switch/Transfer"
-const HomeSwitchIcon = ({ className, size = 24, strokeWidth = 2, ...props }: any) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={strokeWidth}
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-    {...props}
-  >
-    {/* Outer Home Outline */}
-    <path d="M3 10l9-7 9 7" />
-    <path d="M4 10v11h16V10" />
-    {/* Inner Right-facing arrow (Transfer) */}
-    <path d="M9 14h6" />
-    <path d="M13 12l2 2-2 2" />
-    {/* Inner Left-facing arrow (Transfer) */}
-    <path d="M15 18H9" />
-    <path d="M11 16l-2 2 2 2" />
   </svg>
 );
 
@@ -108,10 +73,9 @@ interface BottomNavProps {
 interface NavItem {
   id: string;
   label: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<{ className?: string; size?: number }>;
   isSwitcher?: boolean;
   badge?: number;
-  color?: string;
 }
 
 export const BottomNav: React.FC<BottomNavProps> = ({
@@ -122,66 +86,69 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   activeSubTab,
   onSelectSubTab,
 }) => {
-  // Define module-specific action tabs
+  const { l } = useLanguage();
+
+  // Define module-specific action tabs with clean bilingual labels
   const getNavItems = (): NavItem[] => {
     switch (activeModule) {
       case 'chat':
         return [
-          { id: 'back_home', label: 'Home', icon: Home },
-          { id: 'chat', label: 'Chat', icon: MessageSquare, badge: unreadChatCount > 0 ? unreadChatCount : undefined },
-          { id: 'upload', label: 'আপলোড+', icon: PlusCircle },
-          { id: 'module_switch', label: 'মডিউল', icon: ModuleLayersIcon },
-          { id: 'community', label: 'কমিউনিটি', icon: Users },
+          { id: 'back_home', label: l('হোম', 'Home'), icon: Home },
+          { id: 'chat', label: l('চ্যাট', 'Chats'), icon: MessageSquare, badge: unreadChatCount > 0 ? unreadChatCount : undefined },
+          { id: 'upload', label: l('নতুন', 'New'), icon: PlusCircle },
+          { id: 'module_switch', label: l('মডিউল', 'Modules'), icon: ModuleLayersIcon },
+          { id: 'community', label: l('গ্রুপ', 'Groups'), icon: Users },
         ];
       case 'media':
         return [
-          { id: 'back_home', label: 'হোম', icon: Home },
-          { id: 'reels', label: 'রিলস', icon: Clapperboard },
-          { id: 'videos', label: 'ভিডিও', icon: Film },
-          { id: 'audio', label: 'অডিও', icon: Headphones },
-          { id: 'saved', label: 'সংরক্ষিত', icon: Bookmark },
+          { id: 'back_home', label: l('হোম', 'Home'), icon: Home },
+          { id: 'feed', label: l('ফিড', 'Feed'), icon: PlaySquare },
+          { id: 'reels', label: l('রিলস', 'Reels'), icon: Clapperboard },
+          { id: 'subscriptions', label: l('চ্যানেল', 'Channels'), icon: Users },
+          { id: 'chat', label: l('চ্যাট', 'Chat'), icon: MessageCircle, badge: 2 },
+          { id: 'profile', label: l('প্রোফাইল', 'Profile'), icon: User },
         ];
       case 'brain':
         return [
-          { id: 'back_home', label: 'হোম', icon: Home },
-          { id: 'ai', label: 'এআই ডক্টর', icon: Brain },
-          { id: 'learn', label: 'প্রশ্নোত্তর', icon: HelpCircle },
-          { id: 'battle', label: 'কুইজ', icon: Award },
-          { id: 'debate', label: 'ডিবেট', icon: Swords },
+          { id: 'back_home', label: l('হোম', 'Home'), icon: Home },
+          { id: 'ai', label: l('এআই', 'AI Doctor'), icon: Brain },
+          { id: 'learn', label: l('প্রশ্ন', 'Q&A'), icon: HelpCircle },
+          { id: 'battle', label: l('কুইজ', 'Quiz'), icon: Award },
+          { id: 'debate', label: l('ডিবেট', 'Debate'), icon: Swords },
         ];
       case 'care':
         return [
-          { id: 'back_home', label: 'হোম', icon: Home },
-          { id: 'bloodbank', label: 'ডোনার', icon: Droplet },
-          { id: 'hospitals', label: 'হাসপাতাল', icon: Building2 },
-          { id: 'ambulance', label: 'অ্যাম্বুলেন্স', icon: Siren },
-          { id: 'profile', label: 'প্রোফাইল', icon: User },
+          { id: 'back_home', label: l('হোম', 'Home'), icon: Home },
+          { id: 'bloodbank', label: l('ডোনার', 'Donors'), icon: Droplet },
+          { id: 'hospitals', label: l('হাসপাতাল', 'Hospitals'), icon: Building2 },
+          { id: 'ambulance', label: l('অ্যাম্বুলেন্স', 'Ambulance'), icon: Siren },
+          { id: 'profile', label: l('প্রোফাইল', 'Profile'), icon: User },
         ];
       case 'find':
         return [
-          { id: 'back_home', label: 'হোম', icon: Home },
-          { id: 'cases', label: 'নিখোঁজ', icon: UserSearch },
-          { id: 'found', label: 'উদ্ধার', icon: CheckCircle2 },
-          { id: 'radar', label: 'রাডার', icon: Radio },
-          { id: 'profile', label: 'প্রোফাইল', icon: User },
+          { id: 'back_home', label: l('হোম', 'Home'), icon: Home },
+          { id: 'cases', label: l('নিখোঁজ', 'Cases'), icon: UserSearch },
+          { id: 'found', label: l('উদ্ধার', 'Rescued'), icon: CheckCircle2 },
+          { id: 'radar', label: l('রাডার', 'Radar'), icon: Radio },
+          { id: 'profile', label: l('প্রোফাইল', 'Profile'), icon: User },
         ];
       case 'profile':
         return [
-          { id: 'back_home', label: 'হোম', icon: Home },
-          { id: 'overview', label: 'পরিচিতি', icon: User },
-          { id: 'modules', label: 'মডিউল', icon: Layers },
-          { id: 'badges', label: 'পয়েন্ট ও ব্যাজ', icon: Award },
-          { id: 'security', label: 'নিরাপত্তা', icon: ShieldCheck },
+          { id: 'back_home', label: l('হোম', 'Home'), icon: Home },
+          { id: 'overview', label: l('পরিচিতি', 'Overview'), icon: User },
+          { id: 'modules', label: l('মডিউল', 'Modules'), icon: Layers },
+          { id: 'badges', label: l('পয়েন্ট', 'Points'), icon: Award },
+          { id: 'security', label: l('নিরাপত্তা', 'Security'), icon: ShieldCheck },
         ];
       case 'hope':
       default:
         return [
-          { id: 'hope', label: 'হোম', icon: Home },
-          { id: 'chat', label: 'চ্যাট', icon: MessageCircle, badge: unreadChatCount > 0 ? unreadChatCount : undefined },
-          { id: 'media', label: 'মিডিয়া', icon: Clapperboard },
-          { id: 'brain', label: 'ব্রেন', icon: Brain },
-          { id: 'care', label: 'কেয়ার', icon: Droplet },
-          { id: 'find', label: 'নিখোঁজ', icon: UserSearch },
+          { id: 'hope', label: l('হোম', 'Home'), icon: Home },
+          { id: 'chat', label: l('চ্যাট', 'Chat'), icon: MessageCircle, badge: unreadChatCount > 0 ? unreadChatCount : undefined },
+          { id: 'media', label: l('মিডিয়া', 'Media'), icon: Clapperboard },
+          { id: 'brain', label: l('ব্রেন', 'Brain'), icon: Brain },
+          { id: 'care', label: l('কেয়ার', 'Care'), icon: Droplet },
+          { id: 'find', label: l('নিখোঁজ', 'Find'), icon: UserSearch },
         ];
     }
   };
@@ -189,7 +156,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   const navItems = getNavItems();
   const isHome = activeModule === 'hope';
 
-  // Get module theme color
+  // Active module theme color
   const getThemeColor = () => {
     switch (activeModule) {
       case 'chat': return 'text-teal-600';
@@ -206,22 +173,18 @@ export const BottomNav: React.FC<BottomNavProps> = ({
 
   const activeColorClass = getThemeColor();
 
-  const isMedia = activeModule === 'media';
-
   return (
-    <nav className={`fixed bottom-0 left-0 right-0 max-w-md mx-auto backdrop-blur-md border-t z-40 shadow-[0_-4px_24px_rgba(0,0,0,0.08)] ${
-      isMedia 
-        ? 'bg-zinc-950/95 border-zinc-800/80 text-zinc-300' 
-        : 'bg-white/95 border-gray-200/80 text-gray-800'
-    }`}>
-      <div className="flex items-center justify-around px-2 h-16">
+    <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto backdrop-blur-lg border-t z-40 bg-white/95 border-gray-200/90 text-gray-800 shadow-[0_-2px_16px_rgba(0,0,0,0.06)] pb-safe select-none">
+      <div className="flex items-center justify-around px-1 h-14 sm:h-15">
         {navItems.map((item) => {
           const isActive = isHome 
             ? item.id === 'hope' 
             : activeModule === 'chat'
             ? (activeSubTab === item.id || (item.id === 'chat' && (!activeSubTab || activeSubTab === 'chat' || activeSubTab === 'all')))
+            : activeModule === 'media'
+            ? (activeSubTab === item.id || ((item.id === 'feed' || item.id === 'home') && (!activeSubTab || activeSubTab === 'home' || activeSubTab === 'videos' || activeSubTab === 'feed')))
             : activeSubTab === item.id;
-          const Icon = item.icon || HomeSwitchIcon;
+          const Icon = item.icon;
 
           return (
             <button
@@ -230,6 +193,10 @@ export const BottomNav: React.FC<BottomNavProps> = ({
               onClick={() => {
                 if (item.id === 'back_home') {
                   onSelectModule('hope');
+                  return;
+                }
+                if (item.id === 'module_switch') {
+                  if (onOpenModuleSwitcher) onOpenModuleSwitcher();
                   return;
                 }
                 if (isHome) {
@@ -244,42 +211,55 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                   onSelectSubTab(item.id);
                 }
               }}
-              className="flex-1 h-full flex flex-col items-center justify-center relative py-1 px-1 cursor-pointer select-none"
+              className="flex-1 h-full flex flex-col items-center justify-center relative py-1 px-0.5 cursor-pointer active:scale-95 transition-all group"
               aria-label={item.label}
-              title={item.id === 'back_home' ? 'হোম পেজে (Desti Hope) ফিরুন' : item.label}
+              title={item.id === 'back_home' ? l('হোম পেজে (Desti Hope) ফিরুন', 'Return to Home (Desti Hope)') : item.label}
             >
-              <div className="relative flex items-center justify-center p-1 rounded-xl">
+              {/* Standardized 22px-24px icon container */}
+              <div className="relative flex items-center justify-center">
                 <Icon
-                  className={`w-7 h-7 transition-colors duration-150 ${
-                    isHome
-                      ? isActive
-                        ? `${activeColorClass} stroke-[2.4]`
-                        : 'text-gray-400 stroke-[2] hover:text-gray-600'
-                      : isActive
-                      ? `${isMedia ? 'text-purple-400' : activeColorClass} stroke-[2.4]`
+                  className={`w-5.5 h-5.5 transition-all duration-150 ${
+                    isActive
+                      ? `${activeColorClass} stroke-[2.3] scale-105`
                       : item.id === 'back_home'
-                      ? (isMedia ? 'text-zinc-400 hover:text-rose-400' : 'text-gray-500 hover:text-[#E53935]') + ' stroke-[2]'
-                      : `${isMedia ? 'text-zinc-400 hover:text-zinc-200' : 'text-gray-500 hover:text-gray-700'} stroke-[2]`
+                      ? 'text-gray-500 group-hover:text-[#E53935] stroke-[1.9]'
+                      : 'text-gray-500 group-hover:text-gray-800 stroke-[1.9]'
                   }`}
                 />
 
+                {/* Compact, clean badge */}
                 {item.badge && (
-                  <span className="absolute -top-1 -right-2 bg-[#E53935] text-white text-[10px] font-black rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center leading-none shadow-xs ring-2 ring-white">
+                  <span className="absolute -top-1.5 -right-2.5 min-w-[16px] h-4 bg-[#E53935] text-white text-[9px] font-black rounded-full px-1 flex items-center justify-center leading-none shadow-xs ring-2 ring-white">
                     {item.badge}
                   </span>
                 )}
               </div>
 
-              {/* Active Indicator Dot (Absolute positioned so it never pushes or shifts the icon position) */}
+              {/* Standard micro-label below icon for optimal mobile readability */}
+              <span 
+                className={`text-[10px] tracking-tight leading-none mt-1 truncate max-w-[56px] text-center transition-colors ${
+                  isActive 
+                    ? `font-bold ${activeColorClass}` 
+                    : 'font-medium text-gray-500 group-hover:text-gray-700'
+                }`}
+              >
+                {item.label}
+              </span>
+
+              {/* Active Indicator Dot under label */}
               {isActive && (
                 <span
-                  className={`absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ${
-                    isHome 
-                      ? 'bg-[#E53935]' 
-                      : isMedia 
-                      ? 'bg-purple-400' 
-                      : activeColorClass.includes('teal') 
-                      ? 'bg-teal-600' 
+                  className={`absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${
+                    activeColorClass.includes('teal')
+                      ? 'bg-teal-600'
+                      : activeColorClass.includes('purple')
+                      ? 'bg-purple-600'
+                      : activeColorClass.includes('amber')
+                      ? 'bg-amber-600'
+                      : activeColorClass.includes('rose')
+                      ? 'bg-rose-600'
+                      : activeColorClass.includes('emerald')
+                      ? 'bg-emerald-600'
                       : 'bg-[#E53935]'
                   }`}
                 />

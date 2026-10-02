@@ -125,6 +125,12 @@ export interface MediaItem {
   likes: number;
   commentsCount: number;
   category: string;
+  description?: string;
+  chapters?: { time: string; title: string; seconds: number }[];
+  isFactChecked?: boolean;
+  factCheckedBy?: string;
+  lifeAction?: { label: string; actionType: 'blood' | 'find' | 'emergency'; targetModule: string; linkText: string };
+  hopeReward?: number;
 }
 
 export interface BrainQuestion {

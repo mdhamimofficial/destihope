@@ -6,9 +6,11 @@ import {
   Brain, 
   MessageSquare, 
   Film, 
-  User 
+  User,
+  Sparkles 
 } from 'lucide-react';
 import { ActiveModule } from '../../types';
+import { useLanguage } from '../../context/LanguageContext';
 
 export interface TopModuleBarProps {
   activeModule: ActiveModule;
@@ -17,13 +19,13 @@ export interface TopModuleBarProps {
 }
 
 const MODULE_TABS = [
-  { id: 'hope' as ActiveModule, label: 'Hope', icon: Heart, color: 'text-red-600' },
-  { id: 'care' as ActiveModule, label: 'Care', icon: Droplet, color: 'text-rose-600' },
-  { id: 'find' as ActiveModule, label: 'Find', icon: UserSearch, color: 'text-emerald-600' },
-  { id: 'brain' as ActiveModule, label: 'Brain', icon: Brain, color: 'text-amber-600' },
-  { id: 'chat' as ActiveModule, label: 'Chat', icon: MessageSquare, color: 'text-teal-600' },
-  { id: 'media' as ActiveModule, label: 'Media', icon: Film, color: 'text-purple-600' },
-  { id: 'profile' as ActiveModule, label: 'Profile', icon: User, color: 'text-slate-600' },
+  { id: 'hope' as ActiveModule, labelBn: 'হোপ', labelEn: 'Hope', icon: Heart, color: 'text-red-600' },
+  { id: 'care' as ActiveModule, labelBn: 'কেয়ার', labelEn: 'Care', icon: Droplet, color: 'text-rose-600' },
+  { id: 'find' as ActiveModule, labelBn: 'ফাইন্ড', labelEn: 'Find', icon: UserSearch, color: 'text-emerald-600' },
+  { id: 'brain' as ActiveModule, labelBn: 'ব্রেন', labelEn: 'Brain', icon: Brain, color: 'text-amber-600' },
+  { id: 'chat' as ActiveModule, labelBn: 'চ্যাট', labelEn: 'Chat', icon: MessageSquare, color: 'text-teal-600' },
+  { id: 'media' as ActiveModule, labelBn: 'মিডিয়া', labelEn: 'Media', icon: Film, color: 'text-purple-600' },
+  { id: 'profile' as ActiveModule, labelBn: 'প্রোফাইল', labelEn: 'Profile', icon: User, color: 'text-slate-600' },
 ];
 
 export const TopModuleBar: React.FC<TopModuleBarProps> = ({
@@ -31,6 +33,8 @@ export const TopModuleBar: React.FC<TopModuleBarProps> = ({
   onSelectModule,
   darkMode = false,
 }) => {
+  const { l } = useLanguage();
+
   return (
     <div className={`w-full overflow-x-auto no-scrollbar border-b px-2 py-1.5 flex items-center gap-1.5 ${
       darkMode 
@@ -55,7 +59,7 @@ export const TopModuleBar: React.FC<TopModuleBarProps> = ({
             }`}
           >
             <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : tab.color}`} />
-            <span>{tab.label}</span>
+            <span>{l(tab.labelBn, tab.labelEn)}</span>
           </button>
         );
       })}

@@ -3,6 +3,7 @@ import { X, Droplet, Search, MessageSquare, Image, MapPin, Send, Check, WifiOff,
 import { FeedPost } from '../../types';
 import { DIVISION_DISTRICTS_MAP } from '../../data/bangladeshLocations';
 import { getNextCaseId, peekNextCaseId, SUPPORTED_COUNTRIES } from '../../utils/caseIdGenerator';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface CreatePostModalProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   onSubmitPost,
   isOffline = false,
 }) => {
+  const { l } = useLanguage();
   const [postType, setPostType] = useState<PostType>('social');
   const [text, setText] = useState('');
   const [district, setDistrict] = useState('ঢাকা');
@@ -149,11 +151,11 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
         {/* Header */}
         <div className="p-4 border-b border-gray-100 flex items-center justify-between">
           <div>
-            <h3 className="font-bold text-gray-900 text-base">নতুন পোস্ট তৈরি করুন</h3>
+            <h3 className="font-bold text-gray-900 text-base">{l('নতুন পোস্ট তৈরি করুন', 'Create New Post')}</h3>
             {isOffline && (
               <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full mt-0.5">
                 <WifiOff className="w-3 h-3" />
-                অফলাইন মুডে তৈরি হচ্ছে (নেট আসলে সিঙ্ক হবে)
+                {l('অফলাইন মুডে তৈরি হচ্ছে (নেট আসলে সিঙ্ক হবে)', 'Creating offline (will sync when online)')}
               </span>
             )}
           </div>
@@ -165,8 +167,8 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               onClose();
             }}
             className="w-10 h-10 -mr-2 -my-2 flex items-center justify-center text-gray-500 hover:text-gray-900 rounded-full hover:bg-gray-100 active:bg-gray-200 active:scale-90 transition-all cursor-pointer touch-manipulation"
-            aria-label="বন্ধ করুন"
-            title="বন্ধ করুন"
+            aria-label={l('বন্ধ করুন', 'Close')}
+            title={l('বন্ধ করুন', 'Close')}
           >
             <X className="w-6 h-6 stroke-[2.2]" />
           </button>
@@ -182,7 +184,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
             }`}
           >
             <MessageSquare className="w-3.5 h-3.5 text-blue-600" />
-            <span>সাধারণ</span>
+            <span>{l('সাধারণ', 'General')}</span>
           </button>
 
           <button
@@ -193,7 +195,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
             }`}
           >
             <Droplet className="w-3.5 h-3.5 text-red-600" />
-            <span>রক্ত প্রয়োজন</span>
+            <span>{l('রক্ত প্রয়োজন', 'Blood Request')}</span>
           </button>
 
           <button
@@ -204,7 +206,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
             }`}
           >
             <Search className="w-3.5 h-3.5 text-teal-600" />
-            <span>নিখোঁজ ব্যক্তি</span>
+            <span>{l('নিখোঁজ ব্যক্তি', 'Missing Person')}</span>
           </button>
         </div>
 
@@ -217,10 +219,10 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               rows={3}
               placeholder={
                 postType === 'social'
-                  ? 'আপনার মতামত লিখুন বা অভিজ্ঞতা শেয়ার করুন...'
+                  ? l('আপনার মতামত লিখুন বা অভিজ্ঞতা শেয়ার করুন...', 'Share your thoughts, updates or experience...')
                   : postType === 'blood'
-                  ? 'রোগীর সমস্যা বা প্রয়োজনীয় অতিরিক্ত তথ্য লিখুন...'
-                  : 'নিখোঁজ ব্যক্তির বিবরণ ও পরিচিতি লিখুন...'
+                  ? l('রোগীর সমস্যা বা প্রয়োজনীয় অতিরিক্ত তথ্য লিখুন...', 'Details of patient condition and requirements...')
+                  : l('নিখোঁজ ব্যক্তির বিবরণ ও পরিচিতি লিখুন...', 'Details and identification of missing person...')
               }
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -234,7 +236,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="block text-[11px] font-bold text-gray-700 mb-0.5">
-                    রক্তের গ্রুপ
+                    {l('রক্তের গ্রুপ', 'Blood Group')}
                   </label>
                   <select
                     value={bloodGroup}
@@ -249,7 +251,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
 
                 <div>
                   <label className="block text-[11px] font-bold text-gray-700 mb-0.5">
-                    প্রয়োজনীয় ব্যাগ
+                    {l('প্রয়োজনীয় ব্যাগ', 'Bags Needed')}
                   </label>
                   <input
                     type="number"
@@ -264,11 +266,11 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
 
               <div>
                 <label className="block text-[11px] font-bold text-gray-700 mb-0.5">
-                  হাসপাতালের নাম
+                  {l('হাসপাতালের নাম', 'Hospital Name')}
                 </label>
                 <input
                   type="text"
-                  placeholder="যেমন: ঢাকা মেডিকেল কলেজ হাসপাতাল"
+                  placeholder={l('যেমন: ঢাকা মেডিকেল কলেজ হাসপাতাল', 'e.g. Dhaka Medical College Hospital')}
                   value={hospital}
                   onChange={(e) => setHospital(e.target.value)}
                   className="w-full text-xs p-2 rounded-lg bg-white border border-gray-200"
@@ -278,7 +280,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="block text-[11px] font-bold text-gray-700 mb-0.5">
-                    জরুরি সময় (ঘণ্টা)
+                    {l('জরুরি সময় (ঘণ্টা)', 'Urgency Deadline (Hours)')}
                   </label>
                   <input
                     type="number"
@@ -291,7 +293,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                 </div>
                 <div>
                   <label className="block text-[11px] font-bold text-gray-700 mb-0.5">
-                    জরুরি যোগাযোগ নম্বর
+                    {l('জরুরি যোগাযোগ নম্বর', 'Contact Phone Number')}
                   </label>
                   <input
                     type="tel"
@@ -310,7 +312,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               {/* Country and Auto Case ID preview */}
               <div className="bg-white p-2 rounded-lg border border-teal-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
                 <div className="flex items-center space-x-2">
-                  <span className="text-[11px] font-bold text-gray-700">দেশ কোড:</span>
+                  <span className="text-[11px] font-bold text-gray-700">{l('দেশ কোড:', 'Country Code:')}</span>
                   <select
                     value={missingCountry}
                     onChange={(e) => setMissingCountry(e.target.value)}
@@ -324,7 +326,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                   </select>
                 </div>
                 <div className="flex items-center space-x-1.5">
-                  <span className="text-[10px] text-gray-500">জেনারেটেড কেস আইডি:</span>
+                  <span className="text-[10px] text-gray-500">{l('জেনারেটেড কেস আইডি:', 'Generated Case ID:')}</span>
                   <span className="text-xs font-black font-mono text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-300">
                     {peekNextCaseId(missingCountry)}
                   </span>
@@ -333,12 +335,12 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
 
               <div>
                 <label className="block text-[11px] font-bold text-gray-700 mb-0.5">
-                  নিখোঁজ ব্যক্তির নাম
+                  {l('নিখোঁজ ব্যক্তির নাম', 'Missing Person Name')}
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="যেমন: সামিউল ইসলাম"
+                  placeholder={l('যেমন: সামিউল ইসলাম', 'e.g. Samiul Islam')}
                   value={missingName}
                   onChange={(e) => setMissingName(e.target.value)}
                   className="w-full text-xs p-2 rounded-lg bg-white border border-gray-200 font-semibold"
@@ -348,12 +350,12 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="block text-[11px] font-bold text-gray-700 mb-0.5">
-                    সর্বশেষ দেখা যাওয়ার স্থান
+                    {l('সর্বশেষ দেখা যাওয়ার স্থান', 'Last Seen Location')}
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="আগ্রাবাদ, চট্টগ্রাম"
+                    placeholder={l('আগ্রাবাদ, চট্টগ্রাম', 'Agrabad, Chittagong')}
                     value={lastSeenLocation}
                     onChange={(e) => setLastSeenLocation(e.target.value)}
                     className="w-full text-xs p-2 rounded-lg bg-white border border-gray-200"
@@ -361,7 +363,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                 </div>
                 <div>
                   <label className="block text-[11px] font-bold text-gray-700 mb-0.5">
-                    জরুরি ফোন নম্বর
+                    {l('জরুরি ফোন নম্বর', 'Emergency Phone Number')}
                   </label>
                   <input
                     type="tel"
@@ -375,11 +377,11 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
 
               <div>
                 <label className="block text-[11px] font-bold text-gray-700 mb-0.5">
-                  পোশাকের বর্ণনা
+                  {l('পোশাকের বর্ণনা', 'Clothing Description')}
                 </label>
                 <input
                   type="text"
-                  placeholder="যেমন: নীল টি-শার্ট ও কালো জিন্স"
+                  placeholder={l('যেমন: নীল টি-শার্ট ও কালো জিন্স', 'e.g. Blue t-shirt and dark jeans')}
                   value={clothing}
                   onChange={(e) => setClothing(e.target.value)}
                   className="w-full text-xs p-2 rounded-lg bg-white border border-gray-200"
@@ -391,7 +393,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
           {/* Location tag */}
           <div className="flex items-center space-x-2">
             <MapPin className="w-4 h-4 text-gray-500 shrink-0" />
-            <span className="text-xs font-semibold text-gray-600 shrink-0">জেলা:</span>
+            <span className="text-xs font-semibold text-gray-600 shrink-0">{l('জেলা:', 'District:')}</span>
             <select
               value={district}
               onChange={(e) => setDistrict(e.target.value)}
@@ -400,7 +402,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               {Object.entries(DIVISION_DISTRICTS_MAP)
                 .sort(([divA], [divB]) => divA.localeCompare(divB, 'bn'))
                 .map(([division, districts]) => (
-                  <optgroup key={division} label={`${division} বিভাগ`}>
+                  <optgroup key={division} label={`${division} ${l('বিভাগ', 'Division')}`}>
                     {[...districts]
                       .sort((a, b) => a.localeCompare(b, 'bn'))
                       .map((dist) => (
@@ -420,7 +422,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               onClick={onClose}
               className="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-xl"
             >
-              বাতিল
+              {l('বাতিল', 'Cancel')}
             </button>
             <button
               type="submit"
@@ -429,12 +431,12 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               {isOffline ? (
                 <>
                   <CloudUpload className="w-3.5 h-3.5" />
-                  <span>অফলাইনে সেভ করুন</span>
+                  <span>{l('অফলাইনে সেভ করুন', 'Save Offline')}</span>
                 </>
               ) : (
                 <>
                   <Send className="w-3.5 h-3.5" />
-                  <span>পোস্ট করুন</span>
+                  <span>{l('পোস্ট করুন', 'Post')}</span>
                 </>
               )}
             </button>

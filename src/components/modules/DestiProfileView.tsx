@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { UserProfile, DonorWillingnessStatus, ActiveModule } from '../../types';
 import { ManageDonorStatusModal } from '../modals/ManageDonorStatusModal';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface DestiProfileViewProps {
   user: UserProfile;
@@ -54,6 +55,7 @@ export const DestiProfileView: React.FC<DestiProfileViewProps> = ({
   activeSubTab = 'overview',
   onSelectSubTab
 }) => {
+  const { l, isEn } = useLanguage();
   // Donor Willingness local state with localStorage fallback & sync
   const [donorWillingness, setDonorWillingness] = useState<DonorWillingnessStatus>(() => {
     try {
@@ -142,7 +144,7 @@ export const DestiProfileView: React.FC<DestiProfileViewProps> = ({
     targetDate.setMonth(targetDate.getMonth() + m);
     const mName = banglaMonths[targetDate.getMonth()];
     const yNum = toBanglaNum(targetDate.getFullYear());
-    return `${toBanglaNum(m)} মাস পর প্রস্তুত (${mName} ${yNum})`;
+    return `${toBanglaNum(m)} {l('মাস পর প্রস্তুত', 'Available after months')} (${mName} ${yNum})`;
   };
 
   // Handle 1-tap change of willingness
@@ -207,11 +209,11 @@ export const DestiProfileView: React.FC<DestiProfileViewProps> = ({
     }
 
     if (status === 'available') {
-      showFeedback('জরুরি রক্তদানের স্ট্যাটাস: "ইচ্ছুক ও প্রস্তুত" হিসেবে সেভ করা হয়েছে 🩸');
+      showFeedback(l('জরুরি রক্তদানের স্ট্যাটাস: "ইচ্ছুক ও প্রস্তুত" হিসেবে সেভ করা হয়েছে 🩸', 'Blood donor status saved: "Ready & Available" 🩸'));
     } else if (status === 'after_months') {
-      showFeedback(`স্ট্যাটাস আপডেট: ${newDateNote} হিসেবে সেট করা হয়েছে ⏳`);
+      showFeedback(l(`স্ট্যাটাস আপডেট: ${newDateNote} হিসেবে সেট করা হয়েছে ⏳`, `Status update: Set to ${newDateNote} ⏳`));
     } else {
-      showFeedback('জরুরি রক্তদানের স্ট্যাটাস: "আপাতত বন্ধ" করা হয়েছে 🔒');
+      showFeedback(l('জরুরি রক্তদানের স্ট্যাটাস: "আপাতত বন্ধ" করা হয়েছে 🔒', 'Blood donor status: Set to "Currently Unavailable" 🔒'));
     }
   };
 
@@ -240,7 +242,7 @@ export const DestiProfileView: React.FC<DestiProfileViewProps> = ({
           <button
             onClick={onBackToHome}
             className="p-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
-            title="হোমে ফিরুন"
+            title={l('হোমে ফিরুন', 'Return to Home')}
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
@@ -253,7 +255,7 @@ export const DestiProfileView: React.FC<DestiProfileViewProps> = ({
               DESTI<span className="text-slate-600">PROFILE</span>
               <ShieldCheck className="w-4 h-4 text-emerald-600 fill-emerald-100" />
             </h2>
-            <p className="text-[10px] text-gray-400 font-medium">ব্যক্তিগত ও মডিউল প্রোফাইল সেটিংস</p>
+            <p className="text-[10px] text-gray-400 font-medium">{l('ব্যক্তিগত ও মডিউল প্রোফাইল সেটিংস', 'Personal & Module Profile Settings')}</p>
           </div>
         </div>
 
@@ -269,11 +271,11 @@ export const DestiProfileView: React.FC<DestiProfileViewProps> = ({
       {/* Primary Sub-tab Switcher */}
       <div className="flex items-center px-3 py-2 space-x-1.5 border-b border-gray-100 bg-white overflow-x-auto no-scrollbar sticky top-[53px] z-10 shadow-2xs">
         {[
-          { id: 'overview', label: '👤 সাধারণ পরিচিতি' },
-          { id: 'modules', label: '🗂️ মডিউল প্রোফাইল' },
-          { id: 'badges', label: '🏆 হোপ পয়েন্ট ও ব্যাজ' },
-          { id: 'security', label: '🔒 এসওএস ও নিরাপত্তা' },
-          { id: 'back_home', label: '🏠 হোমে ফিরুন' }
+          { id: 'overview', label: l('👤 সাধারণ পরিচিতি', '👤 Overview') },
+          { id: 'modules', label: l('🗂️ মডিউল প্রোফাইল', '🗂️ Modules') },
+          { id: 'badges', label: l('🏆 হোপ পয়েন্ট ও ব্যাজ', '🏆 Badges & Points') },
+          { id: 'security', label: l('🔒 এসওএস ও নিরাপত্তা', '🔒 Security') },
+          { id: 'back_home', label: l('🏠 হোমে ফিরুন', '🏠 Home') }
         ].map((tab) => {
           const isActive = activeSubTab === tab.id;
           return (
@@ -330,15 +332,15 @@ export const DestiProfileView: React.FC<DestiProfileViewProps> = ({
               <span className="text-lg font-black text-rose-600 block">
                 {donationsCount}
               </span>
-              <span className="text-[10px] text-gray-500 font-semibold">রক্তদান সংখ্যা</span>
+              <span className="text-[10px] text-gray-500 font-semibold">{l('রক্তদান সংখ্যা', 'Total Donations')}</span>
             </div>
             <div className="bg-white p-3 rounded-2xl border border-gray-200 text-center shadow-2xs">
               <span className="text-lg font-black text-amber-600 block">{user.hopePoints}</span>
-              <span className="text-[10px] text-gray-500 font-semibold">হোপ পয়েন্ট</span>
+              <span className="text-[10px] text-gray-500 font-semibold">{l('হোপ পয়েন্ট', 'Hope Points')}</span>
             </div>
             <div className="bg-white p-3 rounded-2xl border border-gray-200 text-center shadow-2xs">
-              <span className="text-lg font-black text-emerald-600 block">লেভেল ২</span>
-              <span className="text-[10px] text-gray-500 font-semibold">কমিউনিটি র‍্যাংক</span>
+              <span className="text-lg font-black text-emerald-600 block">{l('লেভেল ২', 'Level 2')}</span>
+              <span className="text-[10px] text-gray-500 font-semibold">{l('কমিউনিটি র‍্যাংক', 'Community Rank')}</span>
             </div>
           </div>
 
@@ -353,10 +355,10 @@ export const DestiProfileView: React.FC<DestiProfileViewProps> = ({
                 </div>
                 <div>
                   <h4 className="text-xs font-black text-gray-900 flex items-center gap-1.5">
-                    DestiCare রক্তদান ইচ্ছুকতার স্ট্যাটাস
+                    {l('DestiCare রক্তদান ইচ্ছুকতার স্ট্যাটাস', 'DestiCare Blood Donor Willingness')}
                   </h4>
                   <p className="text-[10px] text-gray-500">
-                    রক্তের প্রয়োজনে রোগীরা আপনার লোকেশন দেখে যোগাযোগ করতে পারবে
+                    {l('রক্তের প্রয়োজনে রোগীরা আপনার লোকেশন দেখে যোগাযোগ করতে পারবে', 'Patients in urgent need can find and contact you')}
                   </p>
                 </div>
               </div>
@@ -386,7 +388,7 @@ export const DestiProfileView: React.FC<DestiProfileViewProps> = ({
                 <div>
                   <span className="text-xs font-black text-gray-900 block">
                     {donorWillingness === 'available' && '🟢 রক্ত দিতে ইচ্ছুক (এখনই প্রস্তুত)'}
-                    {donorWillingness === 'after_months' && `🟡 ${dateNote || `${availableMonths} মাস পর প্রস্তুত`}`}
+                    {donorWillingness === 'after_months' && `🟡 ${dateNote || `${availableMonths} {l('মাস পর প্রস্তুত', 'Available after months')}`}`}
                     {donorWillingness === 'unavailable' && '⚪ আপাতত রক্ত দিতে ইচ্ছুক নই'}
                   </span>
                   <span className="text-[10px] text-gray-500 block">
@@ -431,7 +433,7 @@ export const DestiProfileView: React.FC<DestiProfileViewProps> = ({
                 }`}
               >
                 <span className="text-xs mb-0.5">⚪</span>
-                <span>আপাতত বন্ধ</span>
+                <span>{l('আপাতত বন্ধ', 'Currently Unavailable')}</span>
               </button>
             </div>
 
@@ -517,7 +519,7 @@ export const DestiProfileView: React.FC<DestiProfileViewProps> = ({
                 <div className="min-w-0">
                   <span className="font-bold text-gray-900 block truncate">DestiCare</span>
                   <span className="text-[10px] text-rose-600 block font-semibold">
-                    {donorWillingness === 'available' ? '🟢 ইচ্ছুক' : donorWillingness === 'after_months' ? '🟡 কয়েক মাস পর' : '⚪ আপাতত বন্ধ'}
+                    {donorWillingness === 'available' ? l('🟢 ইচ্ছুক', '🟢 Ready') : donorWillingness === 'after_months' ? l('🟡 কয়েক মাস পর', '🟡 In Months') : l('⚪ আপাতত বন্ধ', '⚪ Unavailable')}
                   </span>
                 </div>
               </button>
@@ -944,7 +946,7 @@ export const DestiProfileView: React.FC<DestiProfileViewProps> = ({
                     <span className="text-[10px] text-emerald-200 block">সার্চ রেডিয়াস</span>
                   </div>
                   <div>
-                    <span className="text-base font-black">লেভেল ২</span>
+                    <span className="text-base font-black">{l('লেভেল ২', 'Level 2')}</span>
                     <span className="text-[10px] text-emerald-200 block">রেসকিউ র‍্যাংক</span>
                   </div>
                 </div>
@@ -1156,7 +1158,7 @@ export const DestiProfileView: React.FC<DestiProfileViewProps> = ({
 
           {/* Point Earning Opportunities */}
           <div className="bg-white p-4 rounded-3xl border border-gray-200 space-y-2.5">
-            <h4 className="text-xs font-bold text-gray-900">হোপ পয়েন্ট অর্জনের সুযোগ:</h4>
+            <h4 className="text-xs font-bold text-gray-900">{l('হোপ পয়েন্ট', 'Hope Points')} অর্জনের সুযোগ:</h4>
             <div className="space-y-2 text-xs">
               <div className="flex items-center justify-between p-2.5 bg-gray-50 rounded-xl">
                 <span>🩸 রক্তদান সম্পন্ন করুন</span>
